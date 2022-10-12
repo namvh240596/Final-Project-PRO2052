@@ -4,10 +4,9 @@ import {scale, verticalScale} from '../../utils/scale';
 export const styles = StyleSheet.create({
   container: {
     width: scale(176),
-    // minHeight: verticalScale(238),
     padding: scale(16),
     borderRadius: 5,
-    borderColor: AppTheme.Colors.White,
+    borderColor: AppTheme.Colors.Light,
     borderWidth: 1,
     marginRight: scale(20),
     marginBottom: verticalScale(14),

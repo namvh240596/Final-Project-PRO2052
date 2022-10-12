@@ -8,7 +8,7 @@ import {scale} from '../../utils/scale';
 
 const CustomProduct = ({
   name,
-  price,
+  firstPrice,
   image,
   sale,
   lastPrice,
@@ -18,30 +18,32 @@ const CustomProduct = ({
   onRemove,
 }) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity>
+    <TouchableOpacity style={styles.container} onPress={onGoDetail}>
+      <View>
         <Image source={IMAGES.Product1} resizeMode="cover" style={styles.img} />
-      </TouchableOpacity>
-      <Text style={styles.textName} numberOfLines={2}>
-        ten sgaasdgSDA ASGASDFSDF SA
-      </Text>
-      <View style={styles.viewStar}>
-        {DATA.map(item => {
-          return (
-            <SvgXml
-              key={item.id}
-              xml={AppIcon.IconStar}
-              height={scale(16)}
-              width={scale(16)}
-            />
-          );
-        })}
       </View>
-      <Text style={styles.textLastPrice}>$ gia cuoi</Text>
+      <Text style={styles.textName} numberOfLines={2}>
+        {name}
+      </Text>
+      {star && (
+        <View style={styles.viewStar}>
+          {DATA.map(item => {
+            return (
+              <SvgXml
+                key={item.id}
+                xml={AppIcon.IconStar}
+                height={scale(16)}
+                width={scale(16)}
+              />
+            );
+          })}
+        </View>
+      )}
+      {lastPrice && <Text style={styles.textLastPrice}>$ {lastPrice}</Text>}
       <View style={styles.fld}>
         <View style={styles.viewSale}>
-          <Text style={styles.textFirstPrice}>$ gia dau</Text>
-          <Text style={styles.textSale}>sale%</Text>
+          <Text style={styles.textFirstPrice}>$ {firstPrice}</Text>
+          <Text style={styles.textSale}> {sale} % off</Text>
         </View>
         {remove && (
           <TouchableOpacity>
@@ -54,7 +56,7 @@ const CustomProduct = ({
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

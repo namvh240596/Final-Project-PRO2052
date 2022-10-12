@@ -23,7 +23,11 @@ const Header = ({title, iconBack}) => {
           />
         </TouchableOpacity>
       )}
-      <Text style={[TextStyles.headingText3, styles.textTitle]}>{title}</Text>
+      <Text
+        numberOfLines={1}
+        style={[TextStyles.headingText3, styles.textTitle]}>
+        {title}
+      </Text>
     </View>
   );
 };
@@ -36,12 +40,15 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     marginLeft: scale(20),
+    width: '70%',
   },
   container: {
     width: '100%',
     minHeight: scale(60),
     flexDirection: 'row',
     alignItems: 'center',
-    elevation: 2,
+    // elevation: 2,
+    borderBottomWidth: 2,
+    borderColor: AppTheme.Colors.Light,
   },
 });

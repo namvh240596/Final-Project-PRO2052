@@ -9,8 +9,10 @@ import {scale, verticalScale} from '../utils/scale';
 import AppIcon from '../assets/icons/index';
 import {SvgXml} from 'react-native-svg';
 import {TextStyles, AppTheme} from '../config/AppTheme';
+import Notification from '../screens/notification';
+import Favorites from '../screens/favorite';
 
-const {Navigator, Screen} = createBottomTabNavigator();
+const {Navigator, Screen, Group} = createBottomTabNavigator();
 export default function BottomNavigator() {
   const heightBottom =
     Platform.OS === 'ios' ? verticalScale(75) : verticalScale(65);

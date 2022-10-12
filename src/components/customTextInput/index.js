@@ -22,11 +22,11 @@ const CustomTextInput = ({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <View>
+    <View style={containerTextInputStyle}>
       <View
         style={[
           styles.containerTextInput,
-          containerTextInputStyle,
+
           (isFocused && {borderColor: AppTheme.Colors.Blue}) ||
             (isError && {borderColor: AppTheme.Colors.Red}),
         ]}>
@@ -50,10 +50,16 @@ const CustomTextInput = ({
           </TouchableOpacity>
         )}
       </View>
-      <Text
-        style={[styles.textError, TextStyles.textStyleErrors, textStyleError]}>
-        {textErrors}
-      </Text>
+      {textErrors && (
+        <Text
+          style={[
+            styles.textError,
+            TextStyles.textStyleErrors,
+            textStyleError,
+          ]}>
+          {textErrors}
+        </Text>
+      )}
     </View>
   );
 };

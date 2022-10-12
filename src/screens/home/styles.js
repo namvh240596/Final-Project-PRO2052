@@ -3,11 +3,30 @@ import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
+  icon: {
+    marginLeft: scale(10),
+  },
+  viewTextInput: {
+    flexDirection: 'row',
+    paddingHorizontal: scale(16),
+    alignItems: 'center',
+  },
+  scrollContainerHotProduct: {
+    marginTop: verticalScale(10),
+  },
+  scrollViewHotProduct: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    paddingLeft: scale(16),
+  },
   viewTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: verticalScale(24),
     paddingHorizontal: scale(16),
+    alignItems: 'flex-end',
+    height: verticalScale(30),
   },
   textMore: {
     fontSize: AppTheme.FontSize.Medium,
@@ -33,16 +52,15 @@ export const styles = StyleSheet.create({
     backgroundColor: AppTheme.Colors.White,
     flex: 1,
     paddingBottom: 0,
+    paddingTop: verticalScale(20),
   },
   margins: {
-    marginHorizontal: scale(16),
+    flex: 1,
   },
   img: {
     width: '100%',
     paddingHorizontal: scale(16),
     height: verticalScale(236),
-    borderTopWidth: 1,
-    borderColor: AppTheme.Colors.Light,
     paddingTop: verticalScale(16),
   },
 });
