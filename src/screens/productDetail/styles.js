@@ -45,16 +45,31 @@ export const styles = StyleSheet.create({
   viewPrice: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: scale(160),
-    marginLeft: scale(16),
+    width: '100%',
     marginTop: verticalScale(14),
+    paddingHorizontal: scale(16),
   },
   textLastPrice: {
     fontSize: scale(16),
     fontFamily: AppTheme.Fonts.Medium,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Red,
+    color: AppTheme.Colors.Grey,
     textDecorationLine: 'line-through',
+  },
+  textDiscount: {
+    fontSize: scale(16),
+    fontFamily: AppTheme.Fonts.Medium,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Red,
+    marginLeft: scale(10),
+  },
+  textTitle: {
+    fontSize: scale(18),
+    fontFamily: AppTheme.Fonts.Medium,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Black,
+    marginLeft: scale(16),
+    marginTop: verticalScale(20),
   },
   textPrice: {
     fontSize: scale(16),
@@ -87,17 +102,40 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(20),
     justifyContent: 'space-between',
   },
+  viewDiscount: {
+    width: '100%',
+    paddingHorizontal: scale(16),
+    marginTop: verticalScale(14),
+  },
   textMore: {
     fontSize: scale(16),
     fontFamily: AppTheme.Fonts.Bold,
     letterSpacing: 0.5,
     color: AppTheme.Colors.Blue,
   },
+
+  textPolicy: {
+    fontSize: scale(16),
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Blue,
+    paddingLeft: scale(16),
+    marginTop: verticalScale(20),
+    fontWeight: '700',
+  },
+  textPromo: {
+    fontSize: scale(15),
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Black,
+    lineHeight: 21.5,
+    marginLeft: scale(16),
+  },
   text: {
     fontSize: scale(16),
     fontFamily: AppTheme.Fonts.Bold,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Grey,
+    color: AppTheme.Colors.Black,
     fontWeight: '700',
   },
   viewButton: {
@@ -141,5 +179,14 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     marginTop: verticalScale(20),
     flexDirection: 'row',
+  },
+  fdl: {
+    flexDirection: 'row',
+  },
+  ViewPolicy: {
+    flexDirection: 'row',
+    paddingHorizontal: scale(16),
+    marginTop: verticalScale(20),
+    alignItems: 'center',
   },
 });

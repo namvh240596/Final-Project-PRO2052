@@ -3,5 +3,6 @@ const IMAGES = {
   ProductMotion: require('../images/promotion.png'),
   Logo: require('../images/logo.png'),
   Avatar: require('../images/avatar.jpg'),
+  CPU: require('../images/cpu.png'),
 };
 export default IMAGES;

@@ -46,17 +46,15 @@ export default function BottomNavigator() {
         }}
       />
       <Screen
-        name="Explore"
+        name="Build PC"
         component={Explore}
         options={{
           tabBarIcon: ({focused}) => {
             return (
               <SvgXml
-                xml={
-                  focused ? AppIcon.IconExploreBlue : AppIcon.IconExploreGrey
-                }
-                width={scale(22)}
-                height={scale(22)}
+                xml={focused ? AppIcon.IconCustomBlue : AppIcon.IconCustom}
+                width={scale(26)}
+                height={scale(26)}
               />
             );
           },

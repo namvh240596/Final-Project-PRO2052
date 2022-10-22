@@ -75,7 +75,13 @@ const Home = ({navigation}) => {
           contentContainerStyle={{paddingHorizontal: scale(16)}}
           showsHorizontalScrollIndicator={false}>
           {DATA_CATEGORIES.map(item => {
-            return <ItemCategories key={item.id} title={item.title} />;
+            return (
+              <ItemCategories
+                onPress={() => navigation.navigate('ListProduct')}
+                key={item.id}
+                title={item.title}
+              />
+            );
           })}
         </ScrollView>
         <View style={styles.viewTitle}>

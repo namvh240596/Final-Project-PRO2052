@@ -107,6 +107,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: verticalScale(3),
+    marginBottom: verticalScale(9),
+    borderBottomWidth: 1,
+    borderColor: AppTheme.Colors.Light,
   },
   iconStar: {
     marginRight: scale(3),

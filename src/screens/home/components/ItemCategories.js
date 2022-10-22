@@ -1,13 +1,13 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {scale, verticalScale} from '../../../utils/scale';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../../assets/icons';
 import {AppTheme} from '../../../config/AppTheme';
 
-const ItemCategories = ({title, iconCategory}) => {
+const ItemCategories = ({title, iconCategory, onPress}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.viewIcon}>
         <SvgXml
           xml={iconCategory || AppIcon.IconCartBlue}
@@ -18,11 +18,11 @@ const ItemCategories = ({title, iconCategory}) => {
       <Text numberOfLines={2} style={styles.textTitle}>
         {title}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export default ItemCategories;
+export default React.memo(ItemCategories);
 
 const styles = StyleSheet.create({
   textTitle: {
