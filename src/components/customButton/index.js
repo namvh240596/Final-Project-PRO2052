@@ -10,11 +10,13 @@ const CustomButton = ({
   textStyles,
   title,
   disabled,
+  onPress,
 }) => {
   return (
     <TouchableOpacity
       style={[styles.container, containerStyles]}
-      disabled={disabled}>
+      disabled={disabled}
+      onPress={onPress}>
       {rightIcon && (
         <SvgXml
           xml={rightIcon}

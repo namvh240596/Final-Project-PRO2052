@@ -6,7 +6,7 @@ import IMAGES from '../../assets/images';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 
-const ProducOnCart = ({heart}) => {
+const ProducOnCart = ({heart, noCount, noDeleted}) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -18,30 +18,34 @@ const ProducOnCart = ({heart}) => {
             </Text>
             <View style={styles.viewIcon}>
               <SvgXml
-                xml={heart ? AppIcon.IconExploreBlue : AppIcon.IconExploreBlue}
+                xml={heart ? AppIcon.IconHeartRed : AppIcon.IconHeart}
                 width={scale(18)}
                 height={scale(18)}
                 onPress={() => {}}
               />
-              <SvgXml
-                xml={AppIcon.IconExploreBlue}
-                width={scale(18)}
-                style={{marginLeft: scale(16)}}
-                height={scale(18)}
-              />
+              {noDeleted ? null : (
+                <SvgXml
+                  xml={AppIcon.IconRemove}
+                  width={scale(18)}
+                  style={{marginLeft: scale(16)}}
+                  height={scale(18)}
+                />
+              )}
             </View>
           </View>
           <View style={styles.viewPrice}>
             <Text style={styles.textPrice}>8999</Text>
-            <View style={[styles.viewPlus]}>
-              <Pressable style={styles.button}>
-                <Text>-</Text>
-              </Pressable>
-              <Text style={styles.textPlus}>9</Text>
-              <Pressable style={styles.button}>
-                <Text>+</Text>
-              </Pressable>
-            </View>
+            {noCount ? null : (
+              <View style={[styles.viewPlus]}>
+                <Pressable style={styles.button}>
+                  <Text>-</Text>
+                </Pressable>
+                <Text style={styles.textPlus}>9</Text>
+                <Pressable style={styles.button}>
+                  <Text>+</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -113,10 +117,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   container: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: AppTheme.Colors.Light,
-    padding: scale(12),
+    paddingVertical: verticalScale(12),
     borderRadius: 5,
+    elevation: 2,
+    shadowColor: AppTheme.Colors.Black,
+    shadowOpacity: 0.5,
+    backgroundColor: AppTheme.Colors.White,
+    paddingHorizontal: scale(16),
+    marginBottom: verticalScale(14),
+    shadowRadius: 15,
   },
 });
