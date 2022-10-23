@@ -8,14 +8,16 @@ import IMAGES from '../../../assets/images';
 
 const ItemChooseGear = ({item, onDelete, onOpen, index}) => {
   return (
-    <TouchableOpacity onPress={onOpen} style={styles.container}>
+    <TouchableOpacity
+      onPress={() => onOpen(item.type)}
+      style={styles.container}>
       <Image source={IMAGES.CPU} resizeMode="cover" style={styles.img} />
       <View style={styles.viewDescription}>
         <Text style={styles.textName}>{item.name}</Text>
         <Text style={styles.text}>Nhấn để chọn linh kiện</Text>
       </View>
       <TouchableOpacity onPress={() => onDelete(index)}>
-        <Text>Delete Gear</Text>
+        <Text style={styles.text}>Delete Gear</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );

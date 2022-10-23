@@ -3,6 +3,19 @@ import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
+  scvProducts: {
+    paddingTop: verticalScale(30),
+  },
+  iconClose: {
+    position: 'absolute',
+    width: '100%',
+    zIndex: 2,
+    alignItems: 'flex-end',
+    right: scale(-1),
+  },
+  viewInfo: {
+    marginLeft: scale(20),
+  },
   textName: {
     fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.Bold,

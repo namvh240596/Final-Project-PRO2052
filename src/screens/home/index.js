@@ -12,7 +12,11 @@ import {scale} from '../../utils/scale';
 import ItemCategories from './components/ItemCategories';
 import {DATA_CATEGORIES, DATA_PRODUCTS} from '../../services/fakeApi/fakeAPI';
 import {SvgXml} from 'react-native-svg';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAllProductsRequest} from '../../redux/products/action';
+import {getProductsSelector} from '../../redux/products/selector';
 const Home = ({navigation}) => {
+  const dispatch = useDispatch();
   const onMore = useCallback(title => {
     switch (title) {
       case 'category':
@@ -26,6 +30,11 @@ const Home = ({navigation}) => {
   const onDetail = id => {
     return navigation.navigate('ProductDetail', {id: id});
   };
+  // useEffect(() => {
+  //   dispatch(getAllProductsRequest());
+  // }, [dispatch]);
+  // const listProduct = useSelector(getProductsSelector);
+  // console.log(listProduct);
   return (
     <ScrollView style={styles.container}>
       <Header title="Home" />

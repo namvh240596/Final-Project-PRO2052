@@ -10,12 +10,18 @@ import {styles} from './styles';
 import Header from '../../components/header';
 import ProducOnCart from '../../components/customProductOnCart';
 import CustomButton from '../../components/customButton';
+import {scale, verticalScale} from '../../utils/scale';
 
 const Cart = () => {
   return (
     <View style={styles.container}>
       <Header title={'Giỏ hàng'} />
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: verticalScale(20),
+        }}
+        showsVerticalScrollIndicator={false}
+        style={styles.body}>
         <ProducOnCart />
         <ProducOnCart />
         <ProducOnCart />
