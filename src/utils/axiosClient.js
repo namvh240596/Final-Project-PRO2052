@@ -1,34 +1,37 @@
-import axios from 'axios'
-import { getToken } from '../helpers/tokenHelper'
+import axios from 'axios';
+import {getToken} from '../helpers/tokenHelper';
 let token;
-getToken().then(res => { token = res });
+getToken().then(res => {
+  token = res;
+});
 
 const axiosClient = axios.create({
-    baseURL: '',
-    headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-    }, timeout: 30000,
+  baseURL: 'http://192.168.50.105:3000',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
+  timeout: 30000,
 });
 
 axiosClient.interceptors.request.use(async req => {
-    if (!token) {
-        token = await getToken();
-        req.headers.Authorization = `Bearer ${token}`;
-    }
+  if (!token) {
     token = await getToken();
-
     req.headers.Authorization = `Bearer ${token}`;
-    return req;
+  }
+  token = await getToken();
+
+  req.headers.Authorization = `Bearer ${token}`;
+  return req;
 });
 
 axiosClient.interceptors.response.use(
-    function (response) {
-        return response.data;
-    },
-    function (error) {
-        return Promise.reject(error);
-    },
+  function (response) {
+    return response.data;
+  },
+  function (error) {
+    return Promise.reject(error);
+  },
 );
 
 export default axiosClient;

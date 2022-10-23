@@ -26,7 +26,7 @@ const AppTheme = {
     Light: '#EBF0FF',
     White: '#FFFFFF',
     Black: '#000000',
-    SecondBackround: '#e9e9e9',
+    SecondBackround: '#f2f2f2',
   },
   FontSize: {
     Small: scale(12),

@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(20),
     paddingHorizontal: scale(16),
     flex: 1,
+    backgroundColor: AppTheme.Colors.SecondBackround,
   },
   container: {
     flex: 1,
@@ -44,6 +45,9 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: verticalScale(10),
     paddingHorizontal: scale(10),
+    backgroundColor: AppTheme.Colors.White,
+    elevation: 2,
+    shadowColor: AppTheme.Colors.Black,
   },
   viewFdl: {
     flexDirection: 'row',
