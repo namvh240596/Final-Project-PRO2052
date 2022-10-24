@@ -4,10 +4,9 @@ import {
   GET_ALL_PRODUCTS_SUCCESS,
 } from './actionType';
 
-export const getAllProductsRequest = (payload, onSuccess) => ({
+export const getAllProductsRequest = payload => ({
   type: GET_ALL_PRODUCTS_REQUEST,
   payload: payload,
-  onSuccess: onSuccess,
 });
 export const getAllProductsSuccess = payload => ({
   type: GET_ALL_PRODUCTS_SUCCESS,

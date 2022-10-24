@@ -5,13 +5,14 @@ import IMAGES from '../../assets/images';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {scale} from '../../utils/scale';
+import {string} from 'yup';
 
 const CustomProduct = ({
-  name,
-  firstPrice,
+  title,
+  costPrice,
   image,
-  sale,
-  lastPrice,
+  salePercent,
+  salePrice,
   star,
   remove,
   onGoDetail,
@@ -20,10 +21,16 @@ const CustomProduct = ({
   return (
     <TouchableOpacity style={styles.container} onPress={onGoDetail}>
       <View>
-        <Image source={IMAGES.Product1} resizeMode="cover" style={styles.img} />
+        {image && (
+          <Image
+            source={{uri: image.toString()}}
+            resizeMode="cover"
+            style={styles.img}
+          />
+        )}
       </View>
       <Text style={styles.textName} numberOfLines={2}>
-        {name}
+        {title}
       </Text>
       {star && (
         <View style={styles.viewStar}>
@@ -39,11 +46,11 @@ const CustomProduct = ({
           })}
         </View>
       )}
-      {lastPrice && <Text style={styles.textLastPrice}>$ {lastPrice}</Text>}
+      {salePrice && <Text style={styles.textLastPrice}>{salePrice}đ</Text>}
       <View style={styles.fld}>
         <View style={styles.viewSale}>
-          <Text style={styles.textFirstPrice}>$ {firstPrice}</Text>
-          <Text style={styles.textSale}> {sale} % off</Text>
+          <Text style={styles.textFirstPrice}>{costPrice}đ</Text>
+          <Text style={styles.textSale}> {salePercent} % off</Text>
         </View>
         {remove && (
           <TouchableOpacity>
