@@ -30,11 +30,10 @@ const Home = ({navigation}) => {
   const onDetail = id => {
     return navigation.navigate('ProductDetail', {id: id});
   };
-  // useEffect(() => {
-  //   dispatch(getAllProductsRequest());
-  // }, [dispatch]);
-  // const listProduct = useSelector(getProductsSelector);
-  // console.log(listProduct);
+  useEffect(() => {
+    dispatch(getAllProductsRequest());
+  }, [dispatch]);
+  const listProduct = useSelector(getProductsSelector);
   return (
     <ScrollView style={styles.container}>
       <Header title="Home" />
@@ -104,16 +103,16 @@ const Home = ({navigation}) => {
           horizontal={true}
           contentContainerStyle={{paddingLeft: scale(16)}}
           showsHorizontalScrollIndicator={false}>
-          {DATA_PRODUCTS.map(item => {
+          {listProduct.map(item => {
             return (
               <CustomProduct
-                key={item.id}
-                name={item.name}
-                image={item.image[1]}
-                firstPrice={1000}
-                lastPrice={899}
-                sale={12}
-                onGoDetail={() => onDetail(item.id)}
+                key={item._id}
+                title={item.title}
+                image={item.images[0]}
+                costPrice={item.costPrice}
+                salePrice={item.salePrice}
+                salePercent={item.salePercent}
+                onGoDetail={() => onDetail(item._id)}
               />
             );
           })}
@@ -129,16 +128,16 @@ const Home = ({navigation}) => {
           horizontal={true}
           contentContainerStyle={{paddingLeft: scale(16)}}
           showsHorizontalScrollIndicator={false}>
-          {DATA_PRODUCTS.map(item => {
+          {listProduct.map(item => {
             return (
               <CustomProduct
-                key={item.id}
-                name={item.name}
-                image={item.image[1]}
-                firstPrice={1000}
-                lastPrice={899}
-                sale={12}
-                onGoDetail={() => onDetail(item.id)}
+                key={item._id}
+                title={item.title}
+                image={item.images[0]}
+                costPrice={item.costPrice}
+                salePrice={item.salePrice}
+                salePercent={item.salePercent}
+                onGoDetail={() => onDetail(item._id)}
               />
             );
           })}
@@ -151,16 +150,16 @@ const Home = ({navigation}) => {
         <ScrollView
           style={styles.scrollContainerHotProduct}
           contentContainerStyle={styles.scrollViewHotProduct}>
-          {DATA_PRODUCTS.map(item => {
+          {listProduct.map(item => {
             return (
               <CustomProduct
-                key={item.id}
-                name={item.name}
-                image={item.image[1]}
-                firstPrice={1000}
-                lastPrice={899}
-                sale={12}
-                onGoDetail={() => onDetail(item.id)}
+                key={item._id}
+                title={item.title}
+                image={item.images[0]}
+                costPrice={item.costPrice}
+                salePrice={item.salePrice}
+                salePercent={item.salePercent}
+                onGoDetail={() => onDetail(item._id)}
               />
             );
           })}

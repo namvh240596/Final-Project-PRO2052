@@ -7,23 +7,21 @@ getToken().then(res => {
 
 const axiosClient = axios.create({
   baseURL: 'http://192.168.50.105:3000',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  },
-  timeout: 30000,
+  timeout: 10000,
 });
 
-axiosClient.interceptors.request.use(async req => {
-  if (!token) {
+axiosClient.interceptors.request.use(
+  async config => {
     token = await getToken();
-    req.headers.Authorization = `Bearer ${token}`;
-  }
-  token = await getToken();
-
-  req.headers.Authorization = `Bearer ${token}`;
-  return req;
-});
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+    return config;
+  },
+  err => Promise.reject(err),
+);
 
 axiosClient.interceptors.response.use(
   function (response) {
