@@ -9,153 +9,101 @@ import CustomButton from '../../components/customButton';
 import ItemReview from '../../components/itemReview';
 import CustomProduct from '../../components/customProduct';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getProductRequest} from '../../redux/products/action';
+import {getProductSelector} from '../../redux/products/selector';
+import {formatMoney} from '../../helpers/formatMoney';
 
 const ProductDetail = props => {
-  // const id = props.route.params;
-  const {
-    id,
-    images,
-    isFavorite,
-    name,
-    rating,
-    price,
-    currentPrice,
-    description,
-    review,
-  } = product;
-  const [star, setStar] = useState([]);
+  const id = props.route.params;
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const arr = [];
-    for (let index = 0; index < rating; index++) {
-      arr.push({id: index});
-    }
-    setStar(arr);
-  }, [rating]);
+    dispatch(getProductRequest(id));
+  }, []);
+  const product = useSelector(getProductSelector);
   const navigation = useNavigation();
-  const [favorite, setFavorite] = useState(false);
+  const onDetail = id => {
+    return navigation.navigate('ProductDetail', {id: id});
+  };
   return (
     <View style={styles.container}>
-      <Header title={name} iconBack />
+      <Header title={product?.title} iconBack />
       <ScrollView style={styles.body}>
         <Image
-          source={{uri: images[0]}}
+          source={{uri: product?.images[0].toString()}}
           style={styles.img}
           resizeMode="contain"
         />
         <View style={styles.viewName}>
           <Text numberOfLines={3} style={styles.textName}>
-            {name}
+            {product?.title}
           </Text>
         </View>
-
+        {product?.description.map((item, index) => {
+          return (
+            <Text key={index} style={styles.text}>
+              {item}
+            </Text>
+          );
+        })}
         <View style={styles.viewPrice}>
           <View>
-            <Text style={styles.textPrice}>{currentPrice} VND</Text>
+            <Text style={styles.textPrice}>
+              {formatMoney(product?.salePrice)}
+            </Text>
             <View style={styles.fdl}>
-              <Text style={styles.textLastPrice}>{price} VND </Text>
-              <Text style={styles.textDiscount}> -15%</Text>
+              <Text style={styles.textLastPrice}>
+                {formatMoney(product?.costPrice)}
+              </Text>
+              <Text style={styles.textDiscount}> {product?.salePercent}%</Text>
             </View>
           </View>
 
           <SvgXml
-            xml={isFavorite ? AppIcon.IconHeartRed : AppIcon.IconHeart}
+            xml={product?.__v === 1 ? AppIcon.IconHeartRed : AppIcon.IconHeart}
             width={scale(24)}
             height={scale(24)}
           />
         </View>
-        <View style={styles.viewTitle}>
-          <Text style={styles.text}>Khuyến mãi</Text>
-        </View>
-        <View style={styles.viewDiscount}>
-          <Text style={styles.textPromo}>
-            - Trả góp 6 tháng lãi suất 0% với đơn hàng &gt; 3tr
-          </Text>
-          <Text style={styles.textPromo}>
-            - Nhập mã PV100 giảm thêm 5% tối đa 100.000đ khi thanh toán qua
-            VNPAY-QR.
-          </Text>
-          <Text style={styles.textPromo}>
-            - Nhập mã PV1000 giảm thêm 1.000.000đ khi thanh toán qua VNPAY-QR.
-          </Text>
-        </View>
-        <Text style={styles.textPolicy}>Chính sách bán hàng</Text>
-        <View style={styles.ViewPolicy}>
-          <SvgXml xml={AppIcon.IconShip} width={scale(32)} height={scale(32)} />
-          <Text style={styles.textPromo}>
-            Miễn phí giao hàng cho đơn hàng từ 800K
-          </Text>
-        </View>
-        <View style={styles.ViewPolicy}>
-          <SvgXml
-            xml={AppIcon.IconGenuine}
-            width={scale(32)}
-            height={scale(32)}
-          />
-          <Text style={styles.textPromo}>Cam kết hàng chính hãng 100%</Text>
-        </View>
-        <View style={styles.ViewPolicy}>
-          <SvgXml
-            xml={AppIcon.IconChange}
-            width={scale(32)}
-            height={scale(32)}
-          />
-          <Text style={styles.textPromo}>Đổi trả trong vòng 10 ngày</Text>
-        </View>
-        <Text style={styles.textPolicy}>Chi tiết sản phẩm</Text>
-        <View style={styles.viewDescription}>
-          <Text>- Chip đồ họa: NVIDIA GeForce GTX 1650</Text>
-          <Text>- Bộ nhớ: 4GB GDDR5 ( 128-bit )</Text>
-          <Text>
-            - GPU clock OC Mode - GPU Boost Clock : 1695 MHz , GPU Base Clock :
-            1485 MHz Gaming Mode (Default) - GPU Boost Clock : 1665 MHz , GPU
-            Base Clock : 1485 MHz
-          </Text>
-        </View>
-        <Text style={styles.textTitle}>Sản phẩm khác</Text>
+
         <View style={styles.viewAlso}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
             <CustomProduct
-              name={name}
-              firstPrice={price}
-              lastPrice={currentPrice}
-              sale={12}
+              title={product?.title}
+              image={product?.images[0]}
+              costPrice={product?.costPrice}
+              salePrice={product?.salePrice}
+              sale={product?.salePercent}
             />
             <CustomProduct
-              name={name}
-              firstPrice={price}
-              lastPrice={currentPrice}
-              sale={12}
+              title={product?.title}
+              image={product?.images[0]}
+              costPrice={product?.costPrice}
+              salePrice={product?.salePrice}
+              salePercent={product?.salePercent}
+              onGoDetail={() => onDetail(product?._id)}
             />
             <CustomProduct
-              name={name}
-              firstPrice={price}
-              lastPrice={currentPrice}
-              sale={12}
+              title={product?.title}
+              image={product?.images[0]}
+              costPrice={product?.costPrice}
+              salePrice={product?.salePrice}
+              sale={product?.salePercent}
             />
             <CustomProduct
-              name={name}
-              firstPrice={price}
-              lastPrice={currentPrice}
-              sale={12}
+              title={product?.title}
+              image={product?.images[0]}
+              costPrice={product?.costPrice}
+              salePrice={product?.salePrice}
+              sale={product?.salePercent}
             />
           </ScrollView>
         </View>
       </ScrollView>
-      <View style={styles.viewButton}>
-        <CustomButton
-          title={'Mua ngay'}
-          containerStyles={styles.button}
-          textStyles={styles.textButton}
-        />
-        <CustomButton
-          title={'Thêm vào giỏ hàng'}
-          containerStyles={styles.button}
-          textStyles={styles.textButton}
-        />
-      </View>
     </View>
   );
 };

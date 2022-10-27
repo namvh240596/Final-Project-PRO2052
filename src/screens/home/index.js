@@ -4,7 +4,6 @@ import {styles} from './styles';
 import Header from '../../components/header';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
-import CustomButton from '../../components/customButton';
 import CustomProduct from '../../components/customProduct';
 import {AppTheme} from '../../config/AppTheme';
 import IMAGES from '../../assets/images';
@@ -15,6 +14,7 @@ import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllProductsRequest} from '../../redux/products/action';
 import {getProductsSelector} from '../../redux/products/selector';
+import {formatMoney} from '../../helpers/formatMoney';
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
   const onMore = useCallback(title => {
@@ -86,8 +86,8 @@ const Home = ({navigation}) => {
             return (
               <ItemCategories
                 onPress={() => navigation.navigate('ListProduct')}
-                key={item.id}
-                title={item.title}
+                key={item?.id}
+                title={item?.title}
               />
             );
           })}
@@ -106,12 +106,12 @@ const Home = ({navigation}) => {
           {listProduct.map(item => {
             return (
               <CustomProduct
-                key={item._id}
-                title={item.title}
-                image={item.images[0]}
-                costPrice={item.costPrice}
-                salePrice={item.salePrice}
-                salePercent={item.salePercent}
+                key={item?._id}
+                title={item?.title}
+                image={item?.images[0]}
+                costPrice={item?.costPrice}
+                salePrice={item?.salePrice}
+                salePercent={item?.salePercent}
                 onGoDetail={() => onDetail(item._id)}
               />
             );
@@ -131,13 +131,13 @@ const Home = ({navigation}) => {
           {listProduct.map(item => {
             return (
               <CustomProduct
-                key={item._id}
-                title={item.title}
-                image={item.images[0]}
-                costPrice={item.costPrice}
-                salePrice={item.salePrice}
-                salePercent={item.salePercent}
-                onGoDetail={() => onDetail(item._id)}
+                key={item?._id}
+                title={item?.title}
+                image={item?.images[0]}
+                costPrice={item?.costPrice}
+                salePrice={item?.salePrice}
+                salePercent={item?.salePercent}
+                onGoDetail={() => onDetail(item?._id)}
               />
             );
           })}

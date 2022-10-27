@@ -63,13 +63,11 @@ export const styles = StyleSheet.create({
     color: AppTheme.Colors.Red,
     marginLeft: scale(10),
   },
-  textTitle: {
-    fontSize: scale(18),
-    fontFamily: AppTheme.Fonts.Medium,
+  text: {
+    fontSize: scale(14),
+    fontFamily: AppTheme.Fonts.Regular,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Black,
-    marginLeft: scale(16),
-    marginTop: verticalScale(20),
+    color: AppTheme.Colors.Red,
   },
   textPrice: {
     fontSize: scale(16),
