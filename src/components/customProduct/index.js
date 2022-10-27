@@ -5,7 +5,7 @@ import IMAGES from '../../assets/images';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {scale} from '../../utils/scale';
-import {string} from 'yup';
+import {formatMoney} from '../../helpers/formatMoney';
 
 const CustomProduct = ({
   title,
@@ -13,7 +13,6 @@ const CustomProduct = ({
   image,
   salePercent,
   salePrice,
-  star,
   remove,
   onGoDetail,
   onRemove,
@@ -32,25 +31,13 @@ const CustomProduct = ({
       <Text style={styles.textName} numberOfLines={2}>
         {title}
       </Text>
-      {star && (
-        <View style={styles.viewStar}>
-          {DATA.map(item => {
-            return (
-              <SvgXml
-                key={item.id}
-                xml={AppIcon.IconStar}
-                height={scale(16)}
-                width={scale(16)}
-              />
-            );
-          })}
-        </View>
+      {salePrice && (
+        <Text style={styles.textLastPrice}>{formatMoney(salePrice)}</Text>
       )}
-      {salePrice && <Text style={styles.textLastPrice}>{salePrice}đ</Text>}
       <View style={styles.fld}>
         <View style={styles.viewSale}>
-          <Text style={styles.textFirstPrice}>{costPrice}đ</Text>
-          <Text style={styles.textSale}> {salePercent} % off</Text>
+          <Text style={styles.textFirstPrice}>{formatMoney(costPrice)}</Text>
+          <Text style={styles.textSale}> {salePercent}% off</Text>
         </View>
         {remove && (
           <TouchableOpacity>

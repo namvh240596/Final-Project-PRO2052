@@ -318,3 +318,100 @@ export const DATA_PRODUCTS_CHOOSE = [
     count: 20,
   },
 ];
+
+export const DATA_PRODUCT = {
+  _id: '634fabad660c0250f7d13d80',
+  title: 'CPU INTEL Core i5-10400F (6C/12T, 2.90 GHz - 4.30 GHz, 12MB) - 1200',
+  description: [
+    'Cam kết hàng chính hãng 100%',
+    'Bảo hành chính hãng 12 tháng.',
+    'Hỗ trợ đổi mới trong 7 ngày.',
+  ],
+  images: [
+    'https://lh3.googleusercontent.com/e2Gutmov-wHaKEPdK3_5yKtn3_J7E1lJTEqBw-x-wtA1_N1xu_hGtP1dHZlkmczAYMZFi8ltXaLQe3GGNrc=w500-rw',
+  ],
+  costPrice: 3839000,
+  salePrice: 3679000,
+  salePercent: 4.2,
+  quantity: 100,
+  specifications: [
+    {
+      title: 'Thương hiệu',
+      content: 'INTEL',
+    },
+    {
+      title: 'Bảo hành',
+      content: '36',
+    },
+    {
+      title: 'Thương hiệu CPU',
+      content: 'Intel',
+    },
+    {
+      title: 'Nhu cầu',
+      content:
+        'Gaming, Văn phòng, Đồ họa - Kỹ thuật, Doanh nghiệp, Học sinh - Sinh viên',
+    },
+    {
+      title: 'CPU',
+      content: 'Core i5-10400F',
+    },
+    {
+      title: 'Series',
+      content: 'Core i5',
+    },
+    {
+      title: 'Socket',
+      content: '1200',
+    },
+    {
+      title: 'Số nhân xử lý',
+      content: '6',
+    },
+    {
+      title: 'Số luồng xử lý',
+      content: '12',
+    },
+    {
+      title: 'Kiến trúc',
+      content: 'Comet Lake',
+    },
+    {
+      title: 'Code name',
+      content: 'Comet Lake',
+    },
+    {
+      title: 'Thế hệ',
+      content: 'Intel Core thế hệ thứ 10',
+    },
+    {
+      title: 'Tốc độ xử lý',
+      content: '2.90 GHz  - 4.30 GHz',
+    },
+    {
+      title: 'Cache',
+      content: '12MB',
+    },
+    {
+      title: 'TDP',
+      content: '65W',
+    },
+    {
+      title: 'Bộ nhớ hỗ trợ',
+      content: 'DDR4  Dual channel',
+    },
+  ],
+  category: {
+    _id: '634f9eea3f879eb6fc81bef8',
+    title: 'Vi xử lý',
+    icon: 'https://i.im.ge/2022/10/14/27O9LM.ic-cpu.png',
+    type: 1,
+    createdAt: '2022-10-19T06:53:32.099Z',
+    updatedAt: '2022-10-19T06:53:32.099Z',
+    __v: 0,
+  },
+  brand: '634fab3033c3391ff54a2e49',
+  __v: 0,
+  createdAt: '2022-10-19T07:47:57.980Z',
+  updatedAt: '2022-10-19T07:47:57.980Z',
+};
