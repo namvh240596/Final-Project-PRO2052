@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: AppTheme.Colors.White,
+    backgroundColor: AppTheme.Colors.SecondBackround,
   },
   img: {
     width: '100%',
@@ -32,6 +32,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: AppTheme.Colors.White,
+    paddingTop: verticalScale(10),
   },
   viewStar: {
     flexDirection: 'row',
@@ -46,8 +48,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: verticalScale(14),
+    paddingTop: verticalScale(14),
     paddingHorizontal: scale(16),
+    alignItems: 'center',
+    backgroundColor: AppTheme.Colors.White,
+    paddingBottom: verticalScale(20),
   },
   textLastPrice: {
     fontSize: scale(16),
@@ -67,7 +72,7 @@ export const styles = StyleSheet.create({
     fontSize: scale(14),
     fontFamily: AppTheme.Fonts.Regular,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Red,
+    color: AppTheme.Colors.Black,
   },
   textPrice: {
     fontSize: scale(16),
@@ -78,7 +83,8 @@ export const styles = StyleSheet.create({
   },
   viewDescription: {
     paddingHorizontal: scale(16),
-    marginTop: verticalScale(20),
+    paddingTop: verticalScale(10),
+    backgroundColor: AppTheme.Colors.White,
   },
   viewSelectMore: {
     flexDirection: 'row',
@@ -129,13 +135,7 @@ export const styles = StyleSheet.create({
     lineHeight: 21.5,
     marginLeft: scale(16),
   },
-  text: {
-    fontSize: scale(16),
-    fontFamily: AppTheme.Fonts.Bold,
-    letterSpacing: 0.5,
-    color: AppTheme.Colors.Black,
-    fontWeight: '700',
-  },
+
   viewButton: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -147,15 +147,20 @@ export const styles = StyleSheet.create({
     borderRadius: 40,
     marginVertical: verticalScale(10),
   },
-  textButton: {
+  textTitle: {
     fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '700',
   },
-  viewReview: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  viewSpecifications: {
     paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(5),
-    alignItems: 'center',
+    backgroundColor: AppTheme.Colors.White,
+    elevation: 2,
+    shadowColor: AppTheme.Colors.Black,
+    shadowOpacity: 0.5,
+    shadowRadius: 50,
   },
   boxMiniStar: {
     flexDirection: 'row',
@@ -175,7 +180,6 @@ export const styles = StyleSheet.create({
   viewAlso: {
     width: '100%',
     paddingHorizontal: scale(16),
-    marginTop: verticalScale(20),
     flexDirection: 'row',
   },
   fdl: {
@@ -186,5 +190,46 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     marginTop: verticalScale(20),
     alignItems: 'center',
+  },
+  btnAddToCart: {
+    width: scale(200),
+    height: verticalScale(50),
+  },
+  viewContent: {
+    backgroundColor: AppTheme.Colors.White,
+    marginTop: verticalScale(10),
+    paddingBottom: verticalScale(20),
+  },
+  textTitleSpecifications: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '700',
+    width: scale(130),
+    paddingHorizontal: scale(6),
+    paddingVertical: verticalScale(5),
+    textAlignVertical: 'center',
+  },
+  textContentSpecifications: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '500',
+    flex: 1,
+    paddingHorizontal: scale(6),
+    paddingVertical: verticalScale(5),
+    borderLeftWidth: 2,
+    borderColor: AppTheme.Colors.Grey,
+  },
+  textTitleSame: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Red,
+    fontWeight: '700',
+    paddingLeft: scale(16),
+    marginVertical: verticalScale(14),
   },
 });

@@ -3,19 +3,26 @@ import React, {useEffect} from 'react';
 import {AppTheme} from '../../config/AppTheme';
 import IMAGES from '../../assets/images';
 import {scale} from '../../utils/scale';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAllProductsRequest} from '../../redux/products/action';
+import {
+  getListCategoriesRequest,
+  getListGearRequest,
+} from '../../redux/categories/action';
+import {getListCategoriesSelector} from '../../redux/categories/selector';
 
 const SplashScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+  const listCategories = useSelector(getListCategoriesSelector);
+  useEffect(() => {
+    dispatch(getAllProductsRequest());
+    dispatch(getListCategoriesRequest());
+  }, []);
   useEffect(() => {
     let timer;
     const directionalNavigation = async () => {
-      //   const check = await AsyncStorage.getItem('checkOnboardingScreen');
-
       timer = setTimeout(() => {
-        // if (check === null) {
-        //   navigation.replace('Onboarding');
-        // } else {
         navigation.replace('MainNavigation');
-        // }
       }, 1000);
     };
     directionalNavigation();

@@ -7,17 +7,23 @@ import {DATA_CATEGORIES, DATA_PRODUCTS} from '../../services/fakeApi/fakeAPI';
 import ItemCategories from '../home/components/ItemCategories';
 import CustomProduct from '../../components/customProduct';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {getListCategoriesSelector} from '../../redux/categories/selector';
+import {getProductsSelector} from '../../redux/products/selector';
+import IMAGES from '../../assets/images';
 
 const ListProduct = () => {
+  const listCategories = useSelector(getListCategoriesSelector);
+  const listProduct = useSelector(getProductsSelector);
   const renderItem = ({item}) => {
     return (
       <CustomProduct
-        key={item.id}
-        name={item.name}
-        image={item.image[1]}
-        firstPrice={1000}
-        lastPrice={899}
-        sale={12}
+        key={item?._id}
+        title={item?.title}
+        image={item?.images[0]}
+        costPrice={item?.costPrice}
+        salePrice={item?.salePrice}
+        salePercent={item?.salePercent}
         onGoDetail={() => onDetail(item.id)}
       />
     );
@@ -33,16 +39,31 @@ const ListProduct = () => {
         <ScrollView
           style={styles.containerCategories}
           horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          {DATA_CATEGORIES.map(item => {
-            return <ItemCategories key={item.id} title={item.title} />;
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{alignItems: 'center'}}>
+          <ItemCategories
+            key={21}
+            title={'Tất cả'}
+            type={100}
+            onPress={() => console.log('aaaa')}
+          />
+          {listCategories.map(item => {
+            return (
+              <ItemCategories
+                key={item?._id}
+                title={item?.title}
+                icon={item?.icon}
+                type={item?.type}
+                onPress={() => console.log('aaaa')}
+              />
+            );
           })}
         </ScrollView>
 
         <FlatList
-          data={DATA_PRODUCTS}
+          data={listProduct}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item._id}
           numColumns={2}
           columnWrapperStyle={styles.columnWrapperStyle}
           showsHorizontalScrollIndicator={false}
@@ -62,18 +83,25 @@ const styles = StyleSheet.create({
     backgroundColor: AppTheme.Colors.White,
   },
   body: {
-    paddingVertical: verticalScale(20),
-    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(15),
     flex: 1,
+    backgroundColor: AppTheme.Colors.SecondBackround,
   },
   containerCategories: {
     backgroundColor: AppTheme.Colors.White,
-    height: verticalScale(150),
+    borderRadius: scale(5),
+    paddingHorizontal: scale(16),
+    minHeight: verticalScale(170),
+    elevation: 3,
+    shadowColor: AppTheme.Colors.Black,
+    shadowOpacity: 0.5,
+    shadowRadius: 50,
   },
   columnWrapperStyle: {
     justifyContent: 'space-between',
   },
   flatList: {
     marginTop: verticalScale(20),
+    paddingHorizontal: scale(16),
   },
 });

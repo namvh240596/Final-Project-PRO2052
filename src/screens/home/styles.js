@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
   scrollViewHotProduct: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
     paddingLeft: scale(16),
   },
   viewTitle: {

@@ -5,7 +5,8 @@ import IMAGES from '../../assets/images';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {scale} from '../../utils/scale';
-import {formatMoney} from '../../helpers/formatMoney';
+import {formatMoney, formatMoney2} from '../../helpers/formatMoney';
+import PlaceholderProductOnHome from '../placeholderProductOnHome';
 
 const CustomProduct = ({
   title,

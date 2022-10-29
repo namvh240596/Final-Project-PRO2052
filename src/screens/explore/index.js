@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import Header from '../../components/header';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
@@ -17,20 +17,68 @@ import ItemChooseGear from './components/ItemChooseGear';
 import {scale, verticalScale} from '../../utils/scale';
 import {DATA_PRODUCTS_CHOOSE} from '../../services/fakeApi/fakeAPI';
 import {SvgXml} from 'react-native-svg';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getListCategoriesSelector,
+  getListGearToCategoriesSelector,
+} from '../../redux/categories/selector';
+import {
+  getChooseGearRequest,
+  getListCategoriesRequest,
+  getListGearRequest,
+} from '../../redux/categories/action';
+import {getProductsSelector} from '../../redux/products/selector';
+import {formatMoney} from '../../helpers/formatMoney';
+
 const Explore = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [visibleModal2, setVisibleModal2] = useState(false);
-  const [type, setType] = useState('');
-  const [data, setData] = useState(initialValue);
-  const OpenModalChooseGear = useCallback(
-    types => {
-      setType(types);
-      setModalVisible(!modalVisible);
+  const [listIndex, setListIndex] = useState(0);
+  const [listGear, setListGear] = useState([]);
+  const [listProduct, setListProduct] = useState([]);
+  const [first, setFirst] = useState(0);
+  const dispatch = useDispatch();
+  const listCategories = useSelector(getListCategoriesSelector);
+  const listProducts = useSelector(getProductsSelector);
+
+  useEffect(() => {
+    dispatch(getListCategoriesRequest());
+    setListGear(listCategories);
+    setListProduct(listProducts);
+    console.log('---', listCategories);
+  }, []);
+
+  const OpenModalChooseGear = useCallback(() => {
+    setModalVisible(true);
+  }, [modalVisible]);
+  const ChooseGear = useCallback(
+    item => {
+      setModalVisible(false);
+      let newList = listGear;
+      newList[listIndex] = item;
+      setFirst(totalMoney());
     },
-    [type],
+    [modalVisible, listGear],
   );
-  const ChooseGear = useCallback(item => {}, [data, modalVisible]);
-  const DeleteGear = useCallback(index => {}, [data, modalVisible]);
+  const totalMoney = () => {
+    let total = 0;
+    for (let index = 0; index < listGear.length; index++) {
+      if (listGear[index]?.costPrice) {
+        if (listGear[index]?.salePrice) {
+          total += listGear[index]?.salePrice;
+        } else {
+          total += listGear[index]?.costPrice;
+        }
+      }
+    }
+    return total;
+  };
+  const DeleteGear = index => {
+    let itemInArr = listCategories[index];
+    let newList = listGear;
+    newList[index] = itemInArr;
+    setListGear(newList);
+    setFirst(totalMoney());
+  };
   return (
     <View style={styles.container}>
       <Header title={'Build PC'} />
@@ -40,18 +88,30 @@ const Explore = () => {
         }}
         style={styles.body}
         showsVerticalScrollIndicator={false}>
-        {data.map((item, index) => {
+        {listGear.map((item, index) => {
           return (
             <ItemChooseGear
-              key={item.id}
+              key={Math.random() * 10000}
               item={item}
-              onOpen={OpenModalChooseGear}
-              onDelete={DeleteGear}
+              onOpenModal={() => {
+                setListIndex(index);
+                OpenModalChooseGear();
+              }}
+              onDelete={() => DeleteGear(index)}
               index={index}
             />
           );
         })}
+        <View style={styles.viewTotalPrice}>
+          <Text style={styles.textTotalPrice}>Chi phí dự tính</Text>
+          <Text style={styles.textSalePrice}>{formatMoney(first)}</Text>
+        </View>
+        <CustomButton
+          containerStyles={styles.containerButton}
+          title={'Thêm vào giỏ hàng'}
+        />
       </ScrollView>
+
       <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalBody}>
@@ -68,20 +128,32 @@ const Explore = () => {
               style={styles.scvProducts}
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}>
-              {DATA_PRODUCTS_CHOOSE.map((item, index) => {
+              {listProduct.map((item, index) => {
                 return (
                   <TouchableOpacity
                     onPress={() => ChooseGear(item)}
                     style={styles.items}
-                    key={item.id}>
+                    key={item._id}>
                     <Image
-                      source={{uri: item.images}}
+                      source={{uri: item?.images[0]}}
                       resizeMode="cover"
                       style={styles.img}
                     />
                     <View style={styles.viewInfo}>
-                      <Text style={styles.textName}>{item.name}</Text>
-                      <Text style={styles.textName}>{item.price}</Text>
+                      <Text style={styles.textName}>{item?.title}</Text>
+                      {item?.salePercent && (
+                        <View style={styles.viewCostPrice}>
+                          <Text style={styles.textCostPrice}>
+                            {formatMoney(item?.costPrice)}
+                          </Text>
+                          <Text style={styles.textSale}>
+                            {item?.salePercent}%
+                          </Text>
+                        </View>
+                      )}
+                      <Text style={styles.textSalePrice}>
+                        {formatMoney(item?.salePrice)}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 );
@@ -95,78 +167,3 @@ const Explore = () => {
 };
 
 export default Explore;
-
-const initialValue = [
-  {
-    id: 1,
-    type: 'cpu',
-    name: 'Vi xử lý',
-    images: [
-      'https://lh3.googleusercontent.com/QH2o8bOLn9ue8BgKtTGdQN-cYIpuY9wdQ8busetwVO4H3NwEnqXiV11jSyowRoKuDjkSr0sr4mzAa1o6CLE=w150-rw',
-    ],
-    count: -1,
-    price: '',
-    currentPrice: '',
-    discount: '',
-  },
-  {
-    id: 2,
-    type: 'ram',
-    name: 'Bộ nhớ trong (RAM)',
-    images: [
-      'https://lh3.googleusercontent.com/QH2o8bOLn9ue8BgKtTGdQN-cYIpuY9wdQ8busetwVO4H3NwEnqXiV11jSyowRoKuDjkSr0sr4mzAa1o6CLE=w150-rw',
-    ],
-    count: -1,
-    price: '',
-    currentPrice: '',
-    discount: '',
-  },
-  {
-    id: 3,
-    type: 'main',
-    name: 'Bộ mạch chủ (Main)',
-    images: [
-      'https://lh3.googleusercontent.com/QH2o8bOLn9ue8BgKtTGdQN-cYIpuY9wdQ8busetwVO4H3NwEnqXiV11jSyowRoKuDjkSr0sr4mzAa1o6CLE=w150-rw',
-    ],
-    count: -1,
-    price: '',
-    currentPrice: '',
-    discount: '',
-  },
-  {
-    id: 4,
-    type: 'Bộ nguồn',
-    name: 'Vi xử lý',
-    images: [
-      'https://lh3.googleusercontent.com/QH2o8bOLn9ue8BgKtTGdQN-cYIpuY9wdQ8busetwVO4H3NwEnqXiV11jSyowRoKuDjkSr0sr4mzAa1o6CLE=w150-rw',
-    ],
-    count: -1,
-    price: '',
-    currentPrice: '',
-    discount: '',
-  },
-  {
-    id: 5,
-    type: 'Card đ',
-    name: 'Card đồ hoạ',
-    images: [
-      'https://lh3.googleusercontent.com/QH2o8bOLn9ue8BgKtTGdQN-cYIpuY9wdQ8busetwVO4H3NwEnqXiV11jSyowRoKuDjkSr0sr4mzAa1o6CLE=w150-rw',
-    ],
-    count: -1,
-    price: '',
-    currentPrice: '',
-    discount: '',
-  },
-  {
-    id: 6,
-    type: 'main',
-    name: 'Bộ mạch chủ (Main)',
-    images: [
-      'https://lh3.googleusercontent.com/QH2o8bOLn9ue8BgKtTGdQN-cYIpuY9wdQ8busetwVO4H3NwEnqXiV11jSyowRoKuDjkSr0sr4mzAa1o6CLE=w150-rw',
-    ],
-    count: -1,
-    price: '',
-    currentPrice: '',
-    discount: '',
-  },
-];
