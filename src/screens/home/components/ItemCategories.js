@@ -4,16 +4,17 @@ import {scale, verticalScale} from '../../../utils/scale';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../../assets/icons';
 import {AppTheme} from '../../../config/AppTheme';
+import IMAGES from '../../../assets/images';
 
-const ItemCategories = ({title, iconCategory, onPress}) => {
+const ItemCategories = ({title, icon, onPress, _id, type}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity onPress={() => onPress(_id)} style={styles.container}>
       <View style={styles.viewIcon}>
-        <SvgXml
-          xml={iconCategory || AppIcon.IconCartBlue}
-          width={scale(24)}
-          height={scale(24)}
-        />
+        {icon ? (
+          <Image source={{uri: icon}} style={styles.img} />
+        ) : (
+          <Image source={IMAGES.ALL} style={styles.img} />
+        )}
       </View>
       <Text numberOfLines={2} style={styles.textTitle}>
         {title}
@@ -25,6 +26,10 @@ const ItemCategories = ({title, iconCategory, onPress}) => {
 export default React.memo(ItemCategories);
 
 const styles = StyleSheet.create({
+  img: {
+    width: scale(40),
+    height: scale(40),
+  },
   textTitle: {
     fontSize: AppTheme.FontSize.Medium,
     color: AppTheme.Colors.Black,
@@ -39,11 +44,18 @@ const styles = StyleSheet.create({
     borderColor: AppTheme.Colors.Light,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: AppTheme.Colors.White,
+    elevation: 2,
+    shadowColor: AppTheme.Colors.Black,
+    shadowOpacity: 0.5,
+
+    shadowRadius: 100,
   },
   container: {
     width: scale(90),
     height: verticalScale(128),
     alignItems: 'center',
     justifyContent: 'space-around',
+    marginRight: scale(10),
   },
 });

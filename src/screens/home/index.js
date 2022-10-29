@@ -15,6 +15,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getAllProductsRequest} from '../../redux/products/action';
 import {getProductsSelector} from '../../redux/products/selector';
 import {formatMoney} from '../../helpers/formatMoney';
+import PlaceholderProduct from '../../components/placeholderProduct';
+import PlaceholderListCategories from '../../components/placeholderListCategories';
+import PlaceholderProductOnHome from '../../components/placeholderProductOnHome';
+import {getListCategoriesSelector} from '../../redux/categories/selector';
+import {
+  getListCategoriesRequest,
+  getListGearRequest,
+} from '../../redux/categories/action';
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
   const onMore = useCallback(title => {
@@ -32,10 +40,24 @@ const Home = ({navigation}) => {
   };
   useEffect(() => {
     dispatch(getAllProductsRequest());
+    dispatch(getListCategoriesRequest());
+    // dispatch(getListGearRequest(listCategories));
   }, [dispatch]);
   const listProduct = useSelector(getProductsSelector);
+  const listCategories = useSelector(getListCategoriesSelector);
+  // console.log('categorie ', listCategories);
+  const onListProductByCategories = useCallback(
+    id => {
+      navigation.navigate('ListProduct');
+    },
+    [dispatch],
+  );
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
       <Header title="Home" />
       <View style={styles.body}>
         <View style={styles.viewTextInput}>
@@ -73,25 +95,29 @@ const Home = ({navigation}) => {
         </View>
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Danh mục</Text>
-          <Pressable onPress={() => onMore('category')}>
-            <Text style={styles.textMore}>Xem Thêm</Text>
-          </Pressable>
+          <Pressable onPress={() => onMore('category')}></Pressable>
         </View>
-        <ScrollView
-          style={styles.containerCategories}
-          horizontal={true}
-          contentContainerStyle={{paddingHorizontal: scale(16)}}
-          showsHorizontalScrollIndicator={false}>
-          {DATA_CATEGORIES.map(item => {
-            return (
-              <ItemCategories
-                onPress={() => navigation.navigate('ListProduct')}
-                key={item?.id}
-                title={item?.title}
-              />
-            );
-          })}
-        </ScrollView>
+        {listCategories.length > 0 ? (
+          <ScrollView
+            style={styles.containerCategories}
+            horizontal={true}
+            contentContainerStyle={{paddingHorizontal: scale(16)}}
+            showsHorizontalScrollIndicator={false}>
+            {listCategories.map(item => {
+              return (
+                <ItemCategories
+                  onPress={onListProductByCategories}
+                  key={item?._id}
+                  title={item?.title}
+                  icon={item?.icon}
+                  type={item?.type}
+                />
+              );
+            })}
+          </ScrollView>
+        ) : (
+          <PlaceholderListCategories />
+        )}
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Flash Sale</Text>
           <Pressable onPress={() => onMore('category')}>

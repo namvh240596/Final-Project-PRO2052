@@ -42,6 +42,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: AppTheme.Colors.Blue,
     alignItems: 'center',
+    elevation: 2,
+    shadowColor: AppTheme.Colors.Puple,
+    shadowOpacity: 0.5,
+    shadowRadius: 50,
   },
   textTitle: {
     width: '100%',

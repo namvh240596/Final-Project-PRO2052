@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
     marginRight: scale(20),
     marginBottom: verticalScale(14),
     backgroundColor: AppTheme.Colors.White,
+    elevation: 4,
+    shadowColor: AppTheme.Colors.Black,
+    shadowOpacity: 0.2,
+    shadowRadius: 40,
   },
 
   img: {
