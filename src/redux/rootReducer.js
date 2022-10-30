@@ -4,7 +4,7 @@ import {PersistConfig, persistReducer} from 'redux-persist';
 import productsReducer from './products/reducer';
 import categoriesReducer from './categories/reducer';
 import gearReducer from './gear/reducer';
-
+import bannerReducer from './banner/reducer';
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
@@ -13,4 +13,5 @@ export const rootReducer = combineReducers({
   productsReducer,
   categoriesReducer,
   gearReducer,
+  bannerReducer,
 });

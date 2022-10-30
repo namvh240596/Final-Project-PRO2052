@@ -10,6 +10,12 @@ export const getAllProductsByTypeApi = type => {
     `/product/?page=&limit=&populate=category&type=${type}`,
   );
 };
-export const getAllCategoriesApi = () => {
-  return axiosClient.get(`/category/`);
+export const getMyFavoriteApi = () => {
+  return axiosClient.get('/favorite/me');
+};
+export const getCheckFavoriteApi = id => {
+  return axiosClient.get(`/favorite/check/${id}`);
+};
+export const changeFavoriteApi = data => {
+  return axiosClient.post(`/favorite`, data);
 };

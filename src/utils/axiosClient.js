@@ -6,23 +6,23 @@ getToken().then(res => {
 });
 
 const axiosClient = axios.create({
-  baseURL: 'http://192.168.50.105:3000',
+  baseURL: 'https://guvico-be.herokuapp.com',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
   timeout: 10000,
 });
 
-axiosClient.interceptors.request.use(
-  async config => {
+axiosClient.interceptors.request.use(async req => {
+  if (!token) {
     token = await getToken();
-    config.headers = {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    };
-    return config;
-  },
-  err => Promise.reject(err),
-);
-
+    req.headers.Authorization = `Bearer ${token}`;
+  }
+  token = await getToken();
+  req.headers.Authorization = `Bearer ${token}`;
+  return req;
+});
 axiosClient.interceptors.response.use(
   function (response) {
     return response.data;

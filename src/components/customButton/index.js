@@ -5,7 +5,7 @@ import {scale, verticalScale} from '../../utils/scale';
 import {AppTheme, TextStyles} from '../../config/AppTheme';
 
 const CustomButton = ({
-  rightIcon,
+  leftIcon,
   containerStyles,
   textStyles,
   title,
@@ -17,9 +17,9 @@ const CustomButton = ({
       style={[styles.container, containerStyles]}
       disabled={disabled}
       onPress={onPress}>
-      {rightIcon && (
+      {leftIcon && (
         <SvgXml
-          xml={rightIcon}
+          xml={leftIcon}
           width={scale(24)}
           height={scale(24)}
           style={{marginLeft: scale(20)}}

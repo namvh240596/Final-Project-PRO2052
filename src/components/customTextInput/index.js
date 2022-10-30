@@ -33,6 +33,7 @@ const CustomTextInput = ({
         {leftIcon && (
           <SvgXml xml={leftIcon} width={scale(24)} height={scale(24)} />
         )}
+
         <TextInput
           placeholder={textPlaceHolder || 'Enter your text'}
           placeholderTextColor={placeholderTextColor || AppTheme.Colors.Grey}
