@@ -44,7 +44,6 @@ const Explore = () => {
     dispatch(getListCategoriesRequest());
     setListGear(listCategories);
     setListProduct(listProducts);
-    console.log('---', listCategories);
   }, []);
 
   const OpenModalChooseGear = useCallback(() => {

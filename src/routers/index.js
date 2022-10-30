@@ -18,7 +18,7 @@ import OrderDetail from '../screens/account/orderDetail';
 const {Navigator, Screen, Group} = createNativeStackNavigator();
 
 export default function AppRouter() {
-  let isLogin = true;
+  let isLogin = false;
   return (
     <NavigationContainer>
       <Navigator

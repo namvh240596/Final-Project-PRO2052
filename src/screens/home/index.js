@@ -1,4 +1,12 @@
-import {View, Text, FlatList, Image, ScrollView, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  ScrollView,
+  Pressable,
+  Dimensions,
+} from 'react-native';
 import React, {useRef, useState, useEffect, useCallback} from 'react';
 import {styles} from './styles';
 import Header from '../../components/header';
@@ -9,7 +17,6 @@ import {AppTheme} from '../../config/AppTheme';
 import IMAGES from '../../assets/images';
 import {scale} from '../../utils/scale';
 import ItemCategories from './components/ItemCategories';
-import {DATA_CATEGORIES, DATA_PRODUCTS} from '../../services/fakeApi/fakeAPI';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllProductsRequest} from '../../redux/products/action';
@@ -23,6 +30,10 @@ import {
   getListCategoriesRequest,
   getListGearRequest,
 } from '../../redux/categories/action';
+import {getListBannerRequest} from '../../redux/banner/action';
+import {getListBannerSelector} from '../../redux/banner/selector';
+import Carousel from 'react-native-reanimated-carousel';
+import FastImage from 'react-native-fast-image';
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
   const onMore = useCallback(title => {
@@ -45,6 +56,7 @@ const Home = ({navigation}) => {
   }, [dispatch]);
   const listProduct = useSelector(getProductsSelector);
   const listCategories = useSelector(getListCategoriesSelector);
+  const listBanner = useSelector(getListBannerSelector);
   // console.log('categorie ', listCategories);
   const onListProductByCategories = useCallback(
     id => {
