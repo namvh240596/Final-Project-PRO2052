@@ -5,6 +5,7 @@ import productsReducer from './products/reducer';
 import categoriesReducer from './categories/reducer';
 import gearReducer from './gear/reducer';
 import bannerReducer from './banner/reducer';
+import authReducer from './auth/reducer';
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
@@ -14,4 +15,5 @@ export const rootReducer = combineReducers({
   categoriesReducer,
   gearReducer,
   bannerReducer,
+  authReducer,
 });

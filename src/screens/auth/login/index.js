@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
 import {SvgXml} from 'react-native-svg';
@@ -7,9 +7,24 @@ import AppIcon from '../../../assets/icons';
 import {scale, verticalScale} from '../../../utils/scale';
 import CustomTextInput from '../../../components/customTextInput';
 import CustomButton from '../../../components/customButton';
+import {useDispatch} from 'react-redux';
+import {loginRequest} from '../../../redux/auth/action';
+import {Formik} from 'formik';
+import {validateLoginSchema} from '../../../utils/schema';
+import {loginRequestApi} from '../../../services/api/auth';
+import Lottie from 'lottie-react-native';
 
 const Login = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const initialValues = {email: '', password: ''};
+  const [isLoading, setIsLoading] = useState(false);
+  const onLogin = useCallback(
+    values => {
+      dispatch(loginRequest({email: values.email, password: values.password}));
+    },
+    [dispatch],
+  );
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -21,21 +36,41 @@ const Login = () => {
         />
         <Text style={styles.textWelcome}>Welcome to High Tech</Text>
         <Text style={styles.text}>Đăng nhập để tiếp</Text>
-        <CustomTextInput
-          leftIcon={AppIcon.IconMailGrey}
-          textPlaceHolder={'Số điện thoại'}
-          containerTextInputStyle={{marginTop: verticalScale(28)}}
-        />
-        <CustomTextInput
-          leftIcon={AppIcon.IconLockGrey}
-          textPlaceHolder={'Mật khẩu'}
-          containerTextInputStyle={{marginTop: verticalScale(18)}}
-          secureTextEntry
-        />
-        <CustomButton
-          title={'Đăng nhập'}
-          containerStyles={styles.containerBtn}
-        />
+        <Formik
+          initialValues={initialValues}
+          validateOnChange={true}
+          onSubmit={onLogin}
+          validationSchema={validateLoginSchema}>
+          {({errors, values, setFieldValue, handleSubmit}) => {
+            return (
+              <>
+                <CustomTextInput
+                  value={values.email}
+                  leftIcon={AppIcon.IconMailGrey}
+                  textPlaceHolder={'Email'}
+                  containerTextInputStyle={{marginTop: verticalScale(28)}}
+                  textErrors={errors.email}
+                  onChangeText={text => setFieldValue('email', text)}
+                />
+                <CustomTextInput
+                  value={values.password}
+                  leftIcon={AppIcon.IconLockGrey}
+                  textPlaceHolder={'Mật khẩu'}
+                  containerTextInputStyle={{marginTop: verticalScale(18)}}
+                  secureTextEntry
+                  textErrors={errors.password}
+                  onChangeText={text => setFieldValue('password', text)}
+                />
+                <CustomButton
+                  title={'Đăng nhập'}
+                  containerStyles={styles.containerBtn}
+                  onPress={handleSubmit}
+                />
+              </>
+            );
+          }}
+        </Formik>
+
         <View style={styles.containerOr}>
           <View style={styles.viewOr}></View>
           <Text style={styles.textOR}>OR</Text>

@@ -2,21 +2,28 @@ import jwtDecode from 'jwt-decode';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {setToken} from '../../helpers/tokenHelper';
 import {loginRequestApi, regsiterRequestApi} from '../../services/api/auth';
-import {loginSuccess} from './action';
+import {loginSuccess, signUpSuccess} from './action';
 import {LOGIN_REQUEST, LOGOUT_REQUEST, SIGN_UP_REQUEST} from './actionType';
 
 function* loginHandle(action) {
-  const {payload} = action;
+  const {payload, onSuccess} = action;
   try {
     const res = yield call(loginRequestApi, {
       email: payload?.email,
       password: payload?.password,
     });
-    console.log('res -> ', res);
-    // setToken(res.token);
-    // const user = jwtDecode(res.token);
-    // onSuccess?.(action);
-    // yield put(loginSuccess(user:res.user,isLogin:true, toekn: res.token));
+    onSuccess?.(action);
+    console.log('res ', res);
+    yield put(
+      loginSuccess({
+        email: res?.data.email,
+        fullname: res?.data.fullname,
+        phone: res?.data.phone,
+        isLogin: true,
+        token: res?.data.token,
+      }),
+    );
+    console.log('tới đây >> ');
   } catch (error) {
     console.log('loginHandle -> ', error);
   }

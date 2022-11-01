@@ -20,14 +20,16 @@ const initialState = {
 };
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_REQUEST:
-      return {...state};
     case LOGIN_SUCCESS:
       return {
         ...state,
         token: action?.payload.token,
         isLogin: action?.payload.isLogin,
-        user: action?.payload.user,
+        user: {
+          email: action?.payload.email,
+          phone: action?.payload.phone,
+          fullname: action?.payload.fullname,
+        },
       };
     case LOGIN_FAILED:
       return {...state};
@@ -36,9 +38,13 @@ const authReducer = (state = initialState, action) => {
     case LOGOUT_SUCCESS:
       return {
         ...state,
-        token: '',
+        token: res.token,
         isLogin: action?.payload.isLogin,
-        user: action?.payload.user,
+        user: {
+          email: action?.payload.email,
+          phone: action?.payload.phone,
+          fullname: action?.payload.fullname,
+        },
       };
     case SIGN_UP_REQUEST:
       return {...state};
