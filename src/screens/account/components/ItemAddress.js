@@ -4,12 +4,14 @@ import {scale, verticalScale} from '../../../utils/scale';
 import {AppTheme} from '../../../config/AppTheme';
 import CustomButton from '../../../components/customButton';
 
-const ItemAddress = ({onPress}) => {
+const ItemAddress = ({onPress, name, address, phone}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.textName}>Nguyễn Lam Trường</Text>
-      <Text>115A Tô Ký Phường Đông Hưng Thuận Quận 12 HCM</Text>
-      <Text>0329374810</Text>
+      <Text style={styles.text}>
+        115A Tô Ký Phường Đông Hưng Thuận Quận 12 HCM
+      </Text>
+      <Text style={styles.textPhone}>0329374810</Text>
     </TouchableOpacity>
   );
 };
@@ -17,12 +19,27 @@ const ItemAddress = ({onPress}) => {
 export default ItemAddress;
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: scale(16),
+    fontFamily: AppTheme.Fonts.Regular,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Grey,
+    marginBottom: verticalScale(7),
+  },
+  textPhone: {
+    fontSize: scale(16),
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '700',
+  },
   textName: {
     fontSize: scale(16),
     fontFamily: AppTheme.Fonts.Bold,
     letterSpacing: 0.5,
     color: AppTheme.Colors.Dark,
     fontWeight: '700',
+    marginBottom: verticalScale(16),
   },
   container: {
     paddingVertical: verticalScale(12),

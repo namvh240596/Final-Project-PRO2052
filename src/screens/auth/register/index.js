@@ -59,7 +59,7 @@ const Register = () => {
               <>
                 <CustomTextInput
                   value={values.fullname}
-                  leftIcon={AppIcon.IconMailGrey}
+                  leftIcon={AppIcon.IconAccountGrey}
                   textPlaceHolder={'Họ tên'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   textErrors={errors.fullname}
@@ -67,7 +67,7 @@ const Register = () => {
                 />
                 <CustomTextInput
                   value={values.phone}
-                  leftIcon={AppIcon.IconMailGrey}
+                  leftIcon={AppIcon.IconPhone}
                   textPlaceHolder={'Số điện thoại'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   textErrors={errors.phone}
