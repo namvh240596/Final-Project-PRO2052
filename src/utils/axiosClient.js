@@ -6,7 +6,7 @@ getToken().then(res => {
 });
 
 const axiosClient = axios.create({
-  baseURL: 'https://guvico-be.herokuapp.com',
+  baseURL: 'https://fpt-hightech-api.herokuapp.com',
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,

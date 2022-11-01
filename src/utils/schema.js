@@ -2,40 +2,64 @@ import * as Yup from 'yup';
 const requiredErrorMessage = 'Vui lòng điền đầy đử thông tin';
 const validPhoneMessage = 'Vui lòng điền đúng định dạng số điện thoại';
 const validEmailMessage = 'Vui lòng điền đúng định dạng email';
-const validPassMessage = 'Mật khẩu phải có tối thiểu tám ký tự, ít nhất một chữ cái và một số';
+const validPassMessage =
+  'Mật khẩu phải có tối thiểu tám ký tự, ít nhất một chữ cái và một số';
 const confirmPassMessage = 'Mật khẩu không trùng khớp';
-
-const regexPass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+const validFullnameMessage = 'Vui lòng điền đúng định dạng tên';
+const regexPass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d].{7,}$/;
 //Tối thiểu tám ký tự, ít nhất một chữ cái và một số:
-const regexPhone = /([0][3|5|7|8|9])+([0-9]{9})\b/g;
+const regexPhone =
+  /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
 //
-const regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const regexEmail =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+const regexFullname =
+  /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/;
 const validateLoginSchema = Yup.object().shape({
-    phone: Yup.string().matches(regexPhone, validPhoneMessage).required(requiredErrorMessage),
-    password: Yup.string().matches(regexPass, validPassMessage).required(requiredErrorMessage),
+  email: Yup.string()
+    .matches(regexEmail, validEmailMessage)
+    .required(requiredErrorMessage),
+  password: Yup.string()
+    .matches(regexPass, validPassMessage)
+    .required(requiredErrorMessage),
 });
 
 const validateRegisterSchema = Yup.object().shape({
-    phone: Yup.string().required(requiredErrorMessage).matches(regexPhone, validPhoneMessage),
+  phone: Yup.string()
+    .required(requiredErrorMessage)
+    .matches(regexPhone, validPhoneMessage),
 });
 
 const validateConfirmPasswordSchema = Yup.object().shape({
-    password: Yup.string()
-        .min(8, validPassMessage).required(requiredErrorMessage).matches(regexPass, validPassMessage),
-    confirm_password: Yup.string()
-        .min(8, validPassMessage).required(requiredErrorMessage)
-        .matches(regexPass, validPassMessage).oneOf([Yup.ref('password'), null], confirmPassMessage),
+  fullname: Yup.string()
+    .matches(regexFullname, validFullnameMessage)
+    .required(requiredErrorMessage),
+  email: Yup.string()
+    .matches(regexEmail, validEmailMessage)
+    .required(requiredErrorMessage),
+  phone: Yup.string()
+    .required(requiredErrorMessage)
+    .matches(regexPhone, validPhoneMessage),
+  password: Yup.string()
+    .min(8, validPassMessage)
+    .required(requiredErrorMessage)
+    .matches(regexPass, validPassMessage),
+  confirmPassword: Yup.string()
+    .min(8, validPassMessage)
+    .required(requiredErrorMessage)
+    .matches(regexPass, validPassMessage)
+    .oneOf([Yup.ref('password'), null], confirmPassMessage),
 });
 
 const validateInformationSchema = Yup.object().shape({
-    name: Yup.string().required(requiredErrorMessage),
-    email: Yup.string().matches(regexEmail, validEmailMessage),
-})
+  name: Yup.string().required(requiredErrorMessage),
+  email: Yup.string().matches(regexEmail, validEmailMessage),
+});
 
 export {
-    validateLoginSchema,
-    validateRegisterSchema,
-    validateConfirmPasswordSchema,
-    validateInformationSchema
-}
+  validateLoginSchema,
+  validateRegisterSchema,
+  validateConfirmPasswordSchema,
+  validateInformationSchema,
+};

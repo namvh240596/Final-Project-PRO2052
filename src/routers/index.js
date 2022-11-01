@@ -14,11 +14,13 @@ import Profile from '../screens/account/profile';
 import MyOrder from '../screens/account/order';
 import Payment from '../screens/account/payment';
 import OrderDetail from '../screens/account/orderDetail';
+import {useSelector} from 'react-redux';
+import {getIsLoginSelector} from '../redux/auth/selector';
 
 const {Navigator, Screen, Group} = createNativeStackNavigator();
 
 export default function AppRouter() {
-  let isLogin = false;
+  const isLogin = useSelector(getIsLoginSelector);
   return (
     <NavigationContainer>
       <Navigator
