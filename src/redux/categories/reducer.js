@@ -17,7 +17,7 @@ const categoriesReducer = (state = initialState, action) => {
     case GET_LIST_CATEGORIES_REQUEST:
       return {...state};
     case GET_LIST_CATEGORIES_SUCCESS:
-      return {...state, listCategories: action?.payload};
+      return {...state, listCategories: action?.payload.data};
     case GET_LIST_CATEGORIES_FAILED:
       return {...state};
     default:

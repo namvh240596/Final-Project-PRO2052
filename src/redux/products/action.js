@@ -9,7 +9,7 @@ import {
   GET_PRODUCT_REQUEST,
   GET_PRODUCT_SUCCESS,
 } from './actionType';
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////// get all product //////////////////////////////////////////////////
 export const getAllProductsRequest = payload => ({
   type: GET_ALL_PRODUCTS_REQUEST,
   payload: payload,
@@ -22,10 +22,11 @@ export const getAllProductsFailed = payload => ({
   type: GET_ALL_PRODUCTS_FAILED,
   payload: payload,
 });
-///////////////////////////////////////////////////////////////////////////////////////////////////
-export const getAllProductsByTypeRequest = payload => ({
+////////////////////////////////////////// get product by type -> category /////////////////////////////////////////////////////////
+export const getAllProductsByTypeRequest = (payload, onSuccess) => ({
   type: GET_ALL_PRODUCTS_BY_TYPE_REQUEST,
   payload: payload,
+  onSuccess: onSuccess,
 });
 export const getAllProductsByTypeSuccess = payload => ({
   type: GET_ALL_PRODUCTS_BY_TYPE_SUCCESS,

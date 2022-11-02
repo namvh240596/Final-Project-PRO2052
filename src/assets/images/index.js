@@ -5,5 +5,6 @@ const IMAGES = {
   Avatar: require('../images/avatar.jpg'),
   CPU: require('../images/cpu.png'),
   ALL: require('../images/all.png'),
+  BACKGROUND: require('../images/backround.jpg'),
 };
 export default IMAGES;

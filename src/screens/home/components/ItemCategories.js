@@ -6,9 +6,11 @@ import AppIcon from '../../../assets/icons';
 import {AppTheme} from '../../../config/AppTheme';
 import IMAGES from '../../../assets/images';
 
-const ItemCategories = ({title, icon, onPress, _id, type}) => {
+const ItemCategories = ({title, icon, onPress, _id, type, containerStyle}) => {
   return (
-    <TouchableOpacity onPress={() => onPress(_id)} style={styles.container}>
+    <TouchableOpacity
+      onPress={() => onPress(_id, type)}
+      style={styles.container}>
       <View style={styles.viewIcon}>
         {icon ? (
           <Image source={{uri: icon}} style={styles.img} />

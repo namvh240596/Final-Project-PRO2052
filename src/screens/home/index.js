@@ -19,7 +19,10 @@ import {scale} from '../../utils/scale';
 import ItemCategories from './components/ItemCategories';
 import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllProductsRequest} from '../../redux/products/action';
+import {
+  getAllProductsByTypeRequest,
+  getAllProductsRequest,
+} from '../../redux/products/action';
 import {getProductsSelector} from '../../redux/products/selector';
 import {formatMoney} from '../../helpers/formatMoney';
 import PlaceholderProduct from '../../components/placeholderProduct';
@@ -34,7 +37,10 @@ import {getListBannerRequest} from '../../redux/banner/action';
 import {getListBannerSelector} from '../../redux/banner/selector';
 import Carousel from 'react-native-reanimated-carousel';
 import FastImage from 'react-native-fast-image';
-const Home = ({navigation}) => {
+import {getToken} from '../../helpers/tokenHelper';
+import {useNavigation} from '@react-navigation/native';
+const Home = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const onMore = useCallback(title => {
     switch (title) {
@@ -59,8 +65,12 @@ const Home = ({navigation}) => {
   const listBanner = useSelector(getListBannerSelector);
   // console.log('categorie ', listCategories);
   const onListProductByCategories = useCallback(
-    id => {
-      navigation.navigate('ListProduct');
+    (id, type) => {
+      dispatch(
+        getAllProductsByTypeRequest(type, () =>
+          navigation.navigate('ListProduct', {id: id}),
+        ),
+      );
     },
     [dispatch],
   );
@@ -136,25 +146,27 @@ const Home = ({navigation}) => {
             <Text style={styles.textMore}>Xem Thêm</Text>
           </Pressable>
         </View>
-        <ScrollView
-          style={styles.containerCategories}
-          horizontal={true}
-          contentContainerStyle={{paddingLeft: scale(16)}}
-          showsHorizontalScrollIndicator={false}>
-          {listProduct.map(item => {
-            return (
-              <CustomProduct
-                key={item?._id}
-                title={item?.title}
-                image={item?.images[0]}
-                costPrice={item?.costPrice}
-                salePrice={item?.salePrice}
-                salePercent={item?.salePercent}
-                onGoDetail={() => onDetail(item._id)}
-              />
-            );
-          })}
-        </ScrollView>
+        {listProduct.length > 0 && (
+          <ScrollView
+            style={styles.containerCategories}
+            horizontal={true}
+            contentContainerStyle={{paddingLeft: scale(16)}}
+            showsHorizontalScrollIndicator={false}>
+            {listProduct.map(item => {
+              return (
+                <CustomProduct
+                  key={item?._id}
+                  title={item?.title}
+                  image={item?.images[0]}
+                  costPrice={item?.costPrice}
+                  salePrice={item?.salePrice}
+                  salePercent={item?.salePercent}
+                  onGoDetail={() => onDetail(item._id)}
+                />
+              );
+            })}
+          </ScrollView>
+        )}
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Mega Sale</Text>
           <Pressable onPress={() => onMore('category')}>

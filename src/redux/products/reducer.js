@@ -1,8 +1,9 @@
 import {
+  GET_ALL_PRODUCTS_BY_TYPE_SUCCESS,
   GET_ALL_PRODUCTS_FAILED,
   GET_ALL_PRODUCTS_REQUEST,
   GET_ALL_PRODUCTS_SUCCESS,
-  GEt_PRODUCT_FAILED,
+  GET_PRODUCT_FAILED,
   GET_PRODUCT_REQUEST,
   GET_PRODUCT_SUCCESS,
 } from './actionType';
@@ -10,6 +11,7 @@ import {
 const initialState = {
   products: [],
   product: {},
+  productsByType: [],
 };
 
 const productsReducer = (state = initialState, action) => {
@@ -17,15 +19,20 @@ const productsReducer = (state = initialState, action) => {
     case GET_ALL_PRODUCTS_REQUEST:
       return {...state};
     case GET_ALL_PRODUCTS_SUCCESS:
-      return {...state, products: action?.payload.res};
+      return {...state, products: action?.payload.res.data};
     case GET_ALL_PRODUCTS_FAILED:
       return {...state};
     case GET_PRODUCT_REQUEST:
       return {...state, product: {}};
     case GET_PRODUCT_SUCCESS:
-      return {...state, product: action?.payload.res};
-    case GEt_PRODUCT_FAILED:
+      return {...state, product: action?.payload.res.data};
+    case GET_PRODUCT_FAILED:
       return {...state};
+    case GET_ALL_PRODUCTS_BY_TYPE_SUCCESS:
+      return {
+        ...state,
+        productsByType: action?.payload.res.data,
+      };
     default:
       return {...state};
   }
