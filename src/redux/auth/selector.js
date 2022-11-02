@@ -1,1 +1,1 @@
-export const getIsLoginSelector = state => state.authReducer.isLogin;
+export const getIsLoginSelector = state => state.auth.isLogin;

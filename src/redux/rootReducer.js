@@ -15,5 +15,5 @@ export const rootReducer = combineReducers({
   categoriesReducer,
   gearReducer,
   bannerReducer,
-  authReducer,
+  auth: persistReducer(authPersistConfig, authReducer),
 });

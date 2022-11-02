@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import Header from '../../components/header';
 import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
@@ -7,14 +7,21 @@ import {DATA_CATEGORIES, DATA_PRODUCTS} from '../../services/fakeApi/fakeAPI';
 import ItemCategories from '../home/components/ItemCategories';
 import CustomProduct from '../../components/customProduct';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getListCategoriesSelector} from '../../redux/categories/selector';
-import {getProductsSelector} from '../../redux/products/selector';
+import {
+  getProductByTypeSelector,
+  getProductsSelector,
+} from '../../redux/products/selector';
 import IMAGES from '../../assets/images';
+import {getAllProductsByTypeRequest} from '../../redux/products/action';
 
-const ListProduct = () => {
+const ListProduct = ({props}) => {
+  const {id} = props.params;
   const listCategories = useSelector(getListCategoriesSelector);
   const listProduct = useSelector(getProductsSelector);
+  const listProductByType = useSelector(getProductByTypeSelector);
+  const dispatch = useDispatch();
   const renderItem = ({item}) => {
     return (
       <CustomProduct
@@ -32,6 +39,13 @@ const ListProduct = () => {
   const onDetail = id => {
     return navigation.navigate('ProductDetail', {id: id});
   };
+  const changeCategory = useCallback(
+    (_id, type) => {
+      dispatch(getAllProductsByTypeRequest(type));
+    },
+    [dispatch],
+  );
+
   return (
     <View style={styles.container}>
       <Header title={'Danh mục sản phẩm'} iconBack />
@@ -40,7 +54,10 @@ const ListProduct = () => {
           style={styles.containerCategories}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{alignItems: 'center'}}>
+          contentContainerStyle={{
+            alignItems: 'center',
+            paddingHorizontal: scale(16),
+          }}>
           <ItemCategories
             key={21}
             title={'Tất cả'}
@@ -54,14 +71,15 @@ const ListProduct = () => {
                 title={item?.title}
                 icon={item?.icon}
                 type={item?.type}
-                onPress={() => console.log('aaaa')}
+                onPress={changeCategory}
+                containerStyle={id === item?._id && styles.choosedCategory}
               />
             );
           })}
         </ScrollView>
 
         <FlatList
-          data={listProduct}
+          data={listProductByType}
           renderItem={renderItem}
           keyExtractor={item => item._id}
           numColumns={2}
@@ -78,6 +96,9 @@ const ListProduct = () => {
 export default ListProduct;
 
 const styles = StyleSheet.create({
+  choosedCategory: {
+    backgroundColor: AppTheme.Colors.Blue,
+  },
   container: {
     flex: 1,
     backgroundColor: AppTheme.Colors.White,

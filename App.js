@@ -7,9 +7,9 @@ import {persistor, store} from './src/redux/configStore';
 const App = () => {
   return (
     <Provider store={store}>
-      {/* <PersistGate loading={null} persistor={persistor}>*/}
+      {/* <PersistGate loading={null} persistor={persistor}> */}
       <AppRouter />
-      {/* </PersistGate>*/}
+      {/* </PersistGate> */}
     </Provider>
   );
 };

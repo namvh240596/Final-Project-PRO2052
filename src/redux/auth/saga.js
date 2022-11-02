@@ -13,7 +13,7 @@ function* loginHandle(action) {
       password: payload?.password,
     });
     onSuccess?.(action);
-    console.log('res ', res);
+    setToken(res?.data.token);
     yield put(
       loginSuccess({
         email: res?.data.email,
