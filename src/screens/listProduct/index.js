@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Header from '../../components/header';
 import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
@@ -16,11 +16,11 @@ import {
 import IMAGES from '../../assets/images';
 import {getAllProductsByTypeRequest} from '../../redux/products/action';
 
-const ListProduct = ({props}) => {
-  const {id} = props.params;
+const ListProduct = props => {
   const listCategories = useSelector(getListCategoriesSelector);
   const listProduct = useSelector(getProductsSelector);
   const listProductByType = useSelector(getProductByTypeSelector);
+  const [typeCategory, setTypeCategory] = useState(props?.route.params.type);
   const dispatch = useDispatch();
   const renderItem = ({item}) => {
     return (
@@ -31,21 +31,26 @@ const ListProduct = ({props}) => {
         costPrice={item?.costPrice}
         salePrice={item?.salePrice}
         salePercent={item?.salePercent}
-        onGoDetail={() => onDetail(item.id)}
+        onGoDetail={() => onDetail(item._id)}
       />
     );
   };
   const navigation = useNavigation();
   const onDetail = id => {
-    return navigation.navigate('ProductDetail', {id: id});
+    return navigation.navigate('ProductDetail', {productId: id});
   };
   const changeCategory = useCallback(
     (_id, type) => {
-      dispatch(getAllProductsByTypeRequest(type));
+      if (type !== -1) {
+        dispatch(getAllProductsByTypeRequest(type));
+        setTypeCategory(type);
+      } else {
+        dispatch(getAllProductsByTypeRequest(''));
+        setTypeCategory(type);
+      }
     },
     [dispatch],
   );
-
   return (
     <View style={styles.container}>
       <Header title={'Danh mục sản phẩm'} iconBack />
@@ -61,8 +66,10 @@ const ListProduct = ({props}) => {
           <ItemCategories
             key={21}
             title={'Tất cả'}
-            type={100}
-            onPress={() => console.log('aaaa')}
+            type={-1}
+            onPress={changeCategory}
+            _id={-1}
+            containerStyle={typeCategory === -1 && styles.choosedCategory}
           />
           {listCategories.map(item => {
             return (
@@ -72,7 +79,9 @@ const ListProduct = ({props}) => {
                 icon={item?.icon}
                 type={item?.type}
                 onPress={changeCategory}
-                containerStyle={id === item?._id && styles.choosedCategory}
+                containerStyle={
+                  typeCategory === item?.type && styles.choosedCategory
+                }
               />
             );
           })}
@@ -97,16 +106,16 @@ export default ListProduct;
 
 const styles = StyleSheet.create({
   choosedCategory: {
-    backgroundColor: AppTheme.Colors.Blue,
+    backgroundColor: AppTheme.Colors.Yellow,
   },
   container: {
     flex: 1,
     backgroundColor: AppTheme.Colors.White,
   },
   body: {
-    paddingVertical: verticalScale(15),
     flex: 1,
     backgroundColor: AppTheme.Colors.SecondBackround,
+    paddingTop: verticalScale(15),
   },
   containerCategories: {
     backgroundColor: AppTheme.Colors.White,
@@ -120,9 +129,11 @@ const styles = StyleSheet.create({
   },
   columnWrapperStyle: {
     justifyContent: 'space-between',
+    paddingBottom: verticalScale(15),
   },
   flatList: {
-    marginTop: verticalScale(20),
     paddingHorizontal: scale(16),
+    paddingTop: verticalScale(20),
+    marginTop: verticalScale(3),
   },
 });

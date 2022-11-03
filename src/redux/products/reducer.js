@@ -25,13 +25,13 @@ const productsReducer = (state = initialState, action) => {
     case GET_PRODUCT_REQUEST:
       return {...state, product: {}};
     case GET_PRODUCT_SUCCESS:
-      return {...state, product: action?.payload.res.data};
+      return {...state, product: action?.payload};
     case GET_PRODUCT_FAILED:
       return {...state};
     case GET_ALL_PRODUCTS_BY_TYPE_SUCCESS:
       return {
         ...state,
-        productsByType: action?.payload.res.data,
+        productsByType: action?.payload.productsByType,
       };
     default:
       return {...state};

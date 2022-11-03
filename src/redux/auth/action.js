@@ -5,11 +5,13 @@ import {
   LOGIN_FAILED,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
   SIGN_UP_FAILED,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
 } from './actionType';
-
+///////////////////////////////// login //////////////////////////////////////////
 export const loginRequest = (payload, onSuccess) => ({
   type: LOGIN_REQUEST,
   payload: payload,
@@ -23,7 +25,7 @@ export const loginFailed = payload => ({
   type: LOGIN_FAILED,
   payload: payload,
 });
-///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// register ///////////////////////////////////////////////////
 export const signUpRequest = (payload, onSuccess) => ({
   type: SIGN_UP_REQUEST,
   payload: payload,
@@ -37,7 +39,7 @@ export const signUpFailed = payload => ({
   type: SIGN_UP_FAILED,
   payload: payload,
 });
-///////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// change password ///////////////////////////////////////////////////
 export const changePasswordRequest = payload => ({
   type: CHANGE_PASSWORD_REQUEST,
   payload: payload,
@@ -50,11 +52,11 @@ export const changePasswordFailed = payload => ({
   type: CHANGE_PASSWORD_FAILED,
   payload: payload,
 });
-///////////////////////////////////////////////////////////////////////////////////////
-export const logoutRequest = () => ({
+////////////////////////////////////// logout /////////////////////////////////////////////////
+export const logoutRequest = payload => ({
   type: LOGOUT_REQUEST,
-});
-export const logoutSuccess = payload => ({
-  type: LOGOUT_SUCCESS,
   payload: payload,
+});
+export const logoutSuccess = () => ({
+  type: LOGOUT_SUCCESS,
 });

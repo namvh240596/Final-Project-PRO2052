@@ -39,6 +39,8 @@ import Carousel from 'react-native-reanimated-carousel';
 import FastImage from 'react-native-fast-image';
 import {getToken} from '../../helpers/tokenHelper';
 import {useNavigation} from '@react-navigation/native';
+import withLoading from '../../HOC/withLoading';
+import {GET_ALL_CATEGORIES_BY_TYPE_REQUEST} from '../../redux/products/actionType';
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -53,22 +55,20 @@ const Home = () => {
     }
   }, []);
   const onDetail = id => {
-    return navigation.navigate('ProductDetail', {id: id});
+    return navigation.navigate('ProductDetail', {productId: id});
   };
   useEffect(() => {
     dispatch(getAllProductsRequest());
     dispatch(getListCategoriesRequest());
-    // dispatch(getListGearRequest(listCategories));
   }, [dispatch]);
   const listProduct = useSelector(getProductsSelector);
   const listCategories = useSelector(getListCategoriesSelector);
   const listBanner = useSelector(getListBannerSelector);
-  // console.log('categorie ', listCategories);
   const onListProductByCategories = useCallback(
-    (id, type) => {
+    (_id, type) => {
       dispatch(
         getAllProductsByTypeRequest(type, () =>
-          navigation.navigate('ListProduct', {id: id}),
+          navigation.navigate('ListProduct', {type: type}),
         ),
       );
     },
@@ -133,6 +133,7 @@ const Home = () => {
                   title={item?.title}
                   icon={item?.icon}
                   type={item?.type}
+                  _id={item?._id}
                 />
               );
             })}

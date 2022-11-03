@@ -1,13 +1,26 @@
 import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import Header from '../../../components/header';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
 import IMAGES from '../../../assets/images';
 import ItemProfile from './components/ItemProfile';
 import AppIcon from '../../../assets/icons';
+import {useDispatch} from 'react-redux';
+import {logoutRequest} from '../../../redux/auth/action';
+import {useNavigation} from '@react-navigation/native';
 
 const Profile = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const onLogout = useCallback(() => {
+    dispatch(
+      logoutRequest(() =>
+        // navigation.reset({index: 1, routes: [{name: 'Login'}]}),
+        navigation.navigate('SplashScreen'),
+      ),
+    );
+  }, []);
   return (
     <View style={styles.container}>
       <Header title={'Tài khoản'} iconBack />
@@ -36,7 +49,11 @@ const Profile = () => {
             icon={AppIcon.IconLockBlue}
             description={'*****'}
           />
-          <ItemProfile title={'Đăng xuất'} disabled={false} />
+          <ItemProfile
+            title={'Đăng xuất'}
+            onPress={onLogout}
+            disabled={false}
+          />
         </View>
       </View>
     </View>
