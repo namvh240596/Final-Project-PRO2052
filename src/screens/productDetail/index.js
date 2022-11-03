@@ -16,22 +16,21 @@ import {formatMoney} from '../../helpers/formatMoney';
 import PlaceholderProduct from '../../components/placeholderProduct';
 
 const ProductDetail = props => {
-  const id = props.route.params;
+  const productId = props.route.params.productId;
+  console.log(props);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const product = useSelector(getProductSelector);
   useEffect(() => {
-    dispatch(getProductRequest(id));
+    dispatch(getProductRequest(productId));
   }, [dispatch]);
   const onDetail = id => {
-    return navigation.navigate('ProductDetail', {id: id});
+    dispatch(getProductRequest(id));
   };
   const onChangeFavorite = useCallback(() => {
     console.log('change ');
   }, []);
-  const addToCart = useCallback(() => {
-    console.log('addToCart ');
-  }, []);
+  const addToCart = useCallback(productId => {}, []);
   return (
     <View style={styles.container}>
       <Header title={product?.title} iconBack />
@@ -71,7 +70,7 @@ const ProductDetail = props => {
             <CustomButton
               title={'Thêm vào giỏ hàng'}
               containerStyles={styles.btnAddToCart}
-              onPress={addToCart}
+              onPress={() => addToCart(product._id)}
             />
             <View style={{left: -scale(20)}}>
               <Text style={styles.textPrice}>
@@ -115,7 +114,8 @@ const ProductDetail = props => {
                 image={product?.images[0]}
                 costPrice={product?.costPrice}
                 salePrice={product?.salePrice}
-                sale={product?.salePercent}
+                salePercent={product?.salePercent}
+                onGoDetail={() => onDetail(product?._id)}
               />
               <CustomProduct
                 title={product?.title}
@@ -131,6 +131,7 @@ const ProductDetail = props => {
                 costPrice={product?.costPrice}
                 salePrice={product?.salePrice}
                 sale={product?.salePercent}
+                onGoDetail={() => onDetail(product?._id)}
               />
               <CustomProduct
                 title={product?.title}
@@ -138,6 +139,7 @@ const ProductDetail = props => {
                 costPrice={product?.costPrice}
                 salePrice={product?.salePrice}
                 sale={product?.salePercent}
+                onGoDetail={() => onDetail(product?._id)}
               />
             </ScrollView>
           </View>

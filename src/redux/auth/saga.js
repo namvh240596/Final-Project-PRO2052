@@ -1,10 +1,10 @@
 import jwtDecode from 'jwt-decode';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
-import {setToken} from '../../helpers/tokenHelper';
+import {removeToken, setToken} from '../../helpers/tokenHelper';
 import {loginRequestApi, regsiterRequestApi} from '../../services/api/auth';
-import {loginSuccess, signUpSuccess} from './action';
+import {loginSuccess, logoutSuccess, signUpSuccess} from './action';
 import {LOGIN_REQUEST, LOGOUT_REQUEST, SIGN_UP_REQUEST} from './actionType';
-
+///////////////////////////////// login //////////////////////////////////////////
 function* loginHandle(action) {
   const {payload, onSuccess} = action;
   try {
@@ -23,11 +23,12 @@ function* loginHandle(action) {
         token: res?.data.token,
       }),
     );
-    console.log('tới đây >> ');
   } catch (error) {
     console.log('loginHandle -> ', error);
   }
 }
+///////////////////////////////// register  //////////////////////////////////////////
+
 function* signUpHanlde(action) {
   const {payload, onSuccess} = action;
   try {
@@ -44,9 +45,14 @@ function* signUpHanlde(action) {
     console.log('signUpHanlde -> ', error);
   }
 }
-function* logoutHandle() {
+///////////////////////////////// logout  //////////////////////////////////////////
+
+function* logoutHandle(action) {
+  const {onSuccess} = action;
   try {
-    yield put({token: '', user: {}, isLogin: false});
+    onSuccess?.(action);
+    removeToken();
+    yield put(logoutSuccess());
   } catch (error) {
     console.log('logoutHandle -> ', error);
   }

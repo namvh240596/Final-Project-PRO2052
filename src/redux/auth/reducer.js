@@ -38,13 +38,9 @@ const authReducer = (state = initialState, action) => {
     case LOGOUT_SUCCESS:
       return {
         ...state,
-        token: res.token,
-        isLogin: action?.payload.isLogin,
-        user: {
-          email: action?.payload.email,
-          phone: action?.payload.phone,
-          fullname: action?.payload.fullname,
-        },
+        token: '',
+        isLogin: false,
+        user: {},
       };
     case SIGN_UP_REQUEST:
       return {...state};

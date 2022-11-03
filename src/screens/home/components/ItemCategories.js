@@ -11,7 +11,7 @@ const ItemCategories = ({title, icon, onPress, _id, type, containerStyle}) => {
     <TouchableOpacity
       onPress={() => onPress(_id, type)}
       style={styles.container}>
-      <View style={styles.viewIcon}>
+      <View style={[styles.viewIcon, containerStyle]}>
         {icon ? (
           <Image source={{uri: icon}} style={styles.img} />
         ) : (
@@ -59,5 +59,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginRight: scale(10),
+    backgroundColor: AppTheme.Colors.White,
   },
 });
