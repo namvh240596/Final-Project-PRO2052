@@ -1,1 +1,2 @@
-export const getListBannerSelector = state => state.gearReducer.listBanner;
+export const getListCartSelector = state => state.cartReducer.listCart;
+export const getStatusCartSelector = state => state.cartReducer.message;

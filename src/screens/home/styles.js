@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
@@ -58,8 +58,29 @@ export const styles = StyleSheet.create({
   },
   img: {
     width: '100%',
-    paddingHorizontal: scale(16),
     height: verticalScale(236),
-    paddingTop: verticalScale(16),
+    marginTop: verticalScale(10),
+  },
+  itemImage: {
+    height: verticalScale(236),
+    width: Dimensions.get('window').width,
+    borderRadius: 5,
+  },
+  dotInActive: {
+    backgroundColor: AppTheme.Colors.White,
+    width: scale(20),
+    height: verticalScale(6),
+  },
+  dotActive: {
+    backgroundColor: AppTheme.Colors.Blue,
+    width: scale(20),
+    height: verticalScale(6),
+  },
+  viewCarousel: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: AppTheme.Colors.White,
+    borderRadius: 5,
   },
 });

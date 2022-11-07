@@ -1,20 +1,32 @@
-import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 import IMAGES from '../../assets/images';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
+import {formatMoney} from '../../helpers/formatMoney';
 
-const ProducOnCart = ({heart, noCount, noDeleted}) => {
+const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <Image source={IMAGES.Product1} resizeMode="cover" />
+        <Image
+          source={{uri: item?.product.images[0]}}
+          resizeMode="cover"
+          style={styles.img}
+        />
         <View style={styles.main}>
           <View style={styles.viewName}>
             <Text numberOfLines={3} style={styles.textName}>
-              nam asdasdas enam asdasdas e nam asdasdas e nam asdasdas e
+              {item?.product.title}
             </Text>
             <View style={styles.viewIcon}>
               <SvgXml
@@ -24,28 +36,53 @@ const ProducOnCart = ({heart, noCount, noDeleted}) => {
                 onPress={() => {}}
               />
               {noDeleted ? null : (
-                <SvgXml
-                  xml={AppIcon.IconRemove}
-                  width={scale(18)}
-                  style={{marginLeft: scale(16)}}
-                  height={scale(18)}
-                />
+                <TouchableOpacity
+                  onPress={() => onUpdateQuantity(item.product._id, 0)}>
+                  <SvgXml
+                    xml={AppIcon.IconRemove}
+                    width={scale(18)}
+                    style={{marginLeft: scale(16)}}
+                    height={scale(18)}
+                  />
+                </TouchableOpacity>
               )}
             </View>
           </View>
           <View style={styles.viewPrice}>
-            <Text style={styles.textPrice}>8999</Text>
-            {noCount ? null : (
-              <View style={[styles.viewPlus]}>
-                <Pressable style={styles.button}>
-                  <Text>-</Text>
-                </Pressable>
-                <Text style={styles.textPlus}>9</Text>
-                <Pressable style={styles.button}>
-                  <Text>+</Text>
-                </Pressable>
-              </View>
-            )}
+            <View>
+              {item.product.salePercent && (
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.textCostPrice}>
+                    {formatMoney(item.product.costPrice)}
+                  </Text>
+                  <Text style={styles.textSale}>
+                    {' '}
+                    {item.product.salePercent}%
+                  </Text>
+                </View>
+              )}
+              <Text style={styles.textPrice}>
+                {formatMoney(item.product.salePrice)}
+              </Text>
+            </View>
+
+            <View style={[styles.viewPlus]}>
+              <Pressable style={styles.buttonSubtraction}>
+                <SvgXml
+                  xml={AppIcon.IconMinus}
+                  width={scale(13)}
+                  height={scale(13)}
+                />
+              </Pressable>
+              <Text style={styles.textQuantity}>{item.quantity}</Text>
+              <Pressable style={styles.buttonAddition}>
+                <SvgXml
+                  xml={AppIcon.IconPlus}
+                  width={scale(13)}
+                  height={scale(13)}
+                />
+              </Pressable>
+            </View>
           </View>
         </View>
       </View>
@@ -56,25 +93,64 @@ const ProducOnCart = ({heart, noCount, noDeleted}) => {
 export default ProducOnCart;
 
 const styles = StyleSheet.create({
-  button: {
+  textCostPrice: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    color: AppTheme.Colors.Grey,
+    textDecorationLine: 'line-through',
+  },
+  textSale: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    color: AppTheme.Colors.Red,
+  },
+  buttonAddition: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: AppTheme.Colors.White,
+
+    borderRadius: 4,
+    marginLeft: scale(1),
+    borderRadius: 4,
+    elevation: 3,
+    shadowColor: AppTheme.Colors.Black,
+    shadowRadius: 4,
   },
-  textPlus: {
+  buttonSubtraction: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderRadius: 4,
+    backgroundColor: AppTheme.Colors.White,
+    marginRight: scale(1),
+    borderRadius: 4,
+    elevation: 3,
+    shadowColor: AppTheme.Colors.Black,
+    shadowRadius: 4,
+  },
+  textQuantity: {
     flex: 1,
     textAlign: 'center',
     textAlignVertical: 'center',
-    backgroundColor: AppTheme.Colors.Light,
+    color: AppTheme.Colors.Black,
+    fontFamily: AppTheme.Fonts.Bold,
+    fontSize: AppTheme.FontSize.Medium,
+    backgroundColor: AppTheme.Colors.White,
+    borderRadius: 4,
+    elevation: 3,
+    shadowColor: AppTheme.Colors.Black,
+    shadowRadius: 4,
+    marginHorizontal: scale(3),
   },
   viewPlus: {
     width: scale(104),
-    height: verticalScale(24),
+    height: verticalScale(34),
     flexDirection: 'row',
-    borderWidth: 1,
     justifyContent: 'space-around',
-    borderColor: AppTheme.Colors.Light,
     borderRadius: 4,
+    alignSelf: 'flex-end',
   },
   viewIcon: {
     flexDirection: 'row',
@@ -97,6 +173,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
+    marginTop: verticalScale(15),
   },
   viewName: {
     flexDirection: 'row',
@@ -110,6 +187,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   img: {
     width: scale(72),
@@ -126,5 +204,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     marginBottom: verticalScale(14),
     shadowRadius: 15,
+    alignItems: 'center',
   },
 });

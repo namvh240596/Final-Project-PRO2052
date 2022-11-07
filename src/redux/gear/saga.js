@@ -2,6 +2,7 @@ import {all, takeLatest} from 'redux-saga/effects';
 import {GET_LIST_GEAR_REQUEST, GET_CHOOSE_GEAR_REQUEST} from './actionType';
 
 function* getListGearToCategoriesHandle(action) {
+  console.log('action.payload ', action.payload);
   try {
     yield put(getListGearSuccess(action?.payload));
   } catch (error) {

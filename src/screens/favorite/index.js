@@ -1,21 +1,33 @@
 import {View, Text, FlatList} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from './styles';
 import Header from '../../components/header';
 import {DATA_PRODUCTS} from '../../services/fakeApi/fakeAPI';
 import CustomProduct from '../../components/customProduct';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getListFavoriteSelector} from '../../redux/products/selector';
+import {getAllFavoriteProductRequest} from '../../redux/products/action';
 
 const Favorites = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const listFavorite = useSelector(getListFavoriteSelector);
+  useEffect(() => {
+    dispatch(getAllFavoriteProductRequest());
+  }, []);
+
   const renderItem = ({item}) => {
     return (
       <CustomProduct
-        key={item.id}
-        name={item.name}
-        image={item.image[1]}
-        firstPrice={1000}
-        lastPrice={899}
-        sale={12}
-        onGoDetail={() => onDetail(item.id)}
+        onGoDetail={() =>
+          navigation.navigate('ProductDetail', {productId: item._id})
+        }
+        costPrice={item.costPrice}
+        image={item.images[0]}
+        salePercent={item.salePercent}
+        salePrice={item.salePrice}
+        title={item.title}
       />
     );
   };
@@ -23,16 +35,18 @@ const Favorites = () => {
     <View style={styles.container}>
       <Header iconBack title={'Sản phẩm yêu thích'} />
       <View style={styles.body}>
-        <FlatList
-          data={DATA_PRODUCTS}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.columnWrapperStyle}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.flatList}
-        />
+        {listFavorite && (
+          <FlatList
+            data={listFavorite}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            numColumns={2}
+            columnWrapperStyle={styles.columnWrapperStyle}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            style={styles.flatList}
+          />
+        )}
       </View>
     </View>
   );
