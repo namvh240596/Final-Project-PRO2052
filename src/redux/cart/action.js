@@ -5,12 +5,16 @@ import {
   ADD_PRODUCTS_TO_CART_FAILED,
   ADD_PRODUCTS_TO_CART_REQUEST,
   ADD_PRODUCTS_TO_CART_SUCCESS,
+  GET_ALL_CART_FAILED,
+  GET_ALL_CART_REQUEST,
+  GET_ALL_CART_SUCCESS,
 } from './actionType';
 
 //////////////////////////////////////////////// add one product to cart  ///////////////////////////////////////
-export const addOneProductToCartRequest = payload => ({
+export const addOneProductToCartRequest = (payload, onSuccess) => ({
   type: ADD_ONE_PRODUCT_TO_CART_REQUEST,
   payload: payload,
+  onSuccess: onSuccess,
 });
 
 export const addOneProductToCartSuccess = payload => ({
@@ -34,5 +38,19 @@ export const addProductsToCartSuccess = payload => ({
 });
 export const addProductsToCartFailed = payload => ({
   type: ADD_PRODUCTS_TO_CART_FAILED,
+  payload: payload,
+});
+///////////////////////////////////////////////// get all cart  //////////////////////////////////////
+
+export const getAllCartRequest = () => ({
+  type: GET_ALL_CART_REQUEST,
+});
+
+export const getAllCartSuccess = payload => ({
+  type: GET_ALL_CART_SUCCESS,
+  payload: payload,
+});
+export const getAllCartFailed = payload => ({
+  type: GET_ALL_CART_FAILED,
   payload: payload,
 });
