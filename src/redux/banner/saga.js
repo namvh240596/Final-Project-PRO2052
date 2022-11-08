@@ -6,7 +6,7 @@ import {GET_CHOOSE_BANNER_REQUEST, GET_LIST_BANNER_REQUEST} from './actionType';
 function* getListBannerHandle() {
   try {
     const res = yield call(getBannerApi);
-    yield put(getListBannerSuccess(res));
+    yield put(getListBannerSuccess(res.data));
   } catch (error) {
     console.log('getListBannerHandle -> ', error);
   }

@@ -41,6 +41,7 @@ import {getToken} from '../../helpers/tokenHelper';
 import {useNavigation} from '@react-navigation/native';
 import withLoading from '../../HOC/withLoading';
 import {GET_ALL_CATEGORIES_BY_TYPE_REQUEST} from '../../redux/products/actionType';
+import SwiperFlatList from 'react-native-swiper-flatlist';
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(getAllProductsRequest());
     dispatch(getListCategoriesRequest());
+    dispatch(getListBannerRequest());
   }, [dispatch]);
   const listProduct = useSelector(getProductsSelector);
   const listCategories = useSelector(getListCategoriesSelector);
@@ -74,7 +76,6 @@ const Home = () => {
     },
     [dispatch],
   );
-
   return (
     <ScrollView
       style={styles.container}
@@ -105,13 +106,25 @@ const Home = () => {
         </View>
 
         <View style={styles.img}>
-          <Image
-            source={IMAGES.ProductMotion}
-            resizeMode="cover"
-            style={{
-              width: '100%',
-              height: scale(206),
-              borderRadius: 5,
+          <SwiperFlatList
+            autoplay
+            autoplayDelay={2}
+            autoplayLoop
+            index={2}
+            showPagination
+            autoplayLoopKeepAnimation
+            paginationStyleItemActive={styles.dotActive}
+            paginationStyleItemInactive={styles.dotInActive}
+            paginationStyle={{
+              alignItems: 'center',
+            }}
+            data={listBanner}
+            renderItem={({item}) => {
+              return (
+                <View style={styles.viewCarousel}>
+                  <Image source={{uri: item.image}} style={styles.itemImage} />
+                </View>
+              );
             }}
           />
         </View>

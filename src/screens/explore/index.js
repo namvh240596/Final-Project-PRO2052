@@ -27,34 +27,51 @@ import {
   getListCategoriesRequest,
   getListGearRequest,
 } from '../../redux/categories/action';
-import {getProductsSelector} from '../../redux/products/selector';
+import {
+  getProductByTypeSelector,
+  getProductsSelector,
+} from '../../redux/products/selector';
 import {formatMoney} from '../../helpers/formatMoney';
+import {getAllProductsByTypeRequest} from '../../redux/products/action';
+import {getAllProductsByTypeApi} from '../../services/api/products';
 
 const Explore = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [listIndex, setListIndex] = useState(0);
   const [listGear, setListGear] = useState([]);
   const [listProduct, setListProduct] = useState([]);
-  const [first, setFirst] = useState(0);
+  const [money, setMoney] = useState(0);
   const dispatch = useDispatch();
   const listCategories = useSelector(getListCategoriesSelector);
-  const listProducts = useSelector(getProductsSelector);
-
   useEffect(() => {
-    dispatch(getListCategoriesRequest());
+    // dispatch(getListCategoriesRequest());
     setListGear(listCategories);
-    setListProduct(listProducts);
   }, []);
 
-  const OpenModalChooseGear = useCallback(() => {
-    setModalVisible(true);
-  }, [modalVisible]);
+  const OpenModalChooseGear = useCallback(
+    index => {
+      let type;
+      if (type) {
+        type = listCategories[index].type;
+      } else {
+        type = listGear[index].category.type;
+      }
+      getAllProductsByTypeApi(type)
+        .then(res => {
+          setListProduct(res.data);
+        })
+        .catch(e => console.log('errors ', e));
+      setModalVisible(true);
+    },
+    [modalVisible, listIndex, listProduct, listGear],
+  );
+
   const ChooseGear = useCallback(
     item => {
       setModalVisible(false);
       let newList = listGear;
       newList[listIndex] = item;
-      setFirst(totalMoney());
+      setMoney(totalMoney());
     },
     [modalVisible, listGear],
   );
@@ -76,8 +93,9 @@ const Explore = () => {
     let newList = listGear;
     newList[index] = itemInArr;
     setListGear(newList);
-    setFirst(totalMoney());
+    setMoney(totalMoney());
   };
+  console.log('list gear ', listGear);
   return (
     <View style={styles.container}>
       <Header title={'Build PC'} />
@@ -94,7 +112,7 @@ const Explore = () => {
               item={item}
               onOpenModal={() => {
                 setListIndex(index);
-                OpenModalChooseGear();
+                OpenModalChooseGear(index);
               }}
               onDelete={() => DeleteGear(index)}
               index={index}
@@ -103,7 +121,7 @@ const Explore = () => {
         })}
         <View style={styles.viewTotalPrice}>
           <Text style={styles.textTotalPrice}>Chi phí dự tính</Text>
-          <Text style={styles.textSalePrice}>{formatMoney(first)}</Text>
+          <Text style={styles.textSalePrice}>{formatMoney(money)}</Text>
         </View>
         <CustomButton
           containerStyles={styles.containerButton}
@@ -116,7 +134,10 @@ const Explore = () => {
           <View style={styles.modalBody}>
             <View style={styles.iconClose}>
               <SvgXml
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setListProduct([]);
+                }}
                 xml={AppIcon.IconClose}
                 width={scale(24)}
                 height={scale(24)}

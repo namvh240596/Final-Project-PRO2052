@@ -3,9 +3,11 @@ import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {
   getAllProductsApi,
   getAllProductsByTypeApi,
+  getMyFavoriteApi,
   getProductApi,
 } from '../../services/api/products';
 import {
+  getAllFavoriteProductSuccess,
   getAllProductsByTypeRequest,
   getAllProductsByTypeSuccess,
   getAllProductsFailed,
@@ -13,6 +15,7 @@ import {
   getProductSuccess,
 } from './action';
 import {
+  GET_ALL_FAVORITE_PRODUCT_REQUEST,
   GET_ALL_PRODUCTS_BY_TYPE_REQUEST,
   GET_ALL_PRODUCTS_REQUEST,
   GET_PRODUCT_REQUEST,
@@ -30,10 +33,8 @@ function* getAllProductsHandle() {
 
 function* getProductHandle(action) {
   const {payload} = action;
-  console.log('pay load ', payload);
   try {
     const res = yield call(getProductApi, action?.payload);
-    console.log('res ', res);
     yield put(getProductSuccess(res?.data));
   } catch (error) {
     console.log('getProductHandle =>', error);
@@ -43,12 +44,20 @@ function* getProductHandle(action) {
 ///////////////////////////////// get product by type ////////////////////////////////
 function* getProductByTypeHandle(action) {
   const {payload, onSuccess} = action;
-
   try {
     const res = yield call(getAllProductsByTypeApi, payload);
-    console.log('res ', res?.data);
     yield put(getAllProductsByTypeSuccess({productsByType: res?.data}));
     onSuccess?.(action);
+  } catch (error) {
+    console.log('getProductByTypeHandle -> ', error);
+  }
+}
+///////////////////////////////// get all favorite product ////////////////////////////////
+function* getAllFavoriteProductHandle(action) {
+  const {payload, onSuccess} = action;
+  try {
+    const res = yield call(getMyFavoriteApi);
+    yield put(getAllFavoriteProductSuccess({listFavorite: res?.data}));
   } catch (error) {
     console.log('getProductByTypeHandle -> ', error);
   }
@@ -59,6 +68,9 @@ function* productsSaga() {
   yield all([takeLatest(GET_PRODUCT_REQUEST, getProductHandle)]);
   yield all([
     takeLatest(GET_ALL_PRODUCTS_BY_TYPE_REQUEST, getProductByTypeHandle),
+  ]);
+  yield all([
+    takeLatest(GET_ALL_FAVORITE_PRODUCT_REQUEST, getAllFavoriteProductHandle),
   ]);
 }
 

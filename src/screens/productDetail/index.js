@@ -1,4 +1,12 @@
-import {View, Text, Image, FlatList, ScrollView, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  ScrollView,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {styles} from './styles';
 import Header from '../../components/header';
@@ -6,7 +14,6 @@ import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {scale, verticalScale} from '../../utils/scale';
 import CustomButton from '../../components/customButton';
-import ItemReview from '../../components/itemReview';
 import CustomProduct from '../../components/customProduct';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,23 +21,42 @@ import {getProductRequest} from '../../redux/products/action';
 import {getProductSelector} from '../../redux/products/selector';
 import {formatMoney} from '../../helpers/formatMoney';
 import PlaceholderProduct from '../../components/placeholderProduct';
+import {addOneProductToCartRequest} from '../../redux/cart/action';
+import {
+  changeFavoriteApi,
+  getCheckFavoriteApi,
+} from '../../services/api/products';
 
 const ProductDetail = props => {
   const productId = props.route.params.productId;
-  console.log(props);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const product = useSelector(getProductSelector);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     dispatch(getProductRequest(productId));
-  }, [dispatch]);
+  }, [loading]);
   const onDetail = id => {
     dispatch(getProductRequest(id));
   };
+
   const onChangeFavorite = useCallback(() => {
-    console.log('change ');
+    changeFavoriteApi({productId: productId, favorite: !product.favorite})
+      .then(res => {
+        setLoading(true);
+        dispatch(getProductRequest(productId));
+        res && setLoading(false);
+      })
+      .catch(error => console.log('onChangeFavorite -> ', error));
+  }, [loading]);
+
+  const addToCart = useCallback(productId => {
+    dispatch(
+      addOneProductToCartRequest({productId: productId, quantity: 1}, () =>
+        navigation.navigate('Cart'),
+      ),
+    );
   }, []);
-  const addToCart = useCallback(productId => {}, []);
   return (
     <View style={styles.container}>
       <Header title={product?.title} iconBack />
@@ -47,15 +73,16 @@ const ProductDetail = props => {
             <Text numberOfLines={3} style={styles.textName}>
               {product?.title}
             </Text>
-            <SvgXml
-              xml={
-                product?.__v === 1 ? AppIcon.IconHeartRed : AppIcon.IconHeart
-              }
-              width={scale(24)}
-              height={scale(24)}
-              style={{marginTop: verticalScale(5)}}
-              onPressOut={onChangeFavorite}
-            />
+            <TouchableOpacity onPress={onChangeFavorite}>
+              <SvgXml
+                xml={
+                  product?.favorite ? AppIcon.IconHeartRed : AppIcon.IconHeart
+                }
+                width={scale(24)}
+                height={scale(24)}
+                style={{marginTop: verticalScale(5)}}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.viewDescription}>
             {product?.description.map((item, index) => {
