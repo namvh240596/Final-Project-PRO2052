@@ -48,13 +48,14 @@ const ItemChooseGear = ({item, onDelete, onOpenModal, index}) => {
               {formatMoney(item?.salePrice)}
             </Text>
           </View>
-          <SvgXml
-            xml={AppIcon.IconDelete}
-            width={scale(28)}
-            height={scale(28)}
-            style={{right: scale(10), top: scale(10)}}
-            onPress={onDelete}
-          />
+          <TouchableOpacity onPress={() => onDelete(index)}>
+            <SvgXml
+              xml={AppIcon.IconDelete}
+              width={scale(28)}
+              height={scale(28)}
+              style={{right: scale(10), top: scale(10)}}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>

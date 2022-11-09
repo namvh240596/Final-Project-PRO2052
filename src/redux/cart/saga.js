@@ -1,5 +1,9 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
-import {addOneProductToCartApi, getCartApi} from '../../services/api/cart';
+import {
+  addOneProductToCartApi,
+  addProductsToCartApi,
+  getCartApi,
+} from '../../services/api/cart';
 import {
   addOneProductToCartSuccess,
   getAllCartRequest,
@@ -27,6 +31,8 @@ function* addOneProductToCartHandle(action) {
 function* addProductsToCartHandle(action) {
   const {payload} = action;
   try {
+    const res = yield call(addProductsToCartApi, action?.payload);
+    console.log('res saga ', res);
   } catch (error) {
     console.log('addProductsToCart -> ', error);
   }

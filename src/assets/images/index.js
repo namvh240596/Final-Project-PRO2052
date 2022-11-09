@@ -6,5 +6,6 @@ const IMAGES = {
   CPU: require('../images/cpu.png'),
   ALL: require('../images/all.png'),
   BACKGROUND: require('../images/backround.jpg'),
+  ANIMATION: require('./animation.json'),
 };
 export default IMAGES;

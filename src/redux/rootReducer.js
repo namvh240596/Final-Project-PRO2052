@@ -12,10 +12,14 @@ const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
 };
+const gearPersistConfig = {
+  key: 'gear',
+  storage: AsyncStorage,
+};
 export const rootReducer = combineReducers({
   productsReducer,
   categoriesReducer,
-  gearReducer,
+  gear: persistReducer(gearPersistConfig, gearReducer),
   bannerReducer,
   loadingReducer,
   auth: persistReducer(authPersistConfig, authReducer),

@@ -3,6 +3,16 @@ import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
+  textTitle: {
+    fontSize: AppTheme.FontSize.Large,
+    fontFamily: AppTheme.Fonts.Bold,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '700',
+    textAlign: 'center',
+    paddingBottom: verticalScale(10),
+    borderBottomWidth: 0.5,
+    borderColor: AppTheme.Colors.Blue,
+  },
   containerButton: {
     marginBottom: verticalScale(15),
   },
@@ -29,7 +39,7 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   scvProducts: {
-    paddingTop: verticalScale(30),
+    paddingTop: verticalScale(15),
   },
   iconClose: {
     position: 'absolute',
@@ -88,19 +98,23 @@ export const styles = StyleSheet.create({
     paddingLeft: scale(12),
   },
   modalBody: {
-    elevation: 5,
+    backgroundColor: 'white',
+    borderTopLeftRadius: scale(12),
+    borderTopRightRadius: scale(12),
+    padding: scale(10),
     shadowColor: AppTheme.Colors.Black,
-    backgroundColor: AppTheme.Colors.White,
-    flex: 1,
-    borderRadius: 2,
-    paddingHorizontal: scale(15),
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    flex: 9,
   },
-
   modalContainer: {
     flex: 1,
-    backgroundColor: AppTheme.Colors.SecondBackround,
-    paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(25),
+    backgroundColor: 'rgb(0, 0, 0,0.8)',
   },
   body: {
     flex: 1,
