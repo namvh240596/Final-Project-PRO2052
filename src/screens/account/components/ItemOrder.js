@@ -2,13 +2,17 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
+import {formatMoney} from '../../../helpers/formatMoney';
 
 const ItemOrder = ({onPress, order}) => {
+  // let day = format(new Date(2014, 1, 11), 'MM/dd/yyyy');
+  console.log(order);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.textTitle}>LKJJHLKJHL</Text>
       <Text style={styles.textDate}>
-        <Text style={styles.textDate}>Đặt hàng ngày: </Text>14-10-2022
+        <Text style={styles.textDate}>Đặt hàng ngày: </Text>
+        {/* {day} */}
       </Text>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Trạng thái</Text>
@@ -16,11 +20,11 @@ const ItemOrder = ({onPress, order}) => {
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Sản phẩm</Text>
-        <Text style={styles.textDate}>2 sản phẩm</Text>
+        <Text style={styles.textDate}>{order.items.length} sản phẩm</Text>
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Tổng cộng</Text>
-        <Text style={styles.textDate}>99.000đ</Text>
+        <Text style={styles.textDate}>{formatMoney(order.totalPrice)}</Text>
       </View>
     </TouchableOpacity>
   );

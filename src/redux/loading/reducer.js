@@ -6,7 +6,7 @@ const loadingReducer = (state = initialState, action) => {
   if (!matches) {
     return state;
   }
-  const [, requestName, requestState] = matches;
+  const [requestName, requestState] = matches;
   const newState = {
     ...state,
     [requestName]: requestState === 'REQUEST',

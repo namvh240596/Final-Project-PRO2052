@@ -67,7 +67,11 @@ const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
             </View>
 
             <View style={[styles.viewPlus]}>
-              <Pressable style={styles.buttonSubtraction}>
+              <Pressable
+                onPress={() =>
+                  onUpdateQuantity(item.product._id, item?.quantity - 1)
+                }
+                style={styles.buttonSubtraction}>
                 <SvgXml
                   xml={AppIcon.IconMinus}
                   width={scale(13)}
@@ -75,7 +79,11 @@ const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
                 />
               </Pressable>
               <Text style={styles.textQuantity}>{item.quantity}</Text>
-              <Pressable style={styles.buttonAddition}>
+              <Pressable
+                onPress={() =>
+                  onUpdateQuantity(item.product._id, item?.quantity + 1)
+                }
+                style={styles.buttonAddition}>
                 <SvgXml
                   xml={AppIcon.IconPlus}
                   width={scale(13)}

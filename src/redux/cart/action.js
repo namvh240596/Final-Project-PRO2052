@@ -8,6 +8,9 @@ import {
   GET_ALL_CART_FAILED,
   GET_ALL_CART_REQUEST,
   GET_ALL_CART_SUCCESS,
+  REMOVE_CART_FAILED,
+  REMOVE_CART_REQUEST,
+  REMOVE_CART_SUCCESS,
 } from './actionType';
 
 //////////////////////////////////////////////// add one product to cart  ///////////////////////////////////////
@@ -52,5 +55,20 @@ export const getAllCartSuccess = payload => ({
 });
 export const getAllCartFailed = payload => ({
   type: GET_ALL_CART_FAILED,
+  payload: payload,
+});
+
+///////////////////////////////////////////////// remove cart  //////////////////////////////////////
+
+export const removeCartRequest = () => ({
+  type: REMOVE_CART_REQUEST,
+});
+
+export const removeCartSuccess = payload => ({
+  type: REMOVE_CART_SUCCESS,
+  payload: payload,
+});
+export const removeCartFailed = payload => ({
+  type: REMOVE_CART_FAILED,
   payload: payload,
 });

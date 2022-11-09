@@ -8,9 +8,8 @@ import {
 } from './actionType';
 
 ////////////////////////////////////////////////////////////////////  //////////////
-export const getListGearRequest = payload => ({
+export const getListGearRequest = () => ({
   type: GET_LIST_GEAR_REQUEST,
-  payload: payload,
 });
 
 export const getListGearSuccess = payload => ({

@@ -5,7 +5,6 @@ import {scale, verticalScale} from '../../utils/scale';
 export const styles = StyleSheet.create({
   body: {
     paddingVertical: verticalScale(20),
-    paddingHorizontal: scale(16),
     flex: 1,
     backgroundColor: AppTheme.Colors.SecondBackround,
   },
@@ -16,7 +15,9 @@ export const styles = StyleSheet.create({
   footer: {
     backgroundColor: AppTheme.Colors.White,
     paddingHorizontal: scale(16),
-    paddingBottom: verticalScale(14),
+    paddingVertical: verticalScale(14),
+    borderRadius: 6,
+    elevation: 2,
   },
   viewCode: {
     flexDirection: 'row',
@@ -77,5 +78,47 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: AppTheme.Colors.Dark,
     fontWeight: '700',
+  },
+  containerLoading: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    zIndex: 10,
+    marginTop: verticalScale(40),
+  },
+  loadingIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    backgroundColor: AppTheme.Colors.White,
+  },
+
+  loadingStyle: {
+    width: scale(200),
+    height: verticalScale(200),
+    alignSelf: 'center',
+    marginBottom: verticalScale(40),
+  },
+  noProduct: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: scale(40),
+  },
+  textNoProduct: {
+    fontSize: scale(18),
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    marginBottom: verticalScale(40),
+  },
+  viewList: {
+    paddingHorizontal: scale(16),
   },
 });

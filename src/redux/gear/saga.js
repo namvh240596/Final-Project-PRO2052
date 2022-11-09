@@ -1,4 +1,5 @@
-import {all, takeLatest} from 'redux-saga/effects';
+import {all, put, takeLatest} from 'redux-saga/effects';
+import {getChooseGearSuccess} from './action';
 import {GET_LIST_GEAR_REQUEST, GET_CHOOSE_GEAR_REQUEST} from './actionType';
 
 function* getListGearToCategoriesHandle(action) {

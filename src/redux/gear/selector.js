@@ -1,1 +1,1 @@
-export const getListGearSelector = state => state.gearReducer.listGear;
+export const getListGearSelector = state => state.gear.listGear;

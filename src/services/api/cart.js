@@ -13,5 +13,5 @@ export const addOneProductToCartApi = data => {
 };
 
 export const addProductsToCartApi = data => {
-  return axiosClient.post('/cart/', data);
+  return axiosClient.post('/cart/add-products', data);
 };
