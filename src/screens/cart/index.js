@@ -93,9 +93,8 @@ const Cart = props => {
     };
     createOrderApi(data)
       .then(res => {
-        console.log('res ', res);
         res && setIsLoading(false);
-        // dispatch();
+        dispatch(getAllCartRequest());
       })
       .catch(e => console.log('errors ', e));
   };
@@ -149,7 +148,7 @@ const Cart = props => {
                 </Text>
               </View>
             </View>
-            <CustomButton title={'Tiếp theo'} onPress={createOrder} />
+            <CustomButton title={'Mua'} onPress={createOrder} />
           </View>
         </ScrollView>
       ) : (
