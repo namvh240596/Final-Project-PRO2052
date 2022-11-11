@@ -3,20 +3,20 @@ import React from 'react';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
 import {formatMoney} from '../../../helpers/formatMoney';
-
+import {format} from 'date-fns';
 const ItemOrder = ({onPress, order}) => {
-  // let day = format(new Date(2014, 1, 11), 'MM/dd/yyyy');
+  let day = format(new Date(order.createdAt), 'MM/dd/yyyy');
   console.log(order);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={styles.textTitle}>LKJJHLKJHL</Text>
-      <Text style={styles.textDate}>
+      <Text style={styles.textTitle}>Thông tin đơn hàng</Text>
+      <View style={styles.viewDate}>
         <Text style={styles.textDate}>Đặt hàng ngày: </Text>
-        {/* {day} */}
-      </Text>
+        <Text style={styles.textDate}>{day}</Text>
+      </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Trạng thái</Text>
-        <Text style={styles.textDate}>Đang giao hàng</Text>
+        <Text style={styles.textDate}>Đang chờ xử lý</Text>
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Sản phẩm</Text>
@@ -24,7 +24,7 @@ const ItemOrder = ({onPress, order}) => {
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Tổng cộng</Text>
-        <Text style={styles.textDate}>{formatMoney(order.totalPrice)}</Text>
+        <Text style={styles.textPrice}>{formatMoney(order.totalPrice)}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -33,15 +33,30 @@ const ItemOrder = ({onPress, order}) => {
 export default ItemOrder;
 
 const styles = StyleSheet.create({
+  viewDate: {
+    flexDirection: 'row',
+    marginTop: verticalScale(10),
+    borderBottomWidth: 0.2,
+    borderColor: AppTheme.Colors.Grey,
+    paddingBottom: verticalScale(10),
+    paddingHorizontal: scale(14),
+  },
   fdl: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: verticalScale(10),
+    paddingHorizontal: scale(14),
+  },
+  textPrice: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    color: AppTheme.Colors.Blue,
+    fontWeight: '700',
   },
   textDate: {
     fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.Medium,
-    color: AppTheme.Colors.Grey,
+    color: AppTheme.Colors.Black,
   },
   container: {
     paddingVertical: verticalScale(12),
