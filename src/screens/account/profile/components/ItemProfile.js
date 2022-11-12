@@ -5,12 +5,9 @@ import AppIcon from '../../../../assets/icons';
 import {scale, verticalScale} from '../../../../utils/scale';
 import {AppTheme} from '../../../../config/AppTheme';
 
-const ItemProfile = ({title, description, icon, onPress, disabled = true}) => {
+const ItemProfile = ({title, description, icon, onPress}) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      disabled={disabled}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.viewTitle}>
         {icon && (
           <SvgXml

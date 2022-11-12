@@ -14,8 +14,7 @@ const regexPhone =
 const regexEmail =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const regexFullname =
-  /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/;
+const regexFullname = /^[A-Za-z]/;
 const validateLoginSchema = Yup.object().shape({
   email: Yup.string()
     .matches(regexEmail, validEmailMessage)
