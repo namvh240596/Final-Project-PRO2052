@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
@@ -13,7 +13,8 @@ import {Formik} from 'formik';
 import {validateLoginSchema} from '../../../utils/schema';
 import {loginRequestApi} from '../../../services/api/auth';
 import Lottie from 'lottie-react-native';
-
+import withLoading from '../../../HOC/withLoading';
+import { LOGIN_REQUEST } from '../../../redux/auth/actionType';
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const Login = () => {
           style={styles.logo}
         />
         <Text style={styles.textWelcome}>Welcome to High Tech</Text>
-        <Text style={styles.text}>Đăng nhập để tiếp</Text>
+        <Text style={styles.text}>Đăng nhập để tiếp tục sử dụng</Text>
         <Formik
           initialValues={initialValues}
           validateOnChange={true}
@@ -96,9 +97,14 @@ const Login = () => {
             Đăng kí
           </Text>
         </Text>
+        <TouchableOpacity
+        onPress={() => navigation.navigate('ForgotPassword')}
+        style={styles.touch}>
+          <Text style={styles.textForgot}>Quên mật khẩu?</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-export default Login;
+export default Login

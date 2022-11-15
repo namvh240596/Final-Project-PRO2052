@@ -15,6 +15,7 @@ import AppIcon from '../../assets/icons';
 import {formatMoney} from '../../helpers/formatMoney';
 
 const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
+  console.log(item.product);
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -30,7 +31,7 @@ const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
             </Text>
             <View style={styles.viewIcon}>
               <SvgXml
-                xml={heart ? AppIcon.IconHeartRed : AppIcon.IconHeart}
+                xml={item.product.favorite ? AppIcon.IconHeartRed : AppIcon.IconHeart}
                 width={scale(18)}
                 height={scale(18)}
                 onPress={() => {}}

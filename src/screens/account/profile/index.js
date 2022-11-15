@@ -64,23 +64,6 @@ const Profile = () => {
           <ItemProfile title={'Đăng xuất'} onPress={onLogout} />
         </View>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={true}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.touch}>
-            <TouchableOpacity>
-              <Text>asd</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.bodyModal}>
-            <Text>aa</Text>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };

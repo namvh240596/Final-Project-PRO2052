@@ -6,7 +6,7 @@ export const getLoadingSelector = (state, actionTypes) => {
         return false;
       }
       const [, requestName, requestState] = matches;
-      return state.loading[`${requestName}`] || false;
+      return state.loadingReducer[`${requestName}`] || false;
     });
   }
   return false;

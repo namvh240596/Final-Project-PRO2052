@@ -53,9 +53,9 @@ export const changePasswordFailed = payload => ({
   payload: payload,
 });
 ////////////////////////////////////// logout /////////////////////////////////////////////////
-export const logoutRequest = payload => ({
+export const logoutRequest = onSuccess => ({
   type: LOGOUT_REQUEST,
-  payload: payload,
+  onSuccess: onSuccess,
 });
 export const logoutSuccess = () => ({
   type: LOGOUT_SUCCESS,

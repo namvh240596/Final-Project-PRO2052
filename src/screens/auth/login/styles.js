@@ -3,6 +3,15 @@ import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
 
 export const styles = StyleSheet.create({
+  textForgot: {
+    fontFamily: AppTheme.Fonts.SemiBold,
+    color: AppTheme.Colors.Blue,
+  },
+  touch: {
+    marginTop: verticalScale(20),
+    alignSelf: 'center'
+  },
+
   textBtn: {
     fontFamily: AppTheme.Fonts.Regular,
     color: AppTheme.Colors.Grey,

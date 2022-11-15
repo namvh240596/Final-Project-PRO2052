@@ -31,10 +31,6 @@ const authReducer = (state = initialState, action) => {
           fullname: action?.payload.fullname,
         },
       };
-    case LOGIN_FAILED:
-      return {...state};
-    case LOGOUT_REQUEST:
-      return {...state};
     case LOGOUT_SUCCESS:
       return {
         ...state,
