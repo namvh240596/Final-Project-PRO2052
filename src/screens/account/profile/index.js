@@ -1,26 +1,35 @@
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
-import React, {useCallback} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  Modal,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import Header from '../../../components/header';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
 import IMAGES from '../../../assets/images';
 import ItemProfile from './components/ItemProfile';
 import AppIcon from '../../../assets/icons';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {logoutRequest} from '../../../redux/auth/action';
 import {useNavigation} from '@react-navigation/native';
+import {getUserSelector} from '../../../redux/auth/selector';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const user = useSelector(getUserSelector);
   const onLogout = useCallback(() => {
-    dispatch(
-      logoutRequest(() =>
-        // navigation.reset({index: 1, routes: [{name: 'Login'}]}),
-        navigation.navigate('SplashScreen'),
-      ),
-    );
+    dispatch(logoutRequest(() => navigation.navigate('SplashScreen')));
   }, []);
+  const onChangeEmail = useCallback(() => {}, []);
+  const onChangePhone = useCallback(() => {}, []);
+  const onChangePassword = useCallback(() => {}, []);
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.container}>
       <Header title={'Tài khoản'} iconBack />
@@ -31,29 +40,28 @@ const Profile = () => {
         />
         <View style={styles.viewAvatar}>
           <Image source={{uri: avatar}} style={styles.img} />
-          <Text style={styles.textName}>{'Lam Trường'}</Text>
+          <Text style={styles.textName}>{user.fullname}</Text>
         </View>
         <View style={styles.viewItem}>
           <ItemProfile
             title={'Email'}
             icon={AppIcon.IconMailBlue}
-            description={'lamtruong@gmail.com'}
+            description={user.email}
+            onPress={onChangeEmail}
           />
           <ItemProfile
             title={'Phone'}
             icon={AppIcon.IconPhone}
-            description={'0328 37 48 10'}
+            description={user.phone}
+            onPress={onChangePhone}
           />
           <ItemProfile
             title={'Đổi mật khẩu'}
             icon={AppIcon.IconLockBlue}
             description={'*****'}
+            onPress={onChangePassword}
           />
-          <ItemProfile
-            title={'Đăng xuất'}
-            onPress={onLogout}
-            disabled={false}
-          />
+          <ItemProfile title={'Đăng xuất'} onPress={onLogout} />
         </View>
       </View>
     </View>
@@ -63,6 +71,23 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
+  bodyModal: {
+    flex: 1,
+    backgroundColor: AppTheme.Colors.White,
+    elevation: 2,
+    borderTopRightRadius: scale(10),
+    borderTopLeftRadius: scale(10),
+    borderTopWidth: 2,
+  },
+  touch: {
+    flex: 1,
+    width: '100%',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgb(0,0,0,0.5)',
+    paddingHorizontal: scale(10),
+  },
   viewItem: {
     width: '100%',
   },

@@ -26,6 +26,8 @@ import {
   changeFavoriteApi,
   getCheckFavoriteApi,
 } from '../../services/api/products';
+import withLoading from '../../HOC/withLoading';
+import {GET_PRODUCT_REQUEST} from '../../redux/products/actionType';
 
 const ProductDetail = props => {
   const productId = props.route.params.productId;
@@ -33,21 +35,27 @@ const ProductDetail = props => {
   const dispatch = useDispatch();
   const product = useSelector(getProductSelector);
   const [loading, setLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   useEffect(() => {
     dispatch(getProductRequest(productId));
-  }, [loading]);
+    setIsFavorite(product.favorite);
+  }, []);
   const onDetail = id => {
     dispatch(getProductRequest(id));
   };
 
   const onChangeFavorite = useCallback(() => {
-    changeFavoriteApi({productId: productId, favorite: !product.favorite})
+    setLoading(true);
+    setIsFavorite(!isFavorite);
+    changeFavoriteApi({productId: productId, favorite: isFavorite})
       .then(res => {
-        setLoading(true);
         dispatch(getProductRequest(productId));
-        res && setLoading(false);
+        setLoading(false);
       })
-      .catch(error => console.log('onChangeFavorite -> ', error));
+      .catch(error => {
+        setLoading(false);
+        console.log('onChangeFavorite -> ', error);
+      });
   }, [loading]);
 
   const addToCart = useCallback(productId => {

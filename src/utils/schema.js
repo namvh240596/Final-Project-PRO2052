@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-const requiredErrorMessage = 'Vui lòng điền đầy đử thông tin';
+const requiredErrorMessage = 'Vui lòng điền đầy đủ thông tin';
 const validPhoneMessage = 'Vui lòng điền đúng định dạng số điện thoại';
 const validEmailMessage = 'Vui lòng điền đúng định dạng email';
 const validPassMessage =
@@ -14,8 +14,7 @@ const regexPhone =
 const regexEmail =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const regexFullname =
-  /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/;
+const regexFullname = /^[A-Za-z]/;
 const validateLoginSchema = Yup.object().shape({
   email: Yup.string()
     .matches(regexEmail, validEmailMessage)
@@ -30,7 +29,11 @@ const validateRegisterSchema = Yup.object().shape({
     .required(requiredErrorMessage)
     .matches(regexPhone, validPhoneMessage),
 });
-
+const validateEmailSchema = Yup.object().shape({
+  email: Yup.string()
+    .required(requiredErrorMessage)
+    .matches(regexEmail, validEmailMessage),
+});
 const validateConfirmPasswordSchema = Yup.object().shape({
   fullname: Yup.string()
     .matches(regexFullname, validFullnameMessage)
@@ -62,4 +65,5 @@ export {
   validateRegisterSchema,
   validateConfirmPasswordSchema,
   validateInformationSchema,
+  validateEmailSchema
 };

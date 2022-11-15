@@ -64,9 +64,12 @@ const Cart = props => {
     updateQuantityProductApi({productId: _id, quantity: quantity})
       .then(res => {
         isFocused && dispatch(getAllCartRequest());
-        res && setIsLoading(false);
+        setIsLoading(false);
       })
-      .catch(e => console.log('cart update quantity -> ', e));
+      .catch(e => {
+        setIsLoading(false);
+        console.log('cart update quantity -> ', e);
+      });
   }, []);
   const createOrder = () => {
     let data;

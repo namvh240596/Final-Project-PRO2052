@@ -4,6 +4,7 @@ import Login from '../screens/auth/login';
 import Register from '../screens/auth/register';
 import RegisterSuccess from '../screens/auth/registerSuccess';
 import CheckOTP from '../screens/auth/screenOtp';
+import ForgotPassword from '../screens/auth/forgotpass';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -16,6 +17,8 @@ export const AuthNavigation = () => {
             <Screen name='Register' component={Register} />
             <Screen name='RegisterSuccess' component={RegisterSuccess} />
             <Screen name='CheckOTP' component={CheckOTP} />
+            <Screen name='ForgotPassword' component={ForgotPassword} />
+
         </Navigator>
     )
 }
