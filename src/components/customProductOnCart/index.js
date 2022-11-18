@@ -14,8 +14,7 @@ import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {formatMoney} from '../../helpers/formatMoney';
 
-const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
-  console.log(item.product);
+const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -57,7 +56,6 @@ const ProducOnCart = ({heart, noCount, noDeleted, item, onUpdateQuantity}) => {
                     {formatMoney(item.product.costPrice)}
                   </Text>
                   <Text style={styles.textSale}>
-                    {' '}
                     {item.product.salePercent}%
                   </Text>
                 </View>

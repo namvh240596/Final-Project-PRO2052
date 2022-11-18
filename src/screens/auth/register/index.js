@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {signUpRequest} from '../../../redux/auth/action';
 import {SvgXml} from 'react-native-svg';
-import {validateConfirmPasswordSchema} from '../../../utils/schema';
+import {validateRegisterSchema} from '../../../utils/schema';
 import CustomTextInput from '../../../components/customTextInput';
 import CustomButton from '../../../components/customButton';
 
@@ -53,7 +53,7 @@ const Register = () => {
           initialValues={initialValues}
           validateOnChange={true}
           onSubmit={onSignUp}
-          validationSchema={validateConfirmPasswordSchema}>
+          validationSchema={validateRegisterSchema}>
           {({errors, values, setFieldValue, handleSubmit}) => {
             return (
               <>
@@ -109,7 +109,7 @@ const Register = () => {
           }}
         </Formik>
         <Text style={styles.text}>
-          Bạn đã có tài khoản?{' '}
+          Bạn đã có tài khoản?
           <Text
             onPress={() => navigation.navigate('Login')}
             style={styles.textBlue}>

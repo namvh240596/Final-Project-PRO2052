@@ -1,20 +1,17 @@
 import {
   View,
   Text,
-  FlatList,
   Image,
   ScrollView,
   Pressable,
-  Dimensions,
 } from 'react-native';
-import React, {useRef, useState, useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {styles} from './styles';
 import Header from '../../components/header';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
 import CustomProduct from '../../components/customProduct';
 import {AppTheme} from '../../config/AppTheme';
-import IMAGES from '../../assets/images';
 import {scale} from '../../utils/scale';
 import ItemCategories from './components/ItemCategories';
 import {SvgXml} from 'react-native-svg';
@@ -24,24 +21,13 @@ import {
   getAllProductsRequest,
 } from '../../redux/products/action';
 import {getProductsSelector} from '../../redux/products/selector';
-import {formatMoney} from '../../helpers/formatMoney';
-import PlaceholderProduct from '../../components/placeholderProduct';
 import PlaceholderListCategories from '../../components/placeholderListCategories';
-import PlaceholderProductOnHome from '../../components/placeholderProductOnHome';
 import {getListCategoriesSelector} from '../../redux/categories/selector';
-import {
-  getListCategoriesRequest,
-  getListGearRequest,
-} from '../../redux/categories/action';
 import {getListBannerRequest} from '../../redux/banner/action';
 import {getListBannerSelector} from '../../redux/banner/selector';
-import Carousel from 'react-native-reanimated-carousel';
-import FastImage from 'react-native-fast-image';
-import {getToken} from '../../helpers/tokenHelper';
 import {useNavigation} from '@react-navigation/native';
-import withLoading from '../../HOC/withLoading';
-import {GET_ALL_CATEGORIES_BY_TYPE_REQUEST} from '../../redux/products/actionType';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import { getListCategoriesRequest } from '../../redux/categories/action';
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();

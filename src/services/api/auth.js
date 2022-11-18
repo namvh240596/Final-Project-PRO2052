@@ -10,5 +10,12 @@ export const changePasswordApi = data => {
   return axiosClient.put('/access/change-password', data);
 };
 export const forgotPasswordApi = data => {
-  return axiosClient.put('/access/forgot-password', data);
+  return axiosClient.post('/access/forgot-password', data);
+};
+
+export const veryfiCodedApi = data => {
+  return axiosClient.post('/access/verify-code', data);
+};
+export const resetPassworddApi = data => {
+  return axiosClient.post('/access/reset-password', data);
 };
