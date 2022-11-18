@@ -18,8 +18,10 @@ const CustomProduct = ({
   onGoDetail,
   onRemove,
 }) => {
+  console.log('=>>',image);
   return (
     <TouchableOpacity style={styles.container} onPress={onGoDetail}>
+    
       <View>
         {image && (
           <Image
@@ -56,5 +58,3 @@ const CustomProduct = ({
 };
 
 export default CustomProduct;
-
-const DATA = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];

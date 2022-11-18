@@ -23,18 +23,12 @@ const validateLoginSchema = Yup.object().shape({
     .matches(regexPass, validPassMessage)
     .required(requiredErrorMessage),
 });
-
-const validateRegisterSchema = Yup.object().shape({
-  phone: Yup.string()
-    .required(requiredErrorMessage)
-    .matches(regexPhone, validPhoneMessage),
-});
 const validateEmailSchema = Yup.object().shape({
   email: Yup.string()
     .required(requiredErrorMessage)
     .matches(regexEmail, validEmailMessage),
 });
-const validateConfirmPasswordSchema = Yup.object().shape({
+const validateRegisterSchema = Yup.object().shape({
   fullname: Yup.string()
     .matches(regexFullname, validFullnameMessage)
     .required(requiredErrorMessage),
@@ -60,10 +54,21 @@ const validateInformationSchema = Yup.object().shape({
   email: Yup.string().matches(regexEmail, validEmailMessage),
 });
 
+const validateConfirmPasswordSchema = Yup.object().shape({
+  password: Yup.string()
+    .min(8, validPassMessage)
+    .required(requiredErrorMessage)
+    .matches(regexPass, validPassMessage),
+  confirmPassword: Yup.string()
+    .min(8, validPassMessage)
+    .required(requiredErrorMessage)
+    .matches(regexPass, validPassMessage)
+    .oneOf([Yup.ref('password'), null], confirmPassMessage),
+});
 export {
   validateLoginSchema,
   validateRegisterSchema,
   validateConfirmPasswordSchema,
   validateInformationSchema,
-  validateEmailSchema
+  validateEmailSchema,
 };

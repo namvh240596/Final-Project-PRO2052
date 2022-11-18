@@ -90,7 +90,7 @@ const Login = () => {
           textStyles={styles.textBtn}
         />
         <Text style={styles.text}>
-          Bạn chưa có tài khoản?{' '}
+          Bạn chưa có tài khoản?
           <Text
             onPress={() => navigation.navigate('Register')}
             style={styles.textBlue}>
