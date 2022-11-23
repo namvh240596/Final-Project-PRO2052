@@ -8,6 +8,9 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getListFavoriteSelector} from '../../redux/products/selector';
 import {getAllFavoriteProductRequest} from '../../redux/products/action';
+import {SvgXml} from 'react-native-svg';
+import AppIcon from '../../assets/icons';
+import {scale} from '../../utils/scale';
 
 const Favorites = () => {
   const navigation = useNavigation();
@@ -28,6 +31,7 @@ const Favorites = () => {
         salePercent={item.salePercent}
         salePrice={item.salePrice}
         title={item.title}
+        containerStyle={styles.itemContainer}
       />
     );
   };
@@ -37,7 +41,7 @@ const Favorites = () => {
       <View style={styles.body}>
         {listFavorite && (
           <FlatList
-            data={listFavorite}
+            data={[]}
             renderItem={renderItem}
             keyExtractor={item => item.id}
             numColumns={2}
@@ -45,6 +49,16 @@ const Favorites = () => {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             style={styles.flatList}
+            ListEmptyComponent={
+              <View style={styles.containerEmpty}>
+                <SvgXml
+                  xml={AppIcon.IconNotFound}
+                  width={scale(124)}
+                  height={scale(124)}
+                />
+                <Text style={styles.text}>Không có sản phẩm yêu thích nào!</Text>
+              </View>
+            }
           />
         )}
       </View>

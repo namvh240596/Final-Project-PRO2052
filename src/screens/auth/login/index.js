@@ -11,10 +11,7 @@ import {useDispatch} from 'react-redux';
 import {loginRequest} from '../../../redux/auth/action';
 import {Formik} from 'formik';
 import {validateLoginSchema} from '../../../utils/schema';
-import {loginRequestApi} from '../../../services/api/auth';
-import Lottie from 'lottie-react-native';
-import withLoading from '../../../HOC/withLoading';
-import { LOGIN_REQUEST } from '../../../redux/auth/actionType';
+import CustomNotiModal from '../../../components/customNotiModal';
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -26,6 +23,7 @@ const Login = () => {
     },
     [dispatch],
   );
+  const [hide, setHide] = useState(true);
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -58,9 +56,11 @@ const Login = () => {
                   leftIcon={AppIcon.IconLockGrey}
                   textPlaceHolder={'Mật khẩu'}
                   containerTextInputStyle={{marginTop: verticalScale(18)}}
-                  secureTextEntry
+                  secureTextEntry={hide}
                   textErrors={errors.password}
                   onChangeText={text => setFieldValue('password', text)}
+                  rightIcon={hide ? AppIcon.IconCloseEye : AppIcon.IconEye}
+                  onClear={() => setHide(!hide)}
                 />
                 <CustomButton
                   title={'Đăng nhập'}
@@ -90,7 +90,7 @@ const Login = () => {
           textStyles={styles.textBtn}
         />
         <Text style={styles.text}>
-          Bạn chưa có tài khoản?
+          Bạn chưa có tài khoản?{' '}
           <Text
             onPress={() => navigation.navigate('Register')}
             style={styles.textBlue}>
@@ -98,13 +98,14 @@ const Login = () => {
           </Text>
         </Text>
         <TouchableOpacity
-        onPress={() => navigation.navigate('ForgotPassword')}
-        style={styles.touch}>
+          onPress={() => navigation.navigate('ForgotPassword')}
+          style={styles.touch}>
           <Text style={styles.textForgot}>Quên mật khẩu?</Text>
         </TouchableOpacity>
       </View>
+      <CustomNotiModal/>
     </View>
   );
 };
 
-export default Login
+export default Login;

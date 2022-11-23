@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useCallback} from 'react';
 import {styles} from './styles';
-import Header from '../../components/header';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
 import CustomProduct from '../../components/customProduct';
@@ -67,7 +66,7 @@ const Home = () => {
       style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
-      <Header title="Home" />
+      {/* <Header title="Home" /> */}
       <View style={styles.body}>
         <View style={styles.viewTextInput}>
           <CustomTextInput
@@ -142,9 +141,6 @@ const Home = () => {
         )}
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Flash Sale</Text>
-          <Pressable onPress={() => onMore('category')}>
-            <Text style={styles.textMore}>Xem Thêm</Text>
-          </Pressable>
         </View>
         {listProduct.length > 0 && (
           <ScrollView
@@ -162,6 +158,7 @@ const Home = () => {
                   salePrice={item?.salePrice}
                   salePercent={item?.salePercent}
                   onGoDetail={() => onDetail(item._id)}
+                  containerStyle={styles.itemProductStyle}
                 />
               );
             })}
@@ -169,9 +166,9 @@ const Home = () => {
         )}
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Mega Sale</Text>
-          <Pressable onPress={() => onMore('category')}>
+          {/* <Pressable onPress={() => onMore('category')}>
             <Text style={styles.textMore}>Xem Thêm</Text>
-          </Pressable>
+          </Pressable> */}
         </View>
         <ScrollView
           style={styles.containerCategories}
@@ -188,6 +185,8 @@ const Home = () => {
                 salePrice={item?.salePrice}
                 salePercent={item?.salePercent}
                 onGoDetail={() => onDetail(item?._id)}
+                containerStyle={styles.itemProductStyle}
+
               />
             );
           })}
@@ -197,7 +196,8 @@ const Home = () => {
             Sản phẩm hot
           </Text>
         </View>
-        <ScrollView
+        <View style={{paddingHorizontal: scale(6)}}>
+           <ScrollView
           style={styles.scrollContainerHotProduct}
           contentContainerStyle={styles.scrollViewHotProduct}>
           {listProduct.map(item => {
@@ -214,6 +214,8 @@ const Home = () => {
             );
           })}
         </ScrollView>
+        </View>
+       
       </View>
     </ScrollView>
   );

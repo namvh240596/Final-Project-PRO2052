@@ -20,6 +20,7 @@ const CustomTextInput = ({
   onClear,
   keyboardType,
   onChangeText,
+  rightStyle,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -49,7 +50,7 @@ const CustomTextInput = ({
           onChangeText={onChangeText}
         />
         {rightIcon && (
-          <TouchableOpacity onPress={onClear}>
+          <TouchableOpacity rightStyle={rightStyle} onPress={onClear}>
             <SvgXml xml={rightIcon} width={scale(24)} height={scale(24)} />
           </TouchableOpacity>
         )}

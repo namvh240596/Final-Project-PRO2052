@@ -17,11 +17,10 @@ const CustomProduct = ({
   remove,
   onGoDetail,
   onRemove,
+  containerStyle,
 }) => {
-  console.log('=>>',image);
   return (
-    <TouchableOpacity style={styles.container} onPress={onGoDetail}>
-    
+    <TouchableOpacity style={[styles.container, containerStyle]} onPress={onGoDetail}>
       <View>
         {image && (
           <Image

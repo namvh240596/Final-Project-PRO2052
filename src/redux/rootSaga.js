@@ -5,6 +5,7 @@ import bannerSaga from './banner/saga';
 import categoriesSaga from './categories/saga';
 import gearSaga from './gear/saga';
 import cartSaga from './cart/saga';
+import locationSaga from './location/saga';
 export default function* rootSaga() {
   yield all([fork(productsSaga)]);
   yield all([fork(categoriesSaga)]);
@@ -12,4 +13,6 @@ export default function* rootSaga() {
   yield all([fork(authSaga)]);
   yield all([fork(bannerSaga)]);
   yield all([fork(cartSaga)]);
+  yield all([fork(locationSaga)]);
+
 }

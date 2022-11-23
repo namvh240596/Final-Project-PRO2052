@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   body: {
     paddingVertical: verticalScale(20),
     flex: 1,
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
   },
   container: {
     flex: 1,

@@ -30,9 +30,9 @@ const AppTheme = {
   },
   FontSize: {
     Small: scale(12),
-    SmallX: scale(13),
-    Medium: scale(15),
-    Large: scale(17),
+    SmallX: scale(14),
+    Medium: scale(16),
+    Large: scale(18),
   },
   Dimensions: {
     windowHeight,
@@ -98,7 +98,7 @@ const TextStyles = StyleSheet.create({
     fontSize: scale(15),
     fontFamily: AppTheme.Fonts.Bold,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Black,
+    color: AppTheme.Colors.Dark,
     fontWeight: '600',
   },
   textStyleErrors: {
