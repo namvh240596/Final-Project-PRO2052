@@ -89,13 +89,15 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: verticalScale(15),
     elevation: 2,
-    shadowColor: AppTheme.Colors.Black,
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    shadowColor: AppTheme.Colors.Grey,
+    backgroundColor: AppTheme.Colors.White,
     shadowRadius: 10,
-    borderRadius: 7,
+    borderRadius: 5,
     padding: scale(5),
     alignItems: 'center',
     paddingLeft: scale(12),
+    borderWidth: 0.5,
+    borderColor: AppTheme.Colors.SecondBackround
   },
   modalBody: {
     backgroundColor: 'white',
@@ -118,9 +120,10 @@ export const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
     paddingHorizontal: scale(16),
     paddingVertical: verticalScale(5),
+    paddingTop: verticalScale(20)
   },
   container: {
     flex: 1,

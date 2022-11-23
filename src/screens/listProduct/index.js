@@ -32,6 +32,7 @@ const ListProduct = props => {
         salePrice={item?.salePrice}
         salePercent={item?.salePercent}
         onGoDetail={() => onDetail(item._id)}
+        containerStyle={styles.itemStyle}
       />
     );
   };
@@ -114,26 +115,29 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
     paddingTop: verticalScale(15),
   },
   containerCategories: {
     backgroundColor: AppTheme.Colors.White,
     borderRadius: scale(5),
-    paddingHorizontal: scale(16),
     minHeight: verticalScale(170),
     elevation: 3,
-    shadowColor: AppTheme.Colors.Black,
+    shadowColor: AppTheme.Colors.SecondBackround,
     shadowOpacity: 0.5,
     shadowRadius: 50,
   },
   columnWrapperStyle: {
     justifyContent: 'space-between',
     paddingBottom: verticalScale(15),
+    paddingHorizontal: scale(8)
   },
   flatList: {
     paddingHorizontal: scale(16),
     paddingTop: verticalScale(20),
     marginTop: verticalScale(3),
+  },
+  itemStyle:{
+    marginBottom: verticalScale(0)
   },
 });

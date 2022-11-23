@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
+import {showModal} from '../../components/customNotiModal';
 import {removeToken, setToken} from '../../helpers/tokenHelper';
 import {loginRequestApi, regsiterRequestApi} from '../../services/api/auth';
 import {loginSuccess, logoutSuccess, signUpSuccess} from './action';
@@ -24,7 +25,13 @@ function* loginHandle(action) {
       }),
     );
   } catch (error) {
-    console.log('loginHandle -> ', error);
+    showModal({
+      title: 'Đăng nhập thất bại',
+      message: error.response.data.message,
+    });
+    console.log('====================================');
+    console.log(error.response.data.message);
+    console.log('====================================');
   }
 }
 ///////////////////////////////// register  //////////////////////////////////////////

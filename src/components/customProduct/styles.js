@@ -8,13 +8,13 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: AppTheme.Colors.Light,
     borderWidth: 1,
-    marginRight: scale(20),
-    marginBottom: verticalScale(14),
+    marginBottom: verticalScale(9),
     backgroundColor: AppTheme.Colors.White,
     elevation: 4,
-    shadowColor: AppTheme.Colors.Black,
-    shadowOpacity: 0.2,
+    shadowColor: AppTheme.Colors.White,
+    shadowOpacity: 0.9,
     shadowRadius: 40,
+    
   },
 
   img: {
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textName: {
-    fontSize: scale(18),
+    fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.Bold,
     letterSpacing: 0.5,
     color: AppTheme.Colors.Dark,

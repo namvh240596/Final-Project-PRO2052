@@ -4,11 +4,13 @@ import {SvgXml} from 'react-native-svg';
 import {scale, verticalScale} from '../../../utils/scale';
 import {AppTheme} from '../../../config/AppTheme';
 
-const ItemAccount = ({icon, title, onPress}) => {
+const ItemAccount = ({icon, title, onPress, containerStyle, textStyle}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.container, containerStyle]}
+      onPress={onPress}>
       <SvgXml xml={icon} width={scale(24)} height={scale(24)} />
-      <Text style={styles.textTitle}>{title}</Text>
+      <Text style={[styles.textTitle, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -21,21 +23,13 @@ const styles = StyleSheet.create({
     fontFamily: AppTheme.Fonts.Bold,
     color: AppTheme.Colors.Dark,
     fontWeight: '700',
-    marginLeft: scale(16),
+    marginLeft: scale(24),
   },
   container: {
     flexDirection: 'row',
     paddingVertical: verticalScale(12),
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: AppTheme.Colors.Light,
-    borderRadius: 5,
-    elevation: 2,
-    shadowColor: AppTheme.Colors.Black,
-    shadowOpacity: 0.5,
     backgroundColor: AppTheme.Colors.White,
-    paddingHorizontal: scale(16),
     marginBottom: verticalScale(14),
-    shadowRadius: 15,
   },
 });

@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginHorizontal: scale(12),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
     borderRadius: 10,
   },
   img: {
@@ -131,18 +131,24 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
   },
   container: {
     width: '100%',
     minHeight: verticalScale(100),
     backgroundColor: AppTheme.Colors.White,
     marginBottom: verticalScale(16),
-    borderRadius: 5,
     elevation: 2,
-    shadowColor: AppTheme.Colors.Black,
+    shadowColor: AppTheme.Colors.White,
+    shadowOffset:{
+      width: 0,
+      height: 4,
+    },
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: verticalScale(10),
+    shadowOpacity: 0.1,
+    borderWidth: 0.1,
+    borderRadius: 2
   },
 });

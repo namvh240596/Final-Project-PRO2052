@@ -18,6 +18,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingLeft: scale(16),
+    justifyContent: 'space-between',
+    paddingHorizontal: scale(22)
   },
   viewTitle: {
     flexDirection: 'row',
@@ -59,11 +61,11 @@ export const styles = StyleSheet.create({
   img: {
     width: '100%',
     height: verticalScale(236),
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(20),
   },
   itemImage: {
-    height: verticalScale(236),
-    width: Dimensions.get('window').width,
+    height: verticalScale(216),
+    width: Dimensions.get('window').width - 32,
     borderRadius: 5,
   },
   dotInActive: {
@@ -82,5 +84,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: AppTheme.Colors.White,
     borderRadius: 5,
+    paddingHorizontal: scale(16)
+  },
+  itemProductStyle:{
+    marginRight: scale(12)
   },
 });

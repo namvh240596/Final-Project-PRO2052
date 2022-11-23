@@ -1,5 +1,5 @@
 import {View, Text, ScrollView} from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback,useState} from 'react';
 import {styles} from './styles';
 import AppIcon from '../../../assets/icons';
 import {scale, verticalScale} from '../../../utils/scale';
@@ -15,6 +15,7 @@ import CustomButton from '../../../components/customButton';
 const Register = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [hidePass, setHidePass] = useState(true);
   const initialValues = {
     email: '',
     password: '',
@@ -67,7 +68,7 @@ const Register = () => {
                 />
                 <CustomTextInput
                   value={values.phone}
-                  leftIcon={AppIcon.IconPhone}
+                  leftIcon={AppIcon.IconPhoneGrey}
                   textPlaceHolder={'Số điện thoại'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   textErrors={errors.phone}
@@ -79,6 +80,7 @@ const Register = () => {
                   textPlaceHolder={'Email'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   textErrors={errors.email}
+
                   onChangeText={text => setFieldValue('email', text)}
                 />
                 <CustomTextInput
@@ -86,8 +88,10 @@ const Register = () => {
                   leftIcon={AppIcon.IconLockGrey}
                   textPlaceHolder={'Mật khẩu'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
-                  secureTextEntry
+                  secureTextEntry={hidePass}
                   textErrors={errors.password}
+                  onClear={()=>setHidePass(!hidePass)}
+                  rightIcon={hidePass ? AppIcon.IconCloseEye : AppIcon.IconEye}
                   onChangeText={text => setFieldValue('password', text)}
                 />
                 <CustomTextInput
@@ -95,9 +99,11 @@ const Register = () => {
                   leftIcon={AppIcon.IconLockGrey}
                   textPlaceHolder={'Xác nhận Mật khẩu'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
-                  secureTextEntry
+                  secureTextEntry={hidePass}
+                  rightIcon={hidePass ? AppIcon.IconCloseEye : AppIcon.IconEye}
                   textErrors={errors.confirmPassword}
                   onChangeText={text => setFieldValue('confirmPassword', text)}
+                  onClear={()=>setHidePass(!hidePass)}
                 />
                 <CustomButton
                   title={'Đăng kí'}
@@ -109,10 +115,10 @@ const Register = () => {
           }}
         </Formik>
         <Text style={styles.text}>
-          Bạn đã có tài khoản?
+          Bạn đã có tài khoản? {' '}
           <Text
             onPress={() => navigation.navigate('Login')}
-            style={styles.textBlue}>
+            style={styles.textBlue}> 
             Đăng Nhập
           </Text>
         </Text>

@@ -156,7 +156,7 @@ const Explore = () => {
 
   return (
     <View style={styles.container}>
-      <Header title={'Build PC'} />
+      {/* <Header title={'Build PC'} /> */}
       <ScrollView
         contentContainerStyle={{
           paddingVertical: verticalScale(5),
@@ -251,7 +251,7 @@ const Explore = () => {
                   width: '100%',
                   height: '100%',
                   zIndex: 11,
-                  backgroundColor: 'rgba(64, 191, 255,0.2)',
+                  backgroundColor: AppTheme.Colors.White,
                 }}
               />
             </View>
