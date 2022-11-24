@@ -1,1 +1,1 @@
-export const getListLocationSelector = state => state.locationReducer.listlocation;
+export const getChangeLoading = state => state.loadingReducer.loading;

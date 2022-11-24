@@ -121,4 +121,22 @@ export const styles = StyleSheet.create({
   viewList: {
     paddingHorizontal: scale(16),
   },
+  viewAddress: {
+    width: '100%',
+    minHeight: verticalScale(60),
+    borderWidth: 0.5,
+    borderColor: AppTheme.Colors.Grey,
+    borderRadius: 6,
+    marginBottom: verticalScale(10),
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(10)
+  },
+  textChooseAddress:{
+    fontSize: scale(16),
+    fontFamily: AppTheme.Fonts.Medium,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    textAlignVertical: 'center',
+    marginTop: verticalScale(8)
+  }
 });

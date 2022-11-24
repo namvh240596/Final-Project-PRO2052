@@ -12,7 +12,7 @@ import {styles} from './styles';
 import {DATA_ACCOUNT} from '../../services/fakeApi/fakeAPI';
 import ItemAccount from './components/ItemAccount';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getUserSelector} from '../../redux/auth/selector';
 import CustomButton from '../../components/customButton';
 import ItemProfile from './profile/components/ItemProfile';
@@ -25,6 +25,7 @@ const Account = () => {
   const [visibled, setVisibled] = useState(false);
   const [email, setEmail] = useState(userInfo.email);
   const [fullname, setFullname] = useState(userInfo.fullname);
+  const dispatch = useDispatch();
   const onGo = value => {
     switch (value) {
       case 'Tài khoản':
@@ -53,7 +54,6 @@ const Account = () => {
     <View style={styles.container}>
       <View style={styles.avatar}>
         <Image
-          defaultSource={{uri: defaultImg}}
           source={{uri: defaultImg}}
           style={styles.img}
         />
@@ -71,7 +71,11 @@ const Account = () => {
           title="Đơn hàng"
           onPress={() => onGo('Đơn hàng')}
         />
-        <ItemAccount icon={AppIcon.IconAddress} title="Địa chỉ" />
+        <ItemAccount
+          icon={AppIcon.IconAddress}
+          onPress={() => onGo('Địa chỉ')}
+          title="Địa chỉ"
+        />
         <ItemAccount icon={AppIcon.IconNotification} title="Thông báo" />
         <ItemAccount icon={AppIcon.IconPayment} title="Liên kết thẻ" />
         <ItemAccount icon={AppIcon.IconHelp} title="Trợ giúp" />

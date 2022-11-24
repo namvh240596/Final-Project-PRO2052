@@ -7,11 +7,11 @@ import CustomButton from '../../../components/customButton';
 const ItemAddress = ({onPress, name, address, phone}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={styles.textName}>Nguyễn Lam Trường</Text>
+      <Text style={styles.textName}>Loại địa chỉ: {name}</Text>
       <Text style={styles.text}>
-        115A Tô Ký Phường Đông Hưng Thuận Quận 12 HCM
+      Địa chỉ:  {address}
       </Text>
-      <Text style={styles.textPhone}>0329374810</Text>
+      <Text style={styles.textPhone}>Số điện thoại: {phone}</Text>
     </TouchableOpacity>
   );
 };
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontSize: scale(16),
     fontFamily: AppTheme.Fonts.Regular,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Grey,
+    color: AppTheme.Colors.Black,
     marginBottom: verticalScale(7),
   },
   textPhone: {
@@ -43,15 +43,12 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingVertical: verticalScale(12),
-    borderWidth: 1,
-    borderColor: AppTheme.Colors.Light,
+    borderWidth: 0.5,
+    borderColor: AppTheme.Colors.Dark,
     borderRadius: 5,
-    elevation: 2,
-    shadowColor: AppTheme.Colors.Black,
-    shadowOpacity: 0.5,
     backgroundColor: AppTheme.Colors.White,
     paddingHorizontal: scale(16),
-    marginBottom: verticalScale(14),
+    marginBottom: verticalScale(16),
     shadowRadius: 15,
   },
 });

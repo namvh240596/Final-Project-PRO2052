@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  Pressable,
-} from 'react-native';
+import {View, Text, Image, ScrollView, Pressable} from 'react-native';
 import React, {useEffect, useCallback} from 'react';
 import {styles} from './styles';
 import CustomTextInput from '../../components/customTextInput';
@@ -26,7 +20,9 @@ import {getListBannerRequest} from '../../redux/banner/action';
 import {getListBannerSelector} from '../../redux/banner/selector';
 import {useNavigation} from '@react-navigation/native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import { getListCategoriesRequest } from '../../redux/categories/action';
+import {getListCategoriesRequest} from '../../redux/categories/action';
+import PlaceholderListBanner from '../../components/placeholderBanner';
+import PlaceholderProductOnHome from '../../components/placeholderProductOnHome';
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -91,27 +87,34 @@ const Home = () => {
         </View>
 
         <View style={styles.img}>
-          <SwiperFlatList
-            autoplay
-            autoplayDelay={2}
-            autoplayLoop
-            index={2}
-            showPagination
-            autoplayLoopKeepAnimation
-            paginationStyleItemActive={styles.dotActive}
-            paginationStyleItemInactive={styles.dotInActive}
-            paginationStyle={{
-              alignItems: 'center',
-            }}
-            data={listBanner}
-            renderItem={({item}) => {
-              return (
-                <View style={styles.viewCarousel}>
-                  <Image source={{uri: item.image}} style={styles.itemImage} />
-                </View>
-              );
-            }}
-          />
+          {listBanner.length > 0 ? (
+            <SwiperFlatList
+              autoplay
+              autoplayDelay={2}
+              autoplayLoop
+              index={2}
+              showPagination
+              autoplayLoopKeepAnimation
+              paginationStyleItemActive={styles.dotActive}
+              paginationStyleItemInactive={styles.dotInActive}
+              paginationStyle={{
+                alignItems: 'center',
+              }}
+              data={listBanner}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.viewCarousel}>
+                    <Image
+                      source={{uri: item.image}}
+                      style={styles.itemImage}
+                    />
+                  </View>
+                );
+              }}
+            />
+          ) : (
+            <PlaceholderListBanner />
+          )}
         </View>
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Danh mục</Text>
@@ -142,7 +145,7 @@ const Home = () => {
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Flash Sale</Text>
         </View>
-        {listProduct.length > 0 && (
+        {listProduct.length > 0 ? (
           <ScrollView
             style={styles.containerCategories}
             horizontal={true}
@@ -163,6 +166,8 @@ const Home = () => {
               );
             })}
           </ScrollView>
+        ) : (
+          <PlaceholderProductOnHome />
         )}
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Mega Sale</Text>
@@ -186,7 +191,6 @@ const Home = () => {
                 salePercent={item?.salePercent}
                 onGoDetail={() => onDetail(item?._id)}
                 containerStyle={styles.itemProductStyle}
-
               />
             );
           })}
@@ -197,25 +201,24 @@ const Home = () => {
           </Text>
         </View>
         <View style={{paddingHorizontal: scale(6)}}>
-           <ScrollView
-          style={styles.scrollContainerHotProduct}
-          contentContainerStyle={styles.scrollViewHotProduct}>
-          {listProduct.map(item => {
-            return (
-              <CustomProduct
-                key={item._id}
-                title={item.title}
-                image={item.images[0]}
-                costPrice={item.costPrice}
-                salePrice={item.salePrice}
-                salePercent={item.salePercent}
-                onGoDetail={() => onDetail(item._id)}
-              />
-            );
-          })}
-        </ScrollView>
+          <ScrollView
+            style={styles.scrollContainerHotProduct}
+            contentContainerStyle={styles.scrollViewHotProduct}>
+            {listProduct.map(item => {
+              return (
+                <CustomProduct
+                  key={item._id}
+                  title={item.title}
+                  image={item.images[0]}
+                  costPrice={item.costPrice}
+                  salePrice={item.salePrice}
+                  salePercent={item.salePercent}
+                  onGoDetail={() => onDetail(item._id)}
+                />
+              );
+            })}
+          </ScrollView>
         </View>
-       
       </View>
     </ScrollView>
   );

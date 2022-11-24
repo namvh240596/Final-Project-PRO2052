@@ -17,8 +17,8 @@ const Header = ({title, iconBack}) => {
         <TouchableOpacity onPress={onGoBack}>
           <SvgXml
             xml={AppIcon.IconBack}
-            width={scale(22)}
-            height={scale(22)}
+            width={scale(20)}
+            height={scale(20)}
             style={styles.icon}
           />
         </TouchableOpacity>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginLeft: scale(20),
   },
   textTitle: {
-    marginLeft: scale(20),
+    marginLeft: scale(125),
     width: '70%',
   },
   container: {

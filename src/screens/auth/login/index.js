@@ -7,19 +7,24 @@ import AppIcon from '../../../assets/icons';
 import {scale, verticalScale} from '../../../utils/scale';
 import CustomTextInput from '../../../components/customTextInput';
 import CustomButton from '../../../components/customButton';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {loginRequest} from '../../../redux/auth/action';
 import {Formik} from 'formik';
 import {validateLoginSchema} from '../../../utils/schema';
 import CustomNotiModal from '../../../components/customNotiModal';
+import MyLoading from '../../../components/loading';
+import {getChangeLoadingRequest} from '../../../redux/loading/action';
+import { getChangeLoading } from '../../../redux/loading/selector';
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const initialValues = {email: '', password: ''};
-  const [isLoading, setIsLoading] = useState(false);
+  const loading = useSelector(getChangeLoading);
+  const [isLoading, setIsLoading] = useState(loading);
   const onLogin = useCallback(
     values => {
       dispatch(loginRequest({email: values.email, password: values.password}));
+      dispatch(getChangeLoadingRequest({loading: true}));
     },
     [dispatch],
   );
@@ -103,7 +108,8 @@ const Login = () => {
           <Text style={styles.textForgot}>Quên mật khẩu?</Text>
         </TouchableOpacity>
       </View>
-      <CustomNotiModal/>
+      <CustomNotiModal />
+     {loading && <MyLoading />}
     </View>
   );
 };

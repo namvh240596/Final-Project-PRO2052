@@ -2,11 +2,10 @@ import * as Yup from 'yup';
 const requiredErrorMessage = 'Vui lòng điền đầy đủ thông tin';
 const validPhoneMessage = 'Vui lòng điền đúng định dạng số điện thoại';
 const validEmailMessage = 'Vui lòng điền đúng định dạng email';
-const validPassMessage =
-  'Mật khẩu phải có tối thiểu sáu ký tự'
+const validPassMessage = 'Mật khẩu phải có tối thiểu sáu ký tự';
 const confirmPassMessage = 'Mật khẩu không trùng khớp';
 const validFullnameMessage = 'Vui lòng điền đúng định dạng tên';
-const regexPass = /^[A-Za-z\d].{5,}$/;
+const regexPass = /^.{6,}$/;
 //Tối thiểu tám ký tự, ít nhất một chữ cái và một số:
 const regexPhone =
   /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;

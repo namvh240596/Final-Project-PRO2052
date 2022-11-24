@@ -1,24 +1,20 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
-import {getBannerApi} from '../../services/api/banner';
-import {getListBannerSuccess} from './action';
-import {GET_CHOOSE_LOCATION_REQUEST, GET_LIST_LOCATION_REQUEST} from './actionType';
+import {getChangeLoadingSuccess} from './action';
+import {
+  GET_CHANGE_LOADING_REQUEST,
+  
+} from './actionType';
 
-function* getListLocationHandle() {
+function* getChangeLoading(action) {
   try {
-    const res = yield call(getBannerApi);
-    yield put(getListBannerSuccess(res.data));
+    yield put(getChangeLoadingSuccess(action.payload));
   } catch (error) {
-    console.log('getListBannerHandle -> ', error);
+    console.log('getChangeLoading -> ', error);
   }
 }
-function* chooseLocationHandle(action) {
-  try {
-  } catch (error) {}
+
+function* loadingSaga() {
+  yield all([takeLatest(GET_CHANGE_LOADING_REQUEST, getChangeLoading)]);
 }
 
-function* locationSaga() {
-  yield all([takeLatest(GET_CHOOSE_LOCATION_REQUEST, chooseLocationHandle)]);
-  yield all([takeLatest(GET_LIST_LOCATION_REQUEST, getListLocationHandle)]);
-}
-
-export default locationSaga;
+export default loadingSaga;
