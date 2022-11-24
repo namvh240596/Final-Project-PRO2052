@@ -93,6 +93,33 @@ export const DATA_PRODUCTS = [
   },
 ];
 
+export const DATA_ADDRESS = [
+  {
+    id: 1,
+    type_address: 'Nhà',
+    address: '115a Tô Ký Đông Hưng Thuận, quận 12 TP. Hồ Chí Minh',
+    phone: '0328374810',
+  },
+  {
+    id: 2,
+    type_address: 'Nhà',
+    address: '115a Tô Ký Đông Hưng Thuận, quận 12 TP. Hồ Chí Minh',
+    phone: '0328374810',
+  },
+  {
+    id: 3,
+    type_address: 'Nhà',
+    address: '115a Tô Ký Đông Hưng Thuận, quận 12 TP. Hồ Chí Minh',
+    phone: '0328374810',
+  },
+  {
+    id: 4,
+    type_address: 'Nhà',
+    address: '115a Tô Ký Đông Hưng Thuận, quận 12 TP. Hồ Chí Minh',
+    phone: '0328374810',
+  },
+  
+];
 export const DATA_ACCOUNT = [
   {
     id: 1,

@@ -3,21 +3,20 @@ import {View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {scale, verticalScale} from '../../utils/scale';
 
-const PlaceholderProductOnHome = () => {
+const PlaceholderListBanner = () => {
   return (
     <SkeletonPlaceholder>
       <View
         style={{
           width: '90%',
-          height: scale(133),
+          height: verticalScale(216),
           borderRadius: scale(10),
           alignSelf: 'center',
-          marginBottom: verticalScale(20),
-          marginTop: verticalScale(10)
+          marginBottom: 20,
         }}
       />
     </SkeletonPlaceholder>
   );
 };
 
-export default PlaceholderProductOnHome;
+export default PlaceholderListBanner;

@@ -8,11 +8,13 @@ const PlaceholderListCategories = () => {
     <SkeletonPlaceholder>
       <View
         style={{
-          width: '95%',
+          width: '90%',
           height: verticalScale(140),
           borderRadius: scale(10),
           alignSelf: 'center',
-          marginBottom: 20,
+          marginBottom: verticalScale(20),
+          marginTop: verticalScale(10)
+
         }}
       />
     </SkeletonPlaceholder>

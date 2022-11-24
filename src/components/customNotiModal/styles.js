@@ -40,9 +40,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    width: scale(60),
+    minWidth: scale(60),
     borderRadius: scale(10),
-    height: verticalScale(40),
+    minHeight: verticalScale(40),
+    borderWidth: 1,
+    paddingHorizontal: scale(16),
+    justifyContent: 'center',
+    paddingVertical: verticalScale(10)
   },
   buttonCancel: {
     backgroundColor: AppTheme.Colors.Light,

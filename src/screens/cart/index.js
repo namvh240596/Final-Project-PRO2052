@@ -4,6 +4,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {styles} from './styles';
@@ -125,6 +126,11 @@ const Cart = props => {
           </View>
 
           <View style={styles.footer}>
+            <View style={styles.viewAddress}>
+              <TouchableOpacity>
+                <Text style={styles.textChooseAddress}>Chọn địa chỉ</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.viewCode}>
               <TextInput placeholder="Nhập mã code" style={styles.textInput} />
               <TouchableOpacity style={styles.touch}>
@@ -183,8 +189,11 @@ const Cart = props => {
           </View>
         </View>
       )}
+     
     </View>
   );
 };
 
 export default Cart;
+
+

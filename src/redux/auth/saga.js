@@ -3,7 +3,7 @@ import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {showModal} from '../../components/customNotiModal';
 import {removeToken, setToken} from '../../helpers/tokenHelper';
 import {loginRequestApi, regsiterRequestApi} from '../../services/api/auth';
-import {loginSuccess, logoutSuccess, signUpSuccess} from './action';
+import {loginFailed, loginSuccess, logoutSuccess, signUpSuccess} from './action';
 import {LOGIN_REQUEST, LOGOUT_REQUEST, SIGN_UP_REQUEST} from './actionType';
 ///////////////////////////////// login //////////////////////////////////////////
 function* loginHandle(action) {
@@ -25,6 +25,7 @@ function* loginHandle(action) {
       }),
     );
   } catch (error) {
+    yield put(loginFailed());
     showModal({
       title: 'Đăng nhập thất bại',
       message: error.response.data.message,

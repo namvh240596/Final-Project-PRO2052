@@ -80,18 +80,19 @@ const CustomNotiModal = ({}) => {
             {options.hasCancel && (
               <CustomButton
                 title={options.textCancel}
-                onPress={() => onCancelPress()}
+                onPress={onCancelPress}
                 containerStyle={[styles.button, styles.buttonCancel]}
                 textStyle={[styles.textStyle, options.cancelTextStyle]}
               />
             )}
             {options.hasConfirm && (
-              <CustomButton
-                title={options.textConfirm}
-                onPress={() => onConfirmPress()}
-                containerStyle={[styles.button, styles.buttonConfirm]}
-                textStyle={styles.textStyle}
-              />
+              <TouchableOpacity
+                style={[styles.button, styles.buttonCancel]}
+                onPress={onConfirmPress}>
+                <Text style={[styles.textStyle, options.cancelTextStyle]}>
+                  Xác nhận
+                </Text>
+              </TouchableOpacity>
             )}
           </View>
         </View>
@@ -102,7 +103,7 @@ const CustomNotiModal = ({}) => {
 
 export default React.memo(CustomNotiModal);
 
-export const showModal = (options) => {
+export const showModal = options => {
   DeviceEventEmitter.emit(OPEN_MODAL, options);
 };
 

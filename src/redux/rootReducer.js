@@ -8,6 +8,8 @@ import bannerReducer from './banner/reducer';
 import authReducer from './auth/reducer';
 import cartReducer from './cart/reducer';
 import locationReducer from './location/reducer';
+import loadingReducer from './loading/reducer';
+
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
@@ -27,5 +29,6 @@ export const rootReducer = combineReducers({
   bannerReducer,
   auth: persistReducer(authPersistConfig, authReducer),
   cartReducer,
-  location: persistReducer(locationReducer, locationPersistConfig)
+  location: persistReducer(locationPersistConfig, locationReducer),
+  loadingReducer,
 });

@@ -18,7 +18,9 @@ import {useSelector} from 'react-redux';
 import {getIsLoginSelector} from '../redux/auth/selector';
 import messaging from '@react-native-firebase/messaging';
 import onDisplayNotification from '../helpers/notifee';
-
+import Location from '../screens/location';
+import { PermissionsAndroid } from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
 const {Navigator, Screen, Group} = createNativeStackNavigator();
 
 export default function AppRouter() {
@@ -44,14 +46,38 @@ export default function AppRouter() {
       try {
         let title = remoteMessage.notification?.title;
         let body = remoteMessage.notification?.title;
-        console.log('====================================');
-        console.log(remoteMessage);
-        console.log('====================================');
         onDisplayNotification(title, body);
       } catch (error) {
         console.log(error);
       }
     });
+  }, []);
+  useEffect(() => {
+    async function requestLocationPermission() {
+      if (Platform.OS === 'ios') {
+        Geolocation.setRNConfiguration({
+          skipPermissionRequests: false,
+          authorizationLevel: 'whenInUse',
+        });
+        Geolocation.requestAuthorization();
+      }
+
+      if (Platform.OS === 'android') {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('location yes');
+          } else {
+            console.log('location permission denied');
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    }
+    requestLocationPermission();
   }, []);
   return (
     <NavigationContainer>
@@ -74,6 +100,7 @@ export default function AppRouter() {
         <Screen name="MyOrder" component={MyOrder} />
         <Screen name="Payment" component={Payment} />
         <Screen name="OrderDetail" component={OrderDetail} />
+        <Screen name="Location" component={Location} />
       </Navigator>
     </NavigationContainer>
   );
