@@ -16,7 +16,7 @@ import Geolocation from 'react-native-geolocation-service';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
 import useDebounce from '../../helpers/debounce';
-import {scale} from '../../utils/scale';
+import {scale, verticalScale} from '../../utils/scale';
 import Header from '../../components/header';
 import CustomButton from '../../components/customButton';
 import axios, {Axios} from 'axios';
@@ -30,8 +30,8 @@ const Location = () => {
     longitude: 108.2193428,
   });
   const [makerPosition, setMakerPosition] = useState({
-    latitude: 0,
-    longitude: 0,
+    latitude: 16.0799812,
+    longitude: 108.2193428,
   });
 
   const [value, setValue] = useState('');
@@ -64,31 +64,34 @@ const Location = () => {
   }, [debouncedValue, place]);
 
   const findPlace = useCallback(id => {
-    getPlaceDetailApi(id)
+    axios
+      .get(
+        `https://rsapi.goong.io/Place/Detail?place_id=${id}&api_key=${API_KEY}`,
+      )
       .then(res => {
+        console.log(res.data);
         setRegion({
-          latitude: res?.result?.geometry?.location?.lat,
-          longitude: res?.result?.geometry?.location?.lng,
+          latitude: res.data.result.geometry.location.lat,
+            longitude: res.data.result.geometry.location.lng,
         });
         setMakerPosition({
-          latitude: res?.result?.geometry?.location?.lat,
-          longitude: res?.result?.geometry?.location?.lng,
+          latitude: res.data.result.geometry.location.lat,
+            longitude: res.data.result.geometry.location.lng,
         });
-        if (Platform.OS === 'android') {
-          setSelectionTextInput({start: 0});
-        }
+        
         setPlaces([]);
         Keyboard.dismiss();
       })
       .catch(e => {
         console.log('Error', e);
       });
-  }, []);
+  }, [places]);
 
   const onAddAddressToProfile = () => {};
 
   const onBackCurrentPosition = () => {
     Geolocation.getCurrentPosition(pos => {
+      console.log('aasdas');
       setRegion({
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
@@ -99,18 +102,11 @@ const Location = () => {
           `https://rsapi.goong.io/Geocode?latlng=${pos.coords.latitude},${pos.coords.longitude}&api_key=${API_KEY}`,
         )
         .then(res => {
-          console.log('res ',res);
-          setValue(res.results[0].formatted_address);
-          setRegion({
-            latitude: res.results[0].geometry.location.lat,
-            longitude: res.results[0].geometry.location.lng,
-          });
+          setValue(res.data.results[0].formatted_address);
           setMakerPosition({
-            latitude: res.results[0].geometry.location.lat,
-            longitude: res.results[0].geometry.location.lng,
+            latitude: res.data.results[0].geometry.location.lat,
+            longitude: res.data.results[0].geometry.location.lng,
           });
-         
-          // Keyboard.dismiss();
         })
         .catch(e => {
           console.log('Error', e);
@@ -118,48 +114,33 @@ const Location = () => {
     });
     setDisabledButton(false);
   };
-
-  const onFocus = useCallback(() => {
-    setIsFocus(true);
-    if (Platform.OS === 'android') {
-      // setSelectionTextInput({selection: null});
-    }
-  }, []);
-
-  const onBlur = useCallback(() => {
-    if (Platform.OS === 'android') {
-      // setSelectionTextInput({selection: {start: 0, end: 0}});
-    }
-  }, []);
   const onChooseAddress = useCallback(item => {}, []);
-
   return (
     <View style={styles.container}>
-      <Header
-        title="Chon vi tri"
-        iconBack={true}
-        //   containerStyle={styles.headerStyle}
-      />
-
-      <View>
+      <Header title="Chọn vị trí" iconBack={true} />
+      <View
+        style={{
+          position: 'absolute',
+          marginTop: verticalScale(60),
+          width: '100%',
+          height: 100,
+          zIndex: 200,
+        }}>
         <CustomTextInput
           value={value}
           onChangeText={text => getPlacess(text)}
-          placeholder={location.address ? location.address : 'Chọn địa điểm'}
+          // placeholder={'Chọn địa điểm'}
           containerStyle={styles.textInputContainer}
-          inputStyle={styles.inputStyle}
-          leftInputComponent={
-            <SvgXml
-              xml={AppIcon.IconSearch}
-              width={scale(24)}
-              height={scale(24)}
-              style={styles.iconSearch}
-            />
-          }
-          onFocus={() => onFocus()}
-          onBlur={() => onBlur()}
+          // inputStyle={styles.inputStyle}
+          // leftInputComponent={
+          //   <SvgXml
+          //     xml={AppIcon.IconSearch}
+          //     width={scale(24)}
+          //     height={scale(24)}
+          //     style={styles.iconSearch}
+          //   />
+          // }
           onEndEditing={() => setIsFocus(false)}
-          selection={Platform.OS === 'android' ? selectionTextInput : null}
         />
         {places && (
           <View style={styles.listPlaces}>
@@ -178,28 +159,26 @@ const Location = () => {
                   height={scale(20)}
                 />
                 <Text key={index} style={styles.textPlaces}>
-                  {/* {item.description} */}
+                  {item.description}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
         )}
-
+      </View>
+      <View>
         <MapView
           style={styles.mapViewContainer}
-          showsUserLocation={true}
-          userInterfaceStyle={'light'}
-          showsMyLocationButton={true}
           region={{
             latitude: region.latitude,
-            longitude: region.latitude,
+            longitude: region.longitude,
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
           }}>
           <Marker
             coordinate={{
-              latitude: region.latitude,
-              longitude: region.latitude,
+              latitude: makerPosition.latitude,
+              longitude: makerPosition.longitude,
             }}>
             <Callout>
               <Text>I'm here</Text>
@@ -211,23 +190,17 @@ const Location = () => {
       <View style={styles.viewFooter}>
         <TouchableOpacity
           style={styles.viewCurrentPosition}
-          onPress={() => onBackCurrentPosition()}>
+          onPress={onBackCurrentPosition}>
           <SvgXml
-            xml={AppIcon.IconCustom}
+            xml={AppIcon.IconFocus}
             width={scale(30)}
             height={scale(30)}
           />
         </TouchableOpacity>
         <CustomButton
-          // title={LABEL.SAVE_ADDRESS[lang]}
-          // containerStyle={[
-          //   styles.buttonContainerStyle,
-          //   {opacity: opacityStyle},
-          // ]}
-          // onPress={onAddAddressToProfile}
-          // disabled={disabledButton}
-          // textStyle={styles.textBtnStyle}
-          title="Chon"
+          title="Chọn"
+          containerStyles={styles.buttonContainerStyle}
+          textStyles={styles.textBtnStyle}
         />
       </View>
     </View>

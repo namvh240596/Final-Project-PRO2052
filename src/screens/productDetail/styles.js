@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
@@ -9,15 +9,7 @@ export const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: AppTheme.Colors.SecondBackround,
-  },
-  img: {
-    width: '100%',
-    height: verticalScale(238),
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: AppTheme.Colors.Black,
-    marginVertical: 12,
+    backgroundColor: AppTheme.Colors.White,
   },
   textName: {
     fontSize: scale(18),
@@ -33,7 +25,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: AppTheme.Colors.White,
-    paddingTop: verticalScale(10),
+    paddingTop: verticalScale(18),
+    borderTopWidth: 1,
+    borderColor: AppTheme.Colors.Light
   },
   viewStar: {
     flexDirection: 'row',
@@ -231,5 +225,37 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     paddingLeft: scale(16),
     marginVertical: verticalScale(14),
+  },
+  img: {
+    width: '100%',
+    height: verticalScale(236),
+    borderWidth: 0.5,
+    borderColor: AppTheme.Colors.Light,
+  },
+  itemImage: {
+    height: verticalScale(216),
+    width: Dimensions.get('window').width - 32,
+    borderRadius: 5,
+  },
+  dotInActive: {
+    backgroundColor: AppTheme.Colors.White,
+    width: scale(20),
+    height: verticalScale(6),
+  },
+  dotActive: {
+    backgroundColor: AppTheme.Colors.Blue,
+    width: scale(20),
+    height: verticalScale(6),
+  },
+  viewCarousel: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: AppTheme.Colors.White,
+    borderRadius: 5,
+    paddingHorizontal: scale(16)
+  },
+  itemProductStyle:{
+    marginRight: scale(12)
   },
 });

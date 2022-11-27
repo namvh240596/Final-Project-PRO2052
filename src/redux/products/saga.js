@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { useDispatch } from 'react-redux';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {
   getAllProductsApi,
@@ -6,6 +6,7 @@ import {
   getMyFavoriteApi,
   getProductApi,
 } from '../../services/api/products';
+import { getChangeLoading } from '../loading/selector';
 import {
   getAllFavoriteProductSuccess,
   getAllProductsByTypeRequest,
@@ -59,7 +60,7 @@ function* getAllFavoriteProductHandle(action) {
     const res = yield call(getMyFavoriteApi);
     yield put(getAllFavoriteProductSuccess({listFavorite: res?.data}));
   } catch (error) {
-    console.log('getProductByTypeHandle -> ', error);
+    console.log('getAllFavoriteProductHandle -> ', error);
   }
 }
 ///////////////////////////////// saga //////////////////////////////////////////////////

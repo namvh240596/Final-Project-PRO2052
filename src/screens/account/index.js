@@ -40,6 +40,9 @@ const Account = () => {
       case 'Liên kết':
         navigation.navigate('Payment');
         break;
+        case 'Thông báo':
+        navigation.navigate('Notification');
+        break;
       default:
         break;
     }
@@ -76,7 +79,9 @@ const Account = () => {
           onPress={() => onGo('Địa chỉ')}
           title="Địa chỉ"
         />
-        <ItemAccount icon={AppIcon.IconNotification} title="Thông báo" />
+        <ItemAccount icon={AppIcon.IconNotification}
+        onPress={() => onGo('Thông báo')}
+        title="Thông báo" />
         <ItemAccount icon={AppIcon.IconPayment} title="Liên kết thẻ" />
         <ItemAccount icon={AppIcon.IconHelp} title="Trợ giúp" />
         <ItemAccount

@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
   viewTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: verticalScale(24),
+    marginTop: verticalScale(16),
     paddingHorizontal: scale(16),
     alignItems: 'flex-end',
     height: verticalScale(30),

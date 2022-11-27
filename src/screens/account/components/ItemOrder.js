@@ -6,7 +6,15 @@ import {formatMoney} from '../../../helpers/formatMoney';
 import {format} from 'date-fns';
 const ItemOrder = ({onPress, order}) => {
   let day = format(new Date(order.createdAt), 'MM/dd/yyyy');
+  let status;
   console.log(order);
+  if(order.status === 'Not Processed'){
+    status = 'Đang được xử lý';
+  } else if (order.status === 'Processed'){
+    status = 'Đã được xử lý';
+  } else {
+    status = order.status;
+  }
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.textTitle}>Thông tin đơn hàng</Text>
@@ -16,7 +24,7 @@ const ItemOrder = ({onPress, order}) => {
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Trạng thái</Text>
-        <Text style={styles.textDate}>Đang chờ xử lý</Text>
+        <Text style={styles.textDate}>{status}</Text>
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Sản phẩm</Text>

@@ -7,7 +7,7 @@ import {
 
 function* getChangeLoading(action) {
   try {
-    yield put(getChangeLoadingSuccess(action.payload));
+    // yield put(getChangeLoadingSuccess(action.payload));
   } catch (error) {
     console.log('getChangeLoading -> ', error);
   }
