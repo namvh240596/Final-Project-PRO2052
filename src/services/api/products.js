@@ -1,6 +1,6 @@
 import axiosClient from '../../utils/axiosClient';
-export const getAllProductsApi = () => {
-  return axiosClient.get('/product');
+export const getAllProductsApi = (page = 1, limit = 30) => {
+  return axiosClient.get(`/product?page=${page}&limit=${limit}`);
 };
 export const getProductApi = id => {
   return axiosClient.get(`/product/${id}`);
@@ -16,4 +16,8 @@ export const getCheckFavoriteApi = id => {
 };
 export const changeFavoriteApi = data => {
   return axiosClient.post(`/favorite`, data);
+};
+
+export const getProductByTitleApi = title => {
+  return axiosClient.get(`/product?title=/${title}/`);
 };

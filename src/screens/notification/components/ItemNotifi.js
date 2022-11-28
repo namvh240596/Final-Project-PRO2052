@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: AppTheme.Colors.Dark,
     alignItems: 'center',
-    paddingVertical: verticalScale(6),
+    paddingVertical: verticalScale(10),
   },
 });

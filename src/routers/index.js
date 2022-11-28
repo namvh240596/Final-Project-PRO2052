@@ -14,31 +14,31 @@ import Profile from '../screens/account/profile';
 import MyOrder from '../screens/account/order';
 import Payment from '../screens/account/payment';
 import OrderDetail from '../screens/account/orderDetail';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getIsLoginSelector} from '../redux/auth/selector';
 import messaging from '@react-native-firebase/messaging';
 import onDisplayNotification from '../helpers/notifee';
 import Location from '../screens/location';
-import { PermissionsAndroid } from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import {postDeviceTokenRequest} from '../redux/notification/action';
+import { getDeviceTokenSelector } from '../redux/notification/selector';
 const {Navigator, Screen, Group} = createNativeStackNavigator();
 
 export default function AppRouter() {
   const isLogin = useSelector(getIsLoginSelector);
-
+  const dispatch = useDispatch();
+  const token = useSelector(getDeviceTokenSelector);
   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    // if (enabled) {
-    //   const fcmToken = await messaging().getToken();
-    //   dispatch(getTokenDeviceRequest({tokenDevice: fcmToken}));
-    //   postDeviceTokenApi(fcmToken)
-    //     .then(res => {})
-    //     .catch(error => console.log(error));
-    // }
+    if (enabled && token === '') {
+      const fcmToken = await messaging().getToken();
+      dispatch(postDeviceTokenRequest(fcmToken));
+    }
   }
   useEffect(() => {
     requestUserPermission();

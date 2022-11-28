@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {
   getAllProductsApi,
@@ -6,7 +6,7 @@ import {
   getMyFavoriteApi,
   getProductApi,
 } from '../../services/api/products';
-import { getChangeLoading } from '../loading/selector';
+import {getChangeLoading} from '../loading/selector';
 import {
   getAllFavoriteProductSuccess,
   getAllProductsByTypeRequest,
@@ -25,7 +25,7 @@ import {
 function* getAllProductsHandle() {
   try {
     const res = yield call(getAllProductsApi);
-    yield put(getAllProductsSuccess({res}));
+    yield put(getAllProductsSuccess(res.data.data));
   } catch (error) {
     yield put(getAllProductsFailed({error}));
   }

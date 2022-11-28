@@ -21,7 +21,7 @@ const initialState = {
 const productsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_PRODUCTS_SUCCESS:
-      return {...state, products: action?.payload.res.data};
+      return {...state, products: action?.payload};
     case GET_PRODUCT_REQUEST:
       return {...state, product: {}};
     case GET_PRODUCT_SUCCESS:

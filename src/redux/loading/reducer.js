@@ -1,4 +1,5 @@
 import {LOGIN_FAILED, LOGIN_SUCCESS} from '../auth/actionType';
+import {GET_NOTIFICATION_SUCCESS} from '../notification/actionType';
 import {GET_ALL_FAVORITE_PRODUCT_SUCCESS} from '../products/actionType';
 import {
   GET_CHANGE_LOADING_FAILED,
@@ -20,6 +21,8 @@ const loadingReducer = (state = initialState, action) => {
     case LOGIN_FAILED:
       return {...state, loading: false};
     case GET_ALL_FAVORITE_PRODUCT_SUCCESS:
+      return {...state, loading: false};
+    case GET_NOTIFICATION_SUCCESS:
       return {...state, loading: false};
     default:
       return {...state};
