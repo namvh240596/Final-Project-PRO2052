@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     zIndex: 10,
-    marginTop: verticalScale(40),
+    marginTop: verticalScale(60),
   },
   loadingIndicator: {
     position: 'absolute',

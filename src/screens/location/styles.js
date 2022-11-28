@@ -18,11 +18,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: scale(371),
     height: verticalScale(55),
-    backgroundColor: AppTheme.Colors.Orange,
+    backgroundColor: AppTheme.Colors.White,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     borderRadius: scale(10),
     padding: scale(10),
+    marginBottom: verticalScale(10)
   },
   loadingStyle: {
     width: scale(300),
@@ -61,7 +62,6 @@ export const styles = StyleSheet.create({
     height: verticalScale(60),
     borderRadius: scale(10),
     backgroundColor: AppTheme.Colors.White,
-    zIndex: 100,
     marginTop: verticalScale(20),
     shadowColor: '#000',
     shadowOffset: {
@@ -71,6 +71,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: '100%'
   },
   inputStyle: {
     flex: 1,
@@ -110,9 +111,8 @@ export const styles = StyleSheet.create({
     marginLeft: scale(5),
   },
   textBtnStyle: {
-    fontSize: scale(18),
-    color: AppTheme.Colors.White,
-    marginTop: Platform.OS === 'ios' ? verticalScale(5) : 0,
+    fontSize: AppTheme.FontSize.Medium,
+    color: AppTheme.Colors.Dark,
   },
   viewCurrentPosition: {
     backgroundColor: AppTheme.Colors.White,
@@ -171,13 +171,6 @@ export const styles = StyleSheet.create({
     color: AppTheme.Colors.Gray,
     width: scale(300),
   },
-  containerModal: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalView: {
-    flex: 1,
-  },
   touchLocation: {
     marginBottom: verticalScale(20),
   },
@@ -187,21 +180,5 @@ export const styles = StyleSheet.create({
     color: AppTheme.Colors.Black,
     textAlign: 'center',
   },
-  viewEmpty: {
-    flex: 1,
-  },
-  textEmpty: {
-    fontSize: AppTheme.FontSize.Medium,
-    fontFamily: AppTheme.Fonts.SemiBold,
-    color: AppTheme.Colors.Black,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    height: verticalScale(400),
-  },
-  flatLits: {
-    backgroundColor: AppTheme.Colors.White,
-    maxHeight: verticalScale(250),
-    marginBottom: verticalScale(2),
-    marginTop: verticalScale(10),
-  },
+
 });

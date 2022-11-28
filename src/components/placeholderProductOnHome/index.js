@@ -9,7 +9,7 @@ const PlaceholderProductOnHome = () => {
       <View
         style={{
           width: '90%',
-          height: scale(133),
+          height: scale(193),
           borderRadius: scale(10),
           alignSelf: 'center',
           marginBottom: verticalScale(20),

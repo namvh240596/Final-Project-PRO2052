@@ -23,11 +23,13 @@ const Header = ({title, iconBack}) => {
           />
         </TouchableOpacity>
       )}
-      <Text
-        numberOfLines={1}
-        style={[TextStyles.headingText3, styles.textTitle]}>
-        {title}
-      </Text>
+      <View style={styles.viewTitle}>
+        <Text
+          numberOfLines={1}
+          style={[TextStyles.headingText3, styles.textTitle]}>
+          {title}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -35,19 +37,24 @@ const Header = ({title, iconBack}) => {
 export default Header;
 
 const styles = StyleSheet.create({
+  viewTitle: {
+    minHeight: scale(60),
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: scale(40)
+  },
   icon: {
     marginLeft: scale(20),
   },
   textTitle: {
-    marginLeft: scale(125),
-    width: '70%',
+   
   },
   container: {
     width: '100%',
     minHeight: scale(60),
     flexDirection: 'row',
     alignItems: 'center',
-    // elevation: 2,
     borderBottomWidth: 2,
     borderColor: AppTheme.Colors.Light,
   },

@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     zIndex: 11,
-    backgroundColor: 'rgba(64, 191, 255,0.2)',
+    backgroundColor: 'rgba(255, 255, 255,0.6)',
   },
   viewLoading: {
     width: '100%',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   body: {
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
     flex: 1,
     paddingHorizontal: scale(5),
     paddingTop: verticalScale(20),

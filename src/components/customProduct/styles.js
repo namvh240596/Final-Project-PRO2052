@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     shadowColor: AppTheme.Colors.White,
     shadowOpacity: 0.9,
     shadowRadius: 40,
-    
   },
 
   img: {
@@ -38,7 +37,7 @@ export const styles = StyleSheet.create({
   fld: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: verticalScale(10),
+    marginTop: verticalScale(4),
   },
   viewSale: {
     flexDirection: 'row',
@@ -50,7 +49,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.5,
     color: AppTheme.Colors.Blue,
     fontWeight: '700',
-    marginTop: verticalScale(16),
+    marginTop: verticalScale(8),
   },
   textFirstPrice: {
     fontSize: scale(14),

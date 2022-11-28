@@ -6,6 +6,7 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {styles} from './styles';
@@ -17,8 +18,14 @@ import CustomButton from '../../components/customButton';
 import CustomProduct from '../../components/customProduct';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProductRequest} from '../../redux/products/action';
-import {getProductSelector} from '../../redux/products/selector';
+import {
+  getAllProductsByTypeRequest,
+  getProductRequest,
+} from '../../redux/products/action';
+import {
+  getProductByTypeSelector,
+  getProductSelector,
+} from '../../redux/products/selector';
 import {formatMoney} from '../../helpers/formatMoney';
 import PlaceholderProduct from '../../components/placeholderProduct';
 import {addOneProductToCartRequest} from '../../redux/cart/action';
@@ -28,26 +35,38 @@ import {
 } from '../../services/api/products';
 import withLoading from '../../HOC/withLoading';
 import {GET_PRODUCT_REQUEST} from '../../redux/products/actionType';
-
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import {getListCategoriesSelector} from '../../redux/categories/selector';
 const ProductDetail = props => {
   const productId = props.route.params.productId;
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const product = useSelector(getProductSelector);
+  const listCategorie = useSelector(getListCategoriesSelector);
+  const list = useSelector(getProductByTypeSelector);
   const [loading, setLoading] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [count, setCount] = useState(0);
   useEffect(() => {
     dispatch(getProductRequest(productId));
     setIsFavorite(product.favorite);
+    setCount(0);
   }, []);
+  useEffect(() => {
+    const result = listCategorie.filter(item => item._id === product.category);
+    const category = result[0];
+    if (category) {
+      dispatch(getAllProductsByTypeRequest(category.type));
+    }
+    setIsFavorite(product.favorite);
+  }, [product]);
+
   const onDetail = id => {
     dispatch(getProductRequest(id));
   };
-
   const onChangeFavorite = useCallback(() => {
     setLoading(true);
-    setIsFavorite(!isFavorite);
-    changeFavoriteApi({productId: productId, favorite: isFavorite})
+    changeFavoriteApi({productId: productId, favorite: !isFavorite})
       .then(res => {
         dispatch(getProductRequest(productId));
         setLoading(false);
@@ -56,27 +75,46 @@ const ProductDetail = props => {
         setLoading(false);
         console.log('onChangeFavorite -> ', error);
       });
-  }, [loading]);
-
-  const addToCart = useCallback(productId => {
-    dispatch(
-      addOneProductToCartRequest({productId: productId, quantity: 1}, () =>
-        navigation.navigate('Cart'),
-      ),
-    );
-  }, []);
+  }, [loading, product, isFavorite]);
+  const addToCart = useCallback(
+    productId => {
+      if (count < 5) {
+        setCount(count + 1);
+        dispatch(
+          addOneProductToCartRequest({productId: productId, quantity: 1}),
+        );
+        ToastAndroid.show('Thêm vào giỏ hàng thành công', ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show('Phát hiện bất thường', ToastAndroid.SHORT);
+      }
+    },
+    [dispatch, count],
+  );
   return (
     <View style={styles.container}>
-      <Header title={product?.title} iconBack />
+      <Header title={'Chi tiết sản phẩm'} iconBack />
       {product._id !== undefined ? (
         <ScrollView style={styles.body}>
-          <Image
-            source={{
-              uri: product?.images[0].toString(),
-            }}
-            style={styles.img}
-            resizeMode="contain"
-          />
+          <View style={styles.img}>
+            <SwiperFlatList
+              index={0}
+              showPagination
+              autoplayLoopKeepAnimation
+              paginationStyleItemActive={styles.dotActive}
+              paginationStyleItemInactive={styles.dotInActive}
+              paginationStyle={{
+                alignItems: 'center',
+              }}
+              data={product.images}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.viewCarousel}>
+                    <Image source={{uri: item}} style={styles.itemImage} />
+                  </View>
+                );
+              }}
+            />
+          </View>
           <View style={styles.viewName}>
             <Text numberOfLines={3} style={styles.textName}>
               {product?.title}
@@ -144,38 +182,20 @@ const ProductDetail = props => {
               horizontal
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}>
-              <CustomProduct
-                title={product?.title}
-                image={product?.images[0]}
-                costPrice={product?.costPrice}
-                salePrice={product?.salePrice}
-                salePercent={product?.salePercent}
-                onGoDetail={() => onDetail(product?._id)}
-              />
-              <CustomProduct
-                title={product?.title}
-                image={product?.images[0]}
-                costPrice={product?.costPrice}
-                salePrice={product?.salePrice}
-                salePercent={product?.salePercent}
-                onGoDetail={() => onDetail(product?._id)}
-              />
-              <CustomProduct
-                title={product?.title}
-                image={product?.images[0]}
-                costPrice={product?.costPrice}
-                salePrice={product?.salePrice}
-                sale={product?.salePercent}
-                onGoDetail={() => onDetail(product?._id)}
-              />
-              <CustomProduct
-                title={product?.title}
-                image={product?.images[0]}
-                costPrice={product?.costPrice}
-                salePrice={product?.salePrice}
-                sale={product?.salePercent}
-                onGoDetail={() => onDetail(product?._id)}
-              />
+              {list.map(item => {
+                return (
+                  <CustomProduct
+                    key={item?._id}
+                    title={item?.title}
+                    image={item?.images[0]}
+                    costPrice={item?.costPrice}
+                    salePrice={item?.salePrice}
+                    salePercent={item?.salePercent}
+                    onGoDetail={() => onDetail(item?._id)}
+                    containerStyle={styles.itemProductStyle}
+                  />
+                );
+              })}
             </ScrollView>
           </View>
         </ScrollView>

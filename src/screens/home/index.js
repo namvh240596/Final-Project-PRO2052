@@ -1,5 +1,5 @@
 import {View, Text, Image, ScrollView, Pressable} from 'react-native';
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {styles} from './styles';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
@@ -23,6 +23,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import {getListCategoriesRequest} from '../../redux/categories/action';
 import PlaceholderListBanner from '../../components/placeholderBanner';
 import PlaceholderProductOnHome from '../../components/placeholderProductOnHome';
+import { getProductByTitle, getProductByTitleApi } from '../../services/api/products';
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -47,6 +48,9 @@ const Home = () => {
   const listProduct = useSelector(getProductsSelector);
   const listCategories = useSelector(getListCategoriesSelector);
   const listBanner = useSelector(getListBannerSelector);
+  const [data, setData] = useState(listProduct);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
   const onListProductByCategories = useCallback(
     (_id, type) => {
       dispatch(
@@ -57,8 +61,16 @@ const Home = () => {
     },
     [dispatch],
   );
+  const onSearchProduct = title => {
+    getProductByTitleApi(title).then((res)=>{
+      console.log(res);
+    }).catch((error)=>{
+      console.log('error ', error);
+    })
+  };
   return (
     <ScrollView
+      onMomentumScrollEnd={() => console.log('scroll end')}
       style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
@@ -67,8 +79,11 @@ const Home = () => {
         <View style={styles.viewTextInput}>
           <CustomTextInput
             leftIcon={AppIcon.IconSearch}
-            textPlaceHolder={'Tim kiem san pham'}
+            textPlaceHolder={'Tìm kiếm sản phẩm'}
             containerTextInputStyle={styles.margins}
+            value={search}
+            onChangeText={text => setSearch(text)}
+            onEndEditing={() => onSearchProduct(search)}
           />
           <SvgXml
             xml={AppIcon.IconHeartRed}
@@ -204,7 +219,7 @@ const Home = () => {
           <ScrollView
             style={styles.scrollContainerHotProduct}
             contentContainerStyle={styles.scrollViewHotProduct}>
-            {listProduct.map(item => {
+            {data.map(item => {
               return (
                 <CustomProduct
                   key={item._id}
