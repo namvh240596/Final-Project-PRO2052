@@ -46,7 +46,8 @@ export const styles = StyleSheet.create({
     width: '100%',
     zIndex: 2,
     alignItems: 'flex-end',
-    right: scale(-1),
+    right: scale(20),
+    top: verticalScale(10)
   },
   viewInfo: {
     marginLeft: scale(10),

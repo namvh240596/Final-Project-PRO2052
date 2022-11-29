@@ -196,6 +196,13 @@ const Explore = () => {
           />
           <View style={styles.modalBody}>
             <Text style={styles.textTitle}>Chọn Gear yêu thích</Text>
+            <SvgXml
+              xml={AppIcon.IconClose}
+              height={scale(28)}
+              width={scale(28)}
+              style={styles.iconClose}
+              onPress={() => setModalVisible(false)}
+            />
             <ScrollView
               style={styles.scvProducts}
               showsHorizontalScrollIndicator={false}

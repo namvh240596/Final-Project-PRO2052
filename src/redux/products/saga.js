@@ -6,6 +6,7 @@ import {
   getMyFavoriteApi,
   getProductApi,
 } from '../../services/api/products';
+import {getChangeLoadingSuccess} from '../loading/action';
 import {getChangeLoading} from '../loading/selector';
 import {
   getAllFavoriteProductSuccess,
@@ -37,8 +38,10 @@ function* getProductHandle(action) {
   try {
     const res = yield call(getProductApi, action?.payload);
     yield put(getProductSuccess(res?.data));
+    yield put(getChangeLoadingSuccess());
   } catch (error) {
     console.log('getProductHandle =>', error);
+    yield put(getChangeLoadingSuccess());
     // yield put(getProductFailed({error}));
   }
 }

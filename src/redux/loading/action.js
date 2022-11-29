@@ -6,9 +6,8 @@ import {
 
 ////////////////////////////// get change loading//////////////////////////////////////  //////////////
 
-export const getChangeLoadingRequest = payload => ({
+export const getChangeLoadingRequest = () => ({
   type: GET_CHANGE_LOADING_REQUEST,
-  payload: payload,
 });
 
 export const getChangeLoadingSuccess = payload => ({
