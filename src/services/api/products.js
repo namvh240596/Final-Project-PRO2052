@@ -19,5 +19,5 @@ export const changeFavoriteApi = data => {
 };
 
 export const getProductByTitleApi = title => {
-  return axiosClient.get(`/product?title=/${title}/`);
+  return axiosClient.get(`/product?title=/${title}/i`);
 };

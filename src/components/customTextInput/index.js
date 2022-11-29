@@ -22,6 +22,9 @@ const CustomTextInput = ({
   onChangeText,
   rightStyle,
   onEndEditing,
+  autoFocus,
+  autoComplete,
+  onFocus,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -45,13 +48,18 @@ const CustomTextInput = ({
           keyboardType={keyboardType}
           value={value}
           selectionColor={AppTheme.Colors.Blue}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            setIsFocused(true);
+            onFocus && onFocus();
+          }}
           onEndEditing={() => {
             setIsFocused(false);
-            onEndEditing();
+            onEndEditing && onEndEditing();
           }}
           style={[styles.textInput, TextStyles.textStyleInput, textInputStyle]}
           onChangeText={onChangeText}
+          autoFocus={autoFocus}
+          autoComplete={autoComplete}
         />
         {rightIcon && (
           <TouchableOpacity rightStyle={rightStyle} onPress={onClear}>

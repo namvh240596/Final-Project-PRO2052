@@ -39,7 +39,7 @@ const CustomProduct = ({
       <View style={styles.fld}>
         <View style={styles.viewSale}>
           <Text style={styles.textFirstPrice}>{formatMoney(costPrice)}</Text>
-          <Text style={styles.textSale}> {salePercent}% off</Text>
+          <Text style={styles.textSale}> {salePercent}%</Text>
         </View>
         {remove && (
           <TouchableOpacity>

@@ -15,6 +15,15 @@ import {
 } from '../../redux/products/selector';
 import IMAGES from '../../assets/images';
 import {getAllProductsByTypeRequest} from '../../redux/products/action';
+import {
+  getChangeLoadingFailed,
+  getChangeLoadingRequest,
+} from '../../redux/loading/action';
+import {getChangeLoading} from '../../redux/loading/selector';
+import MyLoading from '../../components/loading';
+import CustomTextInput from '../../components/customTextInput';
+import AppIcon from '../../assets/icons';
+import {SvgXml} from 'react-native-svg';
 
 const ListProduct = props => {
   const listCategories = useSelector(getListCategoriesSelector);
@@ -22,6 +31,7 @@ const ListProduct = props => {
   const listProductByType = useSelector(getProductByTypeSelector);
   const [typeCategory, setTypeCategory] = useState(props?.route.params.type);
   const dispatch = useDispatch();
+  const loading = useSelector(getChangeLoading);
   const renderItem = ({item}) => {
     return (
       <CustomProduct
@@ -43,9 +53,11 @@ const ListProduct = props => {
   const changeCategory = useCallback(
     (_id, type) => {
       if (type !== -1) {
+        dispatch(getChangeLoadingRequest());
         dispatch(getAllProductsByTypeRequest(type));
         setTypeCategory(type);
       } else {
+        dispatch(getChangeLoadingRequest());
         dispatch(getAllProductsByTypeRequest(''));
         setTypeCategory(type);
       }
@@ -55,6 +67,31 @@ const ListProduct = props => {
   return (
     <View style={styles.container}>
       <Header title={'Danh mục sản phẩm'} iconBack />
+      <View style={styles.viewFillter}>
+        <CustomTextInput
+          rightIcon={AppIcon.IconSearch}
+          textPlaceHolder={'Tìm kiếm'}
+          containerTextInputStyle={styles.containerTextInputStyle}
+        />
+        <SvgXml
+          xml={AppIcon.IconAccountBlue}
+          width={scale(24)}
+          height={scale(24)}
+          style={styles.icon}
+          onPress={() => {
+            console.log('aaa');
+          }}
+        />
+        <SvgXml
+          xml={AppIcon.IconAccountBlue}
+          width={scale(24)}
+          height={scale(24)}
+          style={styles.icon}
+          onPress={() => {
+            console.log('bbbb');
+          }}
+        />
+      </View>
       <View style={styles.body}>
         <ScrollView
           style={styles.containerCategories}
@@ -99,6 +136,7 @@ const ListProduct = props => {
           style={styles.flatList}
         />
       </View>
+      {loading && <MyLoading />}
     </View>
   );
 };
@@ -106,8 +144,21 @@ const ListProduct = props => {
 export default ListProduct;
 
 const styles = StyleSheet.create({
+  icon: {
+    marginLeft: scale(15),
+  },
+  containerTextInputStyle: {
+    flex: 1,
+  },
+  viewFillter: {
+    flexDirection: 'row',
+    paddingHorizontal: scale(16),
+    marginTop: verticalScale(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   choosedCategory: {
-    backgroundColor: AppTheme.Colors.Yellow,
+    backgroundColor: AppTheme.Colors.Blue,
   },
   container: {
     flex: 1,
@@ -121,7 +172,7 @@ const styles = StyleSheet.create({
   containerCategories: {
     backgroundColor: AppTheme.Colors.White,
     borderRadius: scale(5),
-    minHeight: verticalScale(170),
+    minHeight: verticalScale(150),
     elevation: 3,
     shadowColor: AppTheme.Colors.SecondBackround,
     shadowOpacity: 0.5,
@@ -130,14 +181,12 @@ const styles = StyleSheet.create({
   columnWrapperStyle: {
     justifyContent: 'space-between',
     paddingBottom: verticalScale(15),
-    paddingHorizontal: scale(8)
+    paddingHorizontal: scale(8),
   },
   flatList: {
     paddingHorizontal: scale(16),
-    paddingTop: verticalScale(20),
-    marginTop: verticalScale(3),
   },
-  itemStyle:{
-    marginBottom: verticalScale(0)
+  itemStyle: {
+    marginBottom: verticalScale(0),
   },
 });

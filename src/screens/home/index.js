@@ -23,20 +23,19 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import {getListCategoriesRequest} from '../../redux/categories/action';
 import PlaceholderListBanner from '../../components/placeholderBanner';
 import PlaceholderProductOnHome from '../../components/placeholderProductOnHome';
-import { getProductByTitle, getProductByTitleApi } from '../../services/api/products';
+
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const onMore = useCallback(title => {
-    switch (title) {
-      case 'category':
-        console.log('onpress category');
-        break;
-
-      default:
-        break;
+    if (title === 'category') {
+      dispatch(
+        getAllProductsByTypeRequest('', () =>
+          navigation.navigate('ListProduct', {type: -1}),
+        ),
+      );
     }
-  }, []);
+  }, [dispatch]);
   const onDetail = id => {
     return navigation.navigate('ProductDetail', {productId: id});
   };
@@ -61,16 +60,8 @@ const Home = () => {
     },
     [dispatch],
   );
-  const onSearchProduct = title => {
-    getProductByTitleApi(title).then((res)=>{
-      console.log(res);
-    }).catch((error)=>{
-      console.log('error ', error);
-    })
-  };
   return (
     <ScrollView
-      onMomentumScrollEnd={() => console.log('scroll end')}
       style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
@@ -82,8 +73,7 @@ const Home = () => {
             textPlaceHolder={'Tìm kiếm sản phẩm'}
             containerTextInputStyle={styles.margins}
             value={search}
-            onChangeText={text => setSearch(text)}
-            onEndEditing={() => onSearchProduct(search)}
+            onFocus={() => navigation.navigate('SearchScreen')}
           />
           <SvgXml
             xml={AppIcon.IconHeartRed}
@@ -133,7 +123,9 @@ const Home = () => {
         </View>
         <View style={styles.viewTitle}>
           <Text style={styles.textTitle}>Danh mục</Text>
-          <Pressable onPress={() => onMore('category')}></Pressable>
+          <Pressable onPress={() => onMore('category')}>
+            <Text style={styles.textMore}>Xem tất cả</Text>
+          </Pressable>
         </View>
         {listCategories.length > 0 ? (
           <ScrollView
@@ -219,7 +211,7 @@ const Home = () => {
           <ScrollView
             style={styles.scrollContainerHotProduct}
             contentContainerStyle={styles.scrollViewHotProduct}>
-            {data.map(item => {
+            {listProduct.map(item => {
               return (
                 <CustomProduct
                   key={item._id}

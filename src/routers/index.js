@@ -23,6 +23,7 @@ import {PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {postDeviceTokenRequest} from '../redux/notification/action';
 import { getDeviceTokenSelector } from '../redux/notification/selector';
+import SearchScreen from '../screens/search';
 const {Navigator, Screen, Group} = createNativeStackNavigator();
 
 export default function AppRouter() {
@@ -101,6 +102,7 @@ export default function AppRouter() {
         <Screen name="Payment" component={Payment} />
         <Screen name="OrderDetail" component={OrderDetail} />
         <Screen name="Location" component={Location} />
+        <Screen name="SearchScreen" component={SearchScreen} />
       </Navigator>
     </NavigationContainer>
   );

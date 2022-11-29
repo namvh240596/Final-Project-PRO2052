@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     paddingHorizontal: scale(18),
-    borderRadius: 5,
+    borderRadius: scale(25),
     borderColor: AppTheme.Colors.Grey,
   },
   textInput: {
