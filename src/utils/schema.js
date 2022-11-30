@@ -14,6 +14,7 @@ const regexEmail =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const regexFullname = /^[A-Za-z]/;
+
 const validateLoginSchema = Yup.object().shape({
   email: Yup.string()
     .matches(regexEmail, validEmailMessage)
@@ -64,10 +65,22 @@ const validateConfirmPasswordSchema = Yup.object().shape({
     .matches(regexPass, validPassMessage)
     .oneOf([Yup.ref('password'), null], confirmPassMessage),
 });
+const validateUpdateSchema = Yup.object().shape({
+  fullname: Yup.string()
+    .matches(regexFullname, validFullnameMessage)
+    .required(requiredErrorMessage),
+  email: Yup.string()
+    .matches(regexEmail, validEmailMessage)
+    .required(requiredErrorMessage),
+  phone: Yup.string()
+    .required(requiredErrorMessage)
+    .matches(regexPhone, validPhoneMessage),
+})
 export {
   validateLoginSchema,
   validateRegisterSchema,
   validateConfirmPasswordSchema,
   validateInformationSchema,
   validateEmailSchema,
+  validateUpdateSchema
 };

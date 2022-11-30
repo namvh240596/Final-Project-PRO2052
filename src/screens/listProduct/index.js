@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import Header from '../../components/header';
 import {AppTheme} from '../../config/AppTheme';
@@ -8,6 +15,9 @@ import ItemCategories from '../home/components/ItemCategories';
 import CustomProduct from '../../components/customProduct';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
+import Modal from 'react-native-modal';
+
+import RangeSlider from 'rn-range-slider';
 import {getListCategoriesSelector} from '../../redux/categories/selector';
 import {
   getProductByTypeSelector,
@@ -24,6 +34,11 @@ import MyLoading from '../../components/loading';
 import CustomTextInput from '../../components/customTextInput';
 import AppIcon from '../../assets/icons';
 import {SvgXml} from 'react-native-svg';
+import ReactNativeModal from 'react-native-modal';
+import {getListBrandRequest} from '../../redux/brand/action';
+import {getListBrandSelector} from '../../redux/brand/selector';
+import {style} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
+import RnRangeSlider from 'rn-range-slider';
 
 const ListProduct = props => {
   const listCategories = useSelector(getListCategoriesSelector);
@@ -32,6 +47,22 @@ const ListProduct = props => {
   const [typeCategory, setTypeCategory] = useState(props?.route.params.type);
   const dispatch = useDispatch();
   const loading = useSelector(getChangeLoading);
+  const listBrand = useSelector(getListBrandSelector);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [dataPrice, setDataPrice] = useState([]);
+  useEffect(() => {
+    console.log(typeCategory);
+    dispatch(getListBrandRequest());
+    if (typeCategory === -1) {
+      dispatch(getAllProductsByTypeRequest(''));
+      dispatch(getChangeLoadingRequest());
+    } else {
+      dispatch(getAllProductsByTypeRequest(typeCategory));
+      dispatch(getChangeLoadingRequest());
+
+    }
+  }, []);
+
   const renderItem = ({item}) => {
     return (
       <CustomProduct
@@ -67,23 +98,25 @@ const ListProduct = props => {
   return (
     <View style={styles.container}>
       <Header title={'Danh mục sản phẩm'} iconBack />
+
       <View style={styles.viewFillter}>
         <CustomTextInput
-          rightIcon={AppIcon.IconSearch}
+          leftIcon={AppIcon.IconSearch}
           textPlaceHolder={'Tìm kiếm'}
           containerTextInputStyle={styles.containerTextInputStyle}
         />
         <SvgXml
-          xml={AppIcon.IconAccountBlue}
+          xml={AppIcon.IconFilter}
           width={scale(24)}
           height={scale(24)}
           style={styles.icon}
           onPress={() => {
             console.log('aaa');
+            setIsModalVisible(true);
           }}
         />
         <SvgXml
-          xml={AppIcon.IconAccountBlue}
+          xml={AppIcon.IconSortTopToBottom}
           width={scale(24)}
           height={scale(24)}
           style={styles.icon}
@@ -137,6 +170,39 @@ const ListProduct = props => {
         />
       </View>
       {loading && <MyLoading />}
+      <Modal isVisible={isModalVisible}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.textTitle}>Tìm kiếm theo: </Text>
+          <View style={styles.viewFillterPrice}>
+            <View style={styles.itemPrice}>
+              <Text style={styles.textItem}>100,000đ</Text>
+            </View>
+            <View style={styles.itemPrice}>
+              <Text style={styles.textItem}>100,000đ</Text>
+            </View>
+            <View style={styles.itemPrice}>
+              <Text style={styles.textItem}>100,000đ</Text>
+            </View>
+          </View>
+          <View style={styles.viewFillterBrand}>
+            {listBrand.length > 0 && (
+              <FlatList
+                data={listBrand}
+                renderItem={({item}) => {
+                  return (
+                    <TouchableOpacity style={styles.touchBrand} key={item._id}>
+                      <Text style={styles.textItem}>{item.title}</Text>
+                    </TouchableOpacity>
+                  );
+                }}
+                keyExtractor={item => item._id}
+                numColumns={3}
+                columnWrapperStyle={styles.wrapperStyle}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -144,6 +210,49 @@ const ListProduct = props => {
 export default ListProduct;
 
 const styles = StyleSheet.create({
+  itemPrice: {
+    borderWidth: 1,
+    width: scale(100),
+    height: verticalScale(35),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+  },
+  viewFillterPrice: {},
+  textItem: {
+    fontSize: AppTheme.FontSize.SmallX,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    color: AppTheme.Colors.Black,
+  },
+  wrapperStyle: {
+    justifyContent: 'space-between',
+    paddingHorizontal: scale(16),
+  },
+  viewFillterBrand: {
+    flex: 1,
+  },
+  touchBrand: {
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: scale(100),
+    height: verticalScale(35),
+    borderRadius: 6,
+    marginTop: verticalScale(10),
+  },
+  textTitle: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontWeight: '700',
+    fontFamily: AppTheme.Fonts.SemiBold,
+    color: AppTheme.Colors.Dark,
+    marginTop: verticalScale(20),
+    textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    borderRadius: 8,
+    backgroundColor: 'white',
+  },
   icon: {
     marginLeft: scale(15),
   },

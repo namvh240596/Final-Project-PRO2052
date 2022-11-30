@@ -64,7 +64,7 @@ const Account = () => {
         <Text style={styles.textEmail}>{userInfo.email}</Text>
         <CustomButton
           title={'Chỉnh sửa thông tin'}
-          onPress={() => setVisibled(true)}
+          onPress={() => navigation.navigate('Profile')}
           containerStyles={styles.buttonStyle}
         />
       </View>
@@ -91,46 +91,12 @@ const Account = () => {
           onPress={onLogout}
         />
       </View>
-      <Modal transparent={true} animationType={'slide'} visible={visibled}>
-        <View style={styles.containerModal}>
-          <TouchableOpacity
-            style={styles.touch}
-            onPress={() => setVisibled(false)}
-          />
-          <View style={styles.centerView}>
-            <View style={styles.viewTextInput}>
-              <View style={styles.viewTop} />
-              <Text style={[styles.textName, styles.textTitle]}>
-                Thông tin cá nhân
-              </Text>
-              <TextInput
-                defaultValue={userInfo.email}
-                style={[styles.textInput, styles.textEmail]}
-                onChangeText={text => setEmail(text)}
-                textContentType="emailAddress"
-              />
-              <TextInput
-                defaultValue={userInfo.fullname}
-                style={[styles.textInput, styles.textEmail]}
-                onChangeText={text => setEmail(text)}
-                textContentType="name"
-              />
-            </View>
-            <View style={styles.viewButton}>
-              <CustomButton
-                containerStyles={styles.buttonStyle}
-                title={'Chỉnh sửa'}
-                onPress={onUpdate}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+
     </View>
   );
 };
 
 export default Account;
 
-const defaultImg =
+export const defaultImg =
   'https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/04/Anh-avatar-dep-anh-dai-dien-FB-Tiktok-Zalo.jpg?ssl=1';
