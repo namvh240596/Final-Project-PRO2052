@@ -10,6 +10,7 @@ import cartReducer from './cart/reducer';
 import locationReducer from './location/reducer';
 import loadingReducer from './loading/reducer';
 import notificationReducer from './notification/reducer';
+import brandReducer from './brand/reducer';
 
 const authPersistConfig = {
   key: 'auth',
@@ -38,4 +39,5 @@ export const rootReducer = combineReducers({
   location: persistReducer(locationPersistConfig, locationReducer),
   loadingReducer,
   notification: persistReducer(notificationPersistConfig, notificationReducer),
+  brandReducer,
 });

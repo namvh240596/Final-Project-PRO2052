@@ -60,8 +60,9 @@ export const getAllCartFailed = payload => ({
 
 ///////////////////////////////////////////////// remove cart  //////////////////////////////////////
 
-export const removeCartRequest = () => ({
+export const removeCartRequest = payload => ({
   type: REMOVE_CART_REQUEST,
+  payload: payload,
 });
 
 export const removeCartSuccess = payload => ({
