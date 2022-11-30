@@ -27,15 +27,14 @@ import PlaceholderProductOnHome from '../../components/placeholderProductOnHome'
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const onMore = useCallback(title => {
-    if (title === 'category') {
-      dispatch(
-        getAllProductsByTypeRequest('', () =>
-          navigation.navigate('ListProduct', {type: -1}),
-        ),
-      );
-    }
-  }, [dispatch]);
+  const onMore = useCallback(
+    title => {
+      if (title === 'category') {
+        navigation.navigate('ListProduct', {type: -1});
+      }
+    },
+    [dispatch],
+  );
   const onDetail = id => {
     return navigation.navigate('ProductDetail', {productId: id});
   };
@@ -52,11 +51,7 @@ const Home = () => {
   const [search, setSearch] = useState('');
   const onListProductByCategories = useCallback(
     (_id, type) => {
-      dispatch(
-        getAllProductsByTypeRequest(type, () =>
-          navigation.navigate('ListProduct', {type: type}),
-        ),
-      );
+      navigation.navigate('ListProduct', {type: type});
     },
     [dispatch],
   );

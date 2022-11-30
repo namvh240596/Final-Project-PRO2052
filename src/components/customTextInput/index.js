@@ -25,6 +25,7 @@ const CustomTextInput = ({
   autoFocus,
   autoComplete,
   onFocus,
+  editable
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -47,6 +48,7 @@ const CustomTextInput = ({
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           value={value}
+          editable={editable}
           selectionColor={AppTheme.Colors.Blue}
           onFocus={() => {
             setIsFocused(true);

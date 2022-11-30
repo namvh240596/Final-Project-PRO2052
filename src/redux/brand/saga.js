@@ -6,7 +6,7 @@ import {GET_LIST_BRAND_REQUEST} from './actionType';
 function* getListBrandHandle() {
   try {
     const res = yield call(getAllBrandApi);
-    yield put(getListBrandSuccess({listBarnd: res.data}));
+    yield put(getListBrandSuccess({listBrand: res.data}));
   } catch (error) {
     console.log('get list brand handle error ', error);
     yield put(getListBrandFailed());
