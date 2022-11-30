@@ -2,6 +2,7 @@ import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {
   addOneProductToCartApi,
   addProductsToCartApi,
+  deleteProductOnCartApi,
   getCartApi,
 } from '../../services/api/cart';
 import {
@@ -15,6 +16,7 @@ import {
   GET_ALL_CART_REQUEST,
   GET_CHOOSE_BANNER_REQUEST,
   GET_LIST_BANNER_REQUEST,
+  REMOVE_CART_REQUEST,
 } from './actionType';
 ///////////////////////////////// add one product to cart  //////////////////////////////
 function* addOneProductToCartHandle(action) {
@@ -29,7 +31,6 @@ function* addOneProductToCartHandle(action) {
 }
 ///////////////////////////////// add list product to cart  //////////////////////////////
 function* addProductsToCartHandle(action) {
-  const {payload} = action;
   try {
     const res = yield call(addProductsToCartApi, action?.payload);
     console.log('res saga ', res);
@@ -46,6 +47,18 @@ function* getAllCartHandle() {
     console.log('getAllCartHandle -> ', error);
   }
 }
+///////////////////////////////// delete product on cart //////////////////////////////
+function* deleteProductOnCartHandle(action) {
+  const {onSuccess} = action;
+  try {
+    const res = yield call(deleteProductOnCartApi, action.payload);
+    console.log('res -> ', res);
+    onSuccess(action);
+  } catch (error) {
+    console.log('deleteProductOnCart -> ', error);
+  }
+}
+
 function* cartSaga() {
   yield all([
     takeLatest(ADD_ONE_PRODUCT_TO_CART_REQUEST, addOneProductToCartHandle),
@@ -54,6 +67,8 @@ function* cartSaga() {
     takeLatest(ADD_PRODUCTS_TO_CART_REQUEST, addProductsToCartHandle),
   ]);
   yield all([takeLatest(GET_ALL_CART_REQUEST, getAllCartHandle)]);
+
+  yield all([takeLatest(REMOVE_CART_REQUEST, deleteProductOnCartHandle)]);
 }
 
 export default cartSaga;

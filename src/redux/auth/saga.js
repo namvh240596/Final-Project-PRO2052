@@ -2,9 +2,25 @@ import jwtDecode from 'jwt-decode';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {showModal} from '../../components/customNotiModal';
 import {removeToken, setToken} from '../../helpers/tokenHelper';
-import {loginRequestApi, regsiterRequestApi} from '../../services/api/auth';
-import {loginFailed, loginSuccess, logoutSuccess, signUpSuccess} from './action';
-import {LOGIN_REQUEST, LOGOUT_REQUEST, SIGN_UP_REQUEST} from './actionType';
+import {
+  getUserInfoApi,
+  loginRequestApi,
+  regsiterRequestApi,
+} from '../../services/api/auth';
+import {
+  getUserInfoFailed,
+  getUserInfoSuccess,
+  loginFailed,
+  loginSuccess,
+  logoutSuccess,
+  signUpSuccess,
+} from './action';
+import {
+  GET_USER_INFO_REQUEST,
+  LOGIN_REQUEST,
+  LOGOUT_REQUEST,
+  SIGN_UP_REQUEST,
+} from './actionType';
 ///////////////////////////////// login //////////////////////////////////////////
 function* loginHandle(action) {
   const {payload, onSuccess} = action;
@@ -13,6 +29,7 @@ function* loginHandle(action) {
       email: payload?.email,
       password: payload?.password,
     });
+    console.log('login res ', res);
     onSuccess?.(action);
     setToken(res?.data.token);
     yield put(
@@ -65,10 +82,21 @@ function* logoutHandle(action) {
     console.log('logoutHandle -> ', error);
   }
 }
+///////////////////////////////// get user info ///////////////////////////////
+function* getUserInfohandle() {
+  try {
+    const res = yield call(getUserInfoApi);
+    yield put(getUserInfoSuccess(res.data));
+  } catch (error) {
+    console.log('error ', error);
+    yield put(getUserInfoFailed());
+  }
+}
 function* authSaga() {
   yield all([takeLatest(LOGIN_REQUEST, loginHandle)]);
   yield all([takeLatest(SIGN_UP_REQUEST, signUpHanlde)]);
   yield all([takeLatest(LOGOUT_REQUEST, logoutHandle)]);
+  yield all([takeLatest(GET_USER_INFO_REQUEST, getUserInfohandle)]);
 }
 
 export default authSaga;

@@ -1,8 +1,7 @@
 import {
+  GET_USER_INFO_SUCCESS,
   LOGIN_FAILED,
-  LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   SIGN_UP_FAILED,
   SIGN_UP_REQUEST,
@@ -15,6 +14,9 @@ const initialState = {
     email: '',
     phone: '',
     fullname: '',
+    information: [],
+    gender: 0,
+    avatar: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
   },
   isLogin: false,
 };
@@ -53,6 +55,11 @@ const authReducer = (state = initialState, action) => {
       };
     case SIGN_UP_FAILED:
       return {...state};
+    case GET_USER_INFO_SUCCESS:
+      return {
+        ...state,
+        user: action?.payload,
+      };
     default:
       return {...state};
   }

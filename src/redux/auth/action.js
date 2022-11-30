@@ -2,6 +2,9 @@ import {
   CHANGE_PASSWORD_FAILED,
   CHANGE_PASSWORD_REQUEST,
   CHANGE_PASSWORD_SUCCESS,
+  GET_USER_INFO_FAILED,
+  GET_USER_INFO_REQUEST,
+  GET_USER_INFO_SUCCESS,
   LOGIN_FAILED,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -60,3 +63,20 @@ export const logoutRequest = onSuccess => ({
 export const logoutSuccess = () => ({
   type: LOGOUT_SUCCESS,
 });
+//////////////////////////////// get  user info ///////////////////////////////////
+
+export const getUserInfoRequest = () => ({
+  type: GET_USER_INFO_REQUEST,
+});
+
+export const getUserInfoSuccess = payload => ({
+  type: GET_USER_INFO_SUCCESS,
+  payload: payload,
+});
+
+export const getUserInfoFailed = payload => ({
+  type: GET_USER_INFO_FAILED,
+  payload: payload,
+});
+
+//////////////////////////////// update user info //////////////////////////////////
