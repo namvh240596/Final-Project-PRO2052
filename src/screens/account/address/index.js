@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
 import ItemAddress from '../components/ItemAddress';
@@ -7,14 +7,26 @@ import CustomButton from '../../../components/customButton';
 import Header from '../../../components/header';
 import {useNavigation} from '@react-navigation/native';
 import {DATA_ADDRESS} from '../../../services/fakeApi/fakeAPI';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUserSelector} from '../../../redux/auth/selector';
+import {getUserInfoRequest} from '../../../redux/auth/action';
 
 const MyAddress = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserInfoRequest());
+  }, []);
+
+  const userInfo = useSelector(getUserSelector);
+  const {information} = userInfo;
+  console.log(userInfo);
   const renderItem = ({item}) => {
     return (
       <ItemAddress
+        isDefault={item.isDefault}
         address={item.address}
-        name={item.type_address}
+        name={item.name}
         phone={item.phone}
       />
     );
@@ -23,16 +35,18 @@ const MyAddress = () => {
     <View style={styles.container}>
       <Header title={'Địa chỉ'} iconBack />
       <View style={styles.body}>
-        <FlatList
-          keyExtractor={item => item.id}
-          data={DATA_ADDRESS}
-          renderItem={renderItem}
-          ListEmptyComponent={
-            <View style={styles.viewEmpty}>
-              <Text style={styles.textEmpty}>Chưa có đia chỉ nào!</Text>
-            </View>
-          }
-        />
+        {userInfo.information.length > 0 && (
+          <FlatList
+            keyExtractor={item => item.id}
+            data={userInfo.information}
+            renderItem={renderItem}
+            ListEmptyComponent={
+              <View style={styles.viewEmpty}>
+                <Text style={styles.textEmpty}>Chưa có đia chỉ nào!</Text>
+              </View>
+            }
+          />
+        )}
       </View>
       <View style={styles.footer}>
         <CustomButton

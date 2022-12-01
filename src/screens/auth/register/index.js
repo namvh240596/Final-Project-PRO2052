@@ -1,5 +1,5 @@
 import {View, Text, ScrollView} from 'react-native';
-import React, {useCallback,useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {styles} from './styles';
 import AppIcon from '../../../assets/icons';
 import {scale, verticalScale} from '../../../utils/scale';
@@ -80,7 +80,6 @@ const Register = () => {
                   textPlaceHolder={'Email'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   textErrors={errors.email}
-
                   onChangeText={text => setFieldValue('email', text)}
                 />
                 <CustomTextInput
@@ -90,7 +89,7 @@ const Register = () => {
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   secureTextEntry={hidePass}
                   textErrors={errors.password}
-                  onClear={()=>setHidePass(!hidePass)}
+                  onClear={() => setHidePass(!hidePass)}
                   rightIcon={hidePass ? AppIcon.IconCloseEye : AppIcon.IconEye}
                   onChangeText={text => setFieldValue('password', text)}
                 />
@@ -103,7 +102,7 @@ const Register = () => {
                   rightIcon={hidePass ? AppIcon.IconCloseEye : AppIcon.IconEye}
                   textErrors={errors.confirmPassword}
                   onChangeText={text => setFieldValue('confirmPassword', text)}
-                  onClear={()=>setHidePass(!hidePass)}
+                  onClear={() => setHidePass(!hidePass)}
                 />
                 <CustomButton
                   title={'Đăng kí'}
@@ -115,10 +114,10 @@ const Register = () => {
           }}
         </Formik>
         <Text style={styles.text}>
-          Bạn đã có tài khoản? {' '}
+          Bạn đã có tài khoản?{' '}
           <Text
             onPress={() => navigation.navigate('Login')}
-            style={styles.textBlue}> 
+            style={styles.textBlue}>
             Đăng Nhập
           </Text>
         </Text>

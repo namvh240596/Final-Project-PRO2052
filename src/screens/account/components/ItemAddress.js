@@ -4,13 +4,20 @@ import {scale, verticalScale} from '../../../utils/scale';
 import {AppTheme} from '../../../config/AppTheme';
 import CustomButton from '../../../components/customButton';
 
-const ItemAddress = ({onPress, name, address, phone}) => {
+const ItemAddress = ({onPress, name, address, phone, isDefault}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={styles.textName}>Loại địa chỉ: {name}</Text>
-      <Text style={styles.text}>
-      Địa chỉ:  {address}
-      </Text>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor: isDefault
+            ? AppTheme.Colors.Blue
+            : AppTheme.Colors.White,
+        },
+      ]}
+      onPress={onPress}>
+      <Text style={styles.textName}> {name}</Text>
+      <Text style={styles.text}>Địa chỉ: {address}</Text>
       <Text style={styles.textPhone}>Số điện thoại: {phone}</Text>
     </TouchableOpacity>
   );

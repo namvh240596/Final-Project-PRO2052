@@ -1,11 +1,25 @@
 import {Dimensions, Platform, StyleSheet} from 'react-native';
-import { AppTheme } from '../../config/AppTheme';
-import { scale, verticalScale } from '../../utils/scale';
+import {AppTheme} from '../../config/AppTheme';
+import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
+  textInputContainer: {
+    backgroundColor: AppTheme.Colors.White,
+  },
+  viewTextInput: {
+    paddingHorizontal: scale(10),
+    marginTop: verticalScale(20),
+  },
   container: {
     flex: 1,
     backgroundColor: AppTheme.Colors.White,
+  },
+  body: {
+    position: 'absolute',
+    marginTop: verticalScale(60),
+    width: '100%',
+    height: 100,
+    zIndex: 200,
   },
   mapViewContainer: {
     width: Dimensions.get('window').width,
@@ -23,7 +37,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: scale(10),
     padding: scale(10),
-    marginBottom: verticalScale(10)
+    marginBottom: verticalScale(10),
   },
   loadingStyle: {
     width: scale(300),
@@ -57,31 +71,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
     borderBottomColor: AppTheme.Colors.TextPlace,
   },
-  textInputContainer: {
-    marginHorizontal: scale(20),
-    height: verticalScale(60),
-    borderRadius: scale(10),
-    backgroundColor: AppTheme.Colors.White,
-    marginTop: verticalScale(20),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '100%'
-  },
-  inputStyle: {
-    flex: 1,
-    height: verticalScale(60),
-    borderRadius: scale(10),
-  },
-  iconSearch: {
-    marginLeft: scale(15),
-    marginRight: scale(5),
-  },
+
   listPlaces: {
     marginHorizontal: scale(20),
     bottom: verticalScale(10),
@@ -180,5 +170,4 @@ export const styles = StyleSheet.create({
     color: AppTheme.Colors.Black,
     textAlign: 'center',
   },
-
 });
