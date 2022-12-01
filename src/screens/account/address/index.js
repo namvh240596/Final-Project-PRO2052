@@ -17,11 +17,8 @@ const MyAddress = () => {
   useEffect(() => {
     dispatch(getUserInfoRequest());
   }, []);
-
   const userInfo = useSelector(getUserSelector);
-  const {information} = userInfo;
-  console.log(userInfo);
-  const renderItem = ({item}) => {
+  const renderItem = ({item, index}) => {
     return (
       <ItemAddress
         isDefault={item.isDefault}
@@ -37,7 +34,7 @@ const MyAddress = () => {
       <View style={styles.body}>
         {userInfo.information.length > 0 && (
           <FlatList
-            keyExtractor={item => item.id}
+            keyExtractor={(item,index) => index}
             data={userInfo.information}
             renderItem={renderItem}
             ListEmptyComponent={
@@ -78,10 +75,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textStyles: {
-    color: AppTheme.Colors.Dark,
+    color: AppTheme.Colors.White,
   },
   containerStyles: {
-    backgroundColor: AppTheme.Colors.Light,
+    backgroundColor: AppTheme.Colors.Dark,
     elevation: 2,
     shadowColor: AppTheme.Colors.Grey,
     shadowOffset: {

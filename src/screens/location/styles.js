@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: scale(371),
     height: verticalScale(55),
-    backgroundColor: AppTheme.Colors.White,
+    backgroundColor: AppTheme.Colors.Dark,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: scale(10),
@@ -74,7 +74,6 @@ export const styles = StyleSheet.create({
 
   listPlaces: {
     marginHorizontal: scale(20),
-    bottom: verticalScale(10),
     zIndex: 100,
     backgroundColor: AppTheme.Colors.White,
     shadowColor: '#000',
@@ -85,6 +84,8 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    borderRadius: 6,
+    marginTop: verticalScale(2)
   },
   itemPlaces: {
     paddingVertical: verticalScale(5),
@@ -102,7 +103,7 @@ export const styles = StyleSheet.create({
   },
   textBtnStyle: {
     fontSize: AppTheme.FontSize.Medium,
-    color: AppTheme.Colors.Dark,
+    color: AppTheme.Colors.White,
   },
   viewCurrentPosition: {
     backgroundColor: AppTheme.Colors.White,

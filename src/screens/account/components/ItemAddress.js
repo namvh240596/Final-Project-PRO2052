@@ -11,7 +11,7 @@ const ItemAddress = ({onPress, name, address, phone, isDefault}) => {
         styles.container,
         {
           backgroundColor: isDefault
-            ? AppTheme.Colors.Blue
+            ? AppTheme.Colors.Light
             : AppTheme.Colors.White,
         },
       ]}

@@ -5,6 +5,7 @@ import {
   deleteProductOnCartApi,
   getCartApi,
 } from '../../services/api/cart';
+import {getChangeLoadingSuccess} from '../loading/action';
 import {
   addOneProductToCartSuccess,
   getAllCartRequest,
@@ -43,8 +44,10 @@ function* getAllCartHandle() {
   try {
     const res = yield call(getCartApi);
     yield put(getAllCartSuccess({listCart: res?.data}));
+    yield put(getChangeLoadingSuccess());
   } catch (error) {
     console.log('getAllCartHandle -> ', error);
+    yield put(getChangeLoadingSuccess());
   }
 }
 ///////////////////////////////// delete product on cart //////////////////////////////

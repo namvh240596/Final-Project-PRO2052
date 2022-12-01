@@ -25,18 +25,19 @@ const CustomTextInput = ({
   autoFocus,
   autoComplete,
   onFocus,
-  editable
+  editable,
+  multiline
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <View style={containerTextInputStyle}>
+    <>
       <View
         style={[
           styles.containerTextInput,
-
           (isFocused && {borderColor: AppTheme.Colors.Blue}) ||
             (isError && {borderColor: AppTheme.Colors.Red}),
+            containerTextInputStyle
         ]}>
         {leftIcon && (
           <SvgXml xml={leftIcon} width={scale(24)} height={scale(24)} />
@@ -62,6 +63,7 @@ const CustomTextInput = ({
           onChangeText={onChangeText}
           autoFocus={autoFocus}
           autoComplete={autoComplete}
+          multiline={multiline}
         />
         {rightIcon && (
           <TouchableOpacity rightStyle={rightStyle} onPress={onClear}>
@@ -79,7 +81,7 @@ const CustomTextInput = ({
           {textErrors}
         </Text>
       )}
-    </View>
+    </>
   );
 };
 

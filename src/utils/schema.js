@@ -75,8 +75,17 @@ const validateUpdateSchema = Yup.object().shape({
   phone: Yup.string()
     .required(requiredErrorMessage)
     .matches(regexPhone, validPhoneMessage),
-})
+});
+const validateAddressSchema = Yup.object().shape({
+  fullname: Yup.string()
+    .matches(regexFullname, validFullnameMessage)
+    .required(requiredErrorMessage),
+  phone: Yup.string()
+    .required(requiredErrorMessage)
+    .matches(regexPhone, validPhoneMessage),
+});
 export {
+  validateAddressSchema,
   validateLoginSchema,
   validateRegisterSchema,
   validateConfirmPasswordSchema,

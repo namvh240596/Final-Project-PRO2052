@@ -20,9 +20,10 @@ const loadingReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_CHANGE_LOADING_REQUEST:
       return {...state, loading: true};
-      
+    case GET_CHANGE_LOADING_SUCCESS:
+      return {...state, loading: false};
     case GET_CHANGE_LOADING_FAILED:
-      return {...state};
+      return {...state, loading: false};
 
     case LOGIN_SUCCESS:
       return {...state, loading: false};

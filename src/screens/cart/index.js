@@ -26,22 +26,47 @@ import {createOrderApi} from '../../services/api/order';
 import IMAGES from '../../assets/images';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
+import {getChangeLoading} from '../../redux/loading/selector';
+import MyLoading from '../../components/loading';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../redux/loading/action';
+import {showModal} from '../../components/customNotiModal';
+import ItemAddress from '../account/components/ItemAddress';
+import {getUserSelector} from '../../redux/auth/selector';
 
 const Cart = props => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const listCart = useSelector(getListCartSelector);
+  const userInfor = useSelector(getUserSelector);
   const [totalItem, setTotalItem] = useState(0);
   const [initialPrice, setInitialPrice] = useState(0);
   const [feeShip, setFeeShip] = useState(30000);
   const [discount, setDiscount] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [count, setCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [myAddress, setMyAddress] = useState({
+    address: '',
+    name: '',
+    phone: '',
+  });
+  useEffect(() => {
+    userInfor.information.map((item, index) => {
+      if (item.isDefault === true) {
+        setMyAddress(item);
+      }
+    });
+  }, []);
+  console.log(myAddress);
+  const loading = useSelector(getChangeLoading);
   useEffect(() => {
     isFocused && dispatch(getAllCartRequest());
+    dispatch(getChangeLoadingRequest());
   }, [dispatch, isFocused]);
+
   useEffect(() => {
     let _totalItem = 0;
     let _initialPrice = 0;
@@ -61,21 +86,24 @@ const Cart = props => {
   }, [navigation, listCart, dispatch]);
 
   const onUpdateQuantity = useCallback((_id, quantity) => {
-    setIsLoading(true);
+    dispatch(getChangeLoadingRequest());
     updateQuantityProductApi({productId: _id, quantity: quantity})
       .then(res => {
         isFocused && dispatch(getAllCartRequest());
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
       })
       .catch(e => {
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: e.response.data.message,
+        });
         console.log('cart update quantity -> ', e);
       });
   }, []);
   const createOrder = () => {
     let data;
     let arrItem = [];
-    setIsLoading(true);
+    dispatch(getChangeLoadingRequest());
     for (let index = 0; index < listCart.length; index++) {
       let item = {
         product: listCart[index].product._id,
@@ -87,20 +115,26 @@ const Cart = props => {
       items: arrItem,
       paymentMethod: 'COD',
       shippingAddress: {
-        address: '1 hcm',
+        address: myAddress.address,
         city: 'hcm',
         postalCode: '12',
         country: 'VN',
       },
-      phone: '0328374810',
+      phone: myAddress.phone,
       totalPrice: finalPrice,
     };
     createOrderApi(data)
       .then(res => {
-        res && setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
         dispatch(getAllCartRequest());
       })
-      .catch(e => console.log('errors ', e));
+      .catch(e => {
+        console.log('errors ', e);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: e.response.data.message,
+        });
+      });
   };
   return (
     <View style={styles.container}>
@@ -126,11 +160,21 @@ const Cart = props => {
           </View>
 
           <View style={styles.footer}>
-            <View style={styles.viewAddress}>
-              <TouchableOpacity>
-                <Text style={styles.textChooseAddress}>Chọn địa chỉ</Text>
-              </TouchableOpacity>
-            </View>
+            {myAddress.address === '' ? (
+              <View style={styles.viewAddress}>
+                <TouchableOpacity>
+                  <Text style={styles.textChooseAddress}>Chọn địa chỉ</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <ItemAddress
+                address={myAddress.address}
+                name={myAddress.name}
+                phone={myAddress.phone}
+                onPress={() => navigation.navigate('MyAddress')}
+              />
+            )}
+
             <View style={styles.viewCode}>
               <TextInput placeholder="Nhập mã code" style={styles.textInput} />
               <TouchableOpacity style={styles.touch}>
@@ -176,24 +220,9 @@ const Cart = props => {
           </View>
         </View>
       )}
-
-      {isLoading && (
-        <View style={styles.containerLoading}>
-          <View style={styles.loadingIndicator}>
-            <Lottie
-              source={IMAGES.ANIMATION}
-              autoPlay
-              loop
-              style={styles.loadingStyle}
-            />
-          </View>
-        </View>
-      )}
-     
+      {loading && <MyLoading />}
     </View>
   );
 };
 
 export default Cart;
-
-

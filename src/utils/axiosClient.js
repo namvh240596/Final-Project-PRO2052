@@ -7,7 +7,7 @@ import {getToken} from '../helpers/tokenHelper';
 // });
 
 const axiosClient = axios.create({
-  baseURL: 'https://fpt-hightech-api.herokuapp.com/',
+  baseURL: 'https://fpt-hightech-api.herokuapp.com',
 });
 
 axiosClient.interceptors.request.use(
