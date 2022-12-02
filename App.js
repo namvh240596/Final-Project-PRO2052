@@ -4,15 +4,15 @@ import AppRouter from './src/routers';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './src/redux/configStore';
+import CodePush from 'react-native-code-push';
 const App = () => {
-
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-      <AppRouter />
+        <AppRouter />
       </PersistGate>
     </Provider>
   );
 };
 
-export default App;
+export default CodePush(App);
