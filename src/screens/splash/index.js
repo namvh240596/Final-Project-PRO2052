@@ -4,7 +4,6 @@ import {AppTheme} from '../../config/AppTheme';
 import IMAGES from '../../assets/images';
 import {scale} from '../../utils/scale';
 
-
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
     let timer;
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
     height: scale(72),
   },
   container: {
-    backgroundColor: AppTheme.Colors.Blue,
+    backgroundColor: AppTheme.Colors.Green,
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
