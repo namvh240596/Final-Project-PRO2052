@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View, Switch} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserSelector} from '../../../redux/auth/selector';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {AppTheme} from '../../../config/AppTheme';
 import Header from '../../../components/header';
 import CustomTextInput from '../../../components/customTextInput';
@@ -23,7 +23,13 @@ const SettingAddress = props => {
   const [isLoading, setIsLoading] = useState(false);
   const inititalValue = {fullname: '', phone: ''};
   const {information} = userInfor;
-  console.log(information);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if(information.length === 0){
+      setIsDefault(true);
+    }
+  }, [isFocused])
+  
   const onSaveAddress = values => {
     setIsLoading(true);
     if (isDefault) {
@@ -49,7 +55,7 @@ const SettingAddress = props => {
         setIsLoading(false);
         showModal({
           title: 'Thêm địa chỉ mới thành công',
-          onConfirmPress: () => navigation.replace('MyAddress'),
+          onConfirmPress: () => navigation.navigate('MyAddress'),
         });
       })
       .catch(error => {
@@ -69,6 +75,7 @@ const SettingAddress = props => {
         <Formik
           initialValues={inititalValue}
           validateOnChange={true}
+          enableReinitialize
           validationSchema={validateAddressSchema}
           onSubmit={onSaveAddress}>
           {({errors, setFieldValue, values, handleSubmit}) => {
@@ -91,6 +98,7 @@ const SettingAddress = props => {
                     onChangeText={text => setFieldValue('phone', text)}
                     value={values.phone}
                     textErrors={errors.phone}
+                    keyboardType='phone-pad'
                   />
                 </View>
                 <Text style={styles.textTitle}>Địa chỉ nhận hàng</Text>

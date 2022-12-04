@@ -39,7 +39,7 @@ const Account = () => {
         navigation.navigate('MyOrder');
         break;
       case 'Địa chỉ':
-        navigation.navigate('MyAddress');
+        navigation.navigate('MyAddress', {isDelete: true});
         break;
       case 'Liên kết':
         navigation.navigate('Payment');

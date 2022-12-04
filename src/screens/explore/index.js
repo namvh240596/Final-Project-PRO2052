@@ -40,24 +40,26 @@ import {getChooseGearRequest} from '../../redux/gear/action';
 import {useIsFocused} from '@react-navigation/native';
 import {getListGearSelector} from '../../redux/gear/selector';
 import {AppTheme} from '../../config/AppTheme';
+import {showModal} from '../../components/customNotiModal';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../redux/loading/action';
 
 const Explore = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [listIndex, setListIndex] = useState(0);
-
   const [listProduct, setListProduct] = useState([]);
   const [money, setMoney] = useState(0);
   const dispatch = useDispatch();
   const listCategories = useSelector(getListCategoriesSelector);
   const [listGear, setListGear] = useState(listCategories);
-  const [isLoading, setIsLoading] = useState(false);
   const myListGear = useSelector(getListGearSelector);
-  const isFocused = useIsFocused();
   useEffect(() => {
     dispatch(getListCategoriesRequest());
     myListGear.length > 0 && fillProductFromRedux();
     setMoney(totalMoney());
-  }, [dispatch]);
+  }, []);
 
   const OpenModalChooseGear = useCallback(
     index => {
@@ -67,11 +69,10 @@ const Explore = () => {
       } else {
         type = listGear[index].category.type;
       }
-      setIsLoading(true);
+      dispatch(getChangeLoadingRequest());
       getAllProductsByTypeApi(type)
         .then(res => {
           setListProduct(res.data);
-          res && setIsLoading(false);
         })
         .catch(e => console.log('errors ', e));
       setModalVisible(true);
@@ -89,6 +90,7 @@ const Explore = () => {
       });
     });
     setListGear(arr);
+    dispatch(getChangeLoadingSuccess());
   };
   const ChooseGear = useCallback(
     item => {
@@ -103,6 +105,7 @@ const Explore = () => {
         }
       });
       dispatch(getChooseGearRequest(arrGear));
+      dispatch(getChangeLoadingSuccess());
     },
     [modalVisible, listGear],
   );
@@ -133,7 +136,6 @@ const Explore = () => {
     dispatch(getChooseGearRequest(arrGear));
   };
   const addProductsToCart = () => {
-    setIsLoading(true);
     let data = [];
     for (let index = 0; index < listGear.length; index++) {
       let item;
@@ -142,16 +144,34 @@ const Explore = () => {
         data.push(item);
       }
     }
-    addProductsToCartApi({productIds: data})
-      .then(res => {
-        res && setIsLoading(false);
-        setListGear(listCategories);
-        setMoney(0);
-        dispatch(getChooseGearRequest([]));
+    if (data.length > 0) {
+      dispatch(getChangeLoadingRequest());
+      addProductsToCartApi({productIds: data})
+        .then(res => {
+          console.log(res);
+          setListGear(listCategories);
+          setMoney(0);
+          dispatch(getChooseGearRequest([]));
+          dispatch(getChangeLoadingSuccess());
+          showModal({
+            title: 'Thông báo',
+            message: 'Thêm vào giỏ hàng thành công',
+          });
+        })
+        .catch(e => {
+          dispatch(getChangeLoadingSuccess());
+          console.log('error ', e);
+          showModal({
+            title: 'Opps! có lỗi xãy ra!',
+            message: e.response.data.message,
+          });
+        });
+    } else {
+      showModal({
+        title: 'Opps!'
+        , message: 'Bạn chưa chọn sản phẩm nào!',
       })
-      .catch(e => {
-        setIsLoading(false);
-      });
+    }
   };
 
   return (
@@ -191,7 +211,10 @@ const Explore = () => {
       <Modal visible={modalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <TouchableOpacity
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setModalVisible(false);
+              dispatch(getChangeLoadingSuccess());
+            }}
             style={{flex: 1}}
           />
           <View style={styles.modalBody}>
@@ -239,30 +262,6 @@ const Explore = () => {
               })}
             </ScrollView>
           </View>
-          {isLoading && (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                top: 0,
-                zIndex: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Lottie
-                source={IMAGES.ANIMATION}
-                autoPlay
-                loop
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  zIndex: 11,
-                  backgroundColor: AppTheme.Colors.White,
-                }}
-              />
-            </View>
-          )}
         </View>
       </Modal>
     </View>

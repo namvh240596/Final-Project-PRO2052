@@ -60,7 +60,6 @@ const Home = () => {
       style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
-      {/* <Header title="Home" /> */}
       <View style={styles.body}>
         <View style={styles.viewTextInput}>
           <CustomTextInput

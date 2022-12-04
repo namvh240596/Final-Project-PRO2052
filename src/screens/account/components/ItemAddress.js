@@ -3,8 +3,20 @@ import React from 'react';
 import {scale, verticalScale} from '../../../utils/scale';
 import {AppTheme} from '../../../config/AppTheme';
 import CustomButton from '../../../components/customButton';
+import Svg, {SvgXml} from 'react-native-svg';
+import AppIcon from '../../../assets/icons';
 
-const ItemAddress = ({onPress, name, address, phone, isDefault}) => {
+const ItemAddress = ({
+  onPress,
+  name,
+  address,
+  phone,
+  isDefault,
+  onDelete,
+  index,
+  isDelete,
+  onEdit
+}) => {
   return (
     <TouchableOpacity
       style={[
@@ -19,6 +31,21 @@ const ItemAddress = ({onPress, name, address, phone, isDefault}) => {
       <Text style={styles.textName}> {name}</Text>
       <Text style={styles.text}>Địa chỉ: {address}</Text>
       <Text style={styles.textPhone}>Số điện thoại: {phone}</Text>
+
+      {isDelete && (
+        <View style={styles.viewChange}>
+          <TouchableOpacity
+            style={styles.touchDelete}
+            onPress={() => onDelete(index)}>
+            <SvgXml
+              height={scale(24)}
+              width={scale(24)}
+              xml={AppIcon.IconDelete}
+            />
+          </TouchableOpacity>
+          
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -26,6 +53,20 @@ const ItemAddress = ({onPress, name, address, phone, isDefault}) => {
 export default ItemAddress;
 
 const styles = StyleSheet.create({
+
+  viewChange: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+
+  },
+  touchEdit: {
+    paddingHorizontal: scale(10)
+
+  },
+  touchDelete: {
+    paddingHorizontal: scale(10),
+    marginRight: scale(5)
+  },
   text: {
     fontSize: scale(16),
     fontFamily: AppTheme.Fonts.Regular,

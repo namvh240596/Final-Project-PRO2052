@@ -1,4 +1,4 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, ToastAndroid} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {styles} from './styles';
 import AppIcon from '../../../assets/icons';
@@ -11,6 +11,11 @@ import {SvgXml} from 'react-native-svg';
 import {validateRegisterSchema} from '../../../utils/schema';
 import CustomTextInput from '../../../components/customTextInput';
 import CustomButton from '../../../components/customButton';
+import {showModal} from '../../../components/customNotiModal';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../../redux/loading/action';
 
 const Register = () => {
   const navigation = useNavigation();
@@ -25,6 +30,7 @@ const Register = () => {
   };
   const onSignUp = useCallback(
     values => {
+      dispatch(getChangeLoadingRequest());
       dispatch(
         signUpRequest(
           {
@@ -33,7 +39,10 @@ const Register = () => {
             fullname: values.fullname,
             phone: values.phone,
           },
-          () => navigation.navigate('Login'),
+          () => {
+            ToastAndroid.show('Đăng kí thành công', ToastAndroid.SHORT)
+            return navigation.navigate('Login');
+          },
         ),
       );
     },
@@ -72,6 +81,7 @@ const Register = () => {
                   textPlaceHolder={'Số điện thoại'}
                   containerTextInputStyle={{marginTop: verticalScale(12)}}
                   textErrors={errors.phone}
+                  keyboardType="phone-pad"
                   onChangeText={text => setFieldValue('phone', text)}
                 />
                 <CustomTextInput

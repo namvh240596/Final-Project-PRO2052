@@ -43,12 +43,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-    backgroundColor: AppTheme.Colors.White,
+    backgroundColor: 'rgba(256, 256, 256)',
   },
-
   loadingStyle: {
-    width: scale(200),
-    height: verticalScale(200),
+    width: scale(150),
+    height: verticalScale(150),
     alignSelf: 'center',
     marginBottom: verticalScale(40),
   },

@@ -10,9 +10,15 @@ import {DATA_ADDRESS} from '../../../services/fakeApi/fakeAPI';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserSelector} from '../../../redux/auth/selector';
 import {getUserInfoRequest} from '../../../redux/auth/action';
+import {updateProfileApi} from '../../../services/api/auth';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../../redux/loading/action';
 
-const MyAddress = () => {
+const MyAddress = props => {
   const navigation = useNavigation();
+  const isDelete = props.route.params?.isDelete;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserInfoRequest());
@@ -25,25 +31,49 @@ const MyAddress = () => {
         address={item.address}
         name={item.name}
         phone={item.phone}
+        onDelete={onDeleteAddress}
+        index={index}
+        isDelete={isDelete ? true : false}
+        onPress={() => {
+          navigation.navigate('Cart', {itemChooseAddress: item});
+        }}
+       
       />
     );
+  };
+
+  const onDeleteAddress = index => {
+    dispatch(getChangeLoadingRequest());
+    console.log(userInfo.information);
+    let arr = userInfo.information;
+    arr.splice(index, 1);
+    updateProfileApi({
+      information: arr,
+    })
+      .then(res => {
+        dispatch(getUserInfoRequest());
+        dispatch(getChangeLoadingSuccess());
+        console.log(res);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
   return (
     <View style={styles.container}>
       <Header title={'Địa chỉ'} iconBack />
       <View style={styles.body}>
-        {userInfo.information.length > 0 && (
-          <FlatList
-            keyExtractor={(item,index) => index}
-            data={userInfo.information}
-            renderItem={renderItem}
-            ListEmptyComponent={
-              <View style={styles.viewEmpty}>
-                <Text style={styles.textEmpty}>Chưa có đia chỉ nào!</Text>
-              </View>
-            }
-          />
-        )}
+        <FlatList
+          keyExtractor={(item, index) => index}
+          data={userInfo.information}
+          renderItem={renderItem}
+          ListEmptyComponent={
+            <View style={styles.viewEmpty}>
+              <Text style={styles.textEmpty}>Chưa có địa chỉ nào!</Text>
+              <Text style={styles.textEmpty}>Vui lòng thêm địa chỉ mới!</Text>
+            </View>
+          }
+        />
       </View>
       <View style={styles.footer}>
         <CustomButton
@@ -61,12 +91,14 @@ export default MyAddress;
 
 const styles = StyleSheet.create({
   textEmpty: {
-    fontSize: AppTheme.FontSize.Medium,
+    fontSize: AppTheme.FontSize.Large,
     fontFamily: AppTheme.Fonts.Medium,
     color: AppTheme.Colors.Dark,
     lineHeight: 20,
     letterSpacing: 0.4,
     textAlign: 'auto',
+    fontWeight: '700',
+    marginTop: verticalScale(30),
   },
   viewEmpty: {
     paddingTop: verticalScale(120),

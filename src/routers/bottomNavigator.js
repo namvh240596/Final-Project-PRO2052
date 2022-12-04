@@ -19,6 +19,7 @@ export default function BottomNavigator() {
   return (
     <Navigator
       initialRouteName="Home"
+      
       screenOptions={{
         headerShown: false,
         tabBarStyle: {

@@ -17,6 +17,12 @@ import {
 } from 'react-native-confirmation-code-field';
 import {AppTheme} from '../../../config/AppTheme';
 import IMAGES from '../../../assets/images';
+import {useDispatch} from 'react-redux';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../../redux/loading/action';
+import {showModal} from '../../../components/customNotiModal';
 
 const CELL_COUNT = 4;
 const ForgotPassword = () => {
@@ -35,19 +41,24 @@ const ForgotPassword = () => {
     value,
     setValue,
   });
+  const dispatch = useDispatch();
   const onSendEmail = useCallback(values => {
     setEmail(values.email);
-    setIsLoading(true);
+    dispatch(getChangeLoadingRequest());
     forgotPasswordApi({email: values.email})
       .then(res => {
         setIsShow(false);
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
         setUser(res.data.user);
         console.log('res -> ', res);
       })
       .catch(e => {
         console.log('message error -> ', e);
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
+
+        showModal({
+          title: e.response?.data.message,
+        });
       });
   }, []);
   useEffect(() => {
@@ -61,33 +72,40 @@ const ForgotPassword = () => {
     return () => clearTimeout(timer);
   }, [seconds]);
   const onReSendCode = useCallback(() => {
-    setIsLoading(true);
+    dispatch(getChangeLoadingRequest());
+
     forgotPasswordApi({email: email})
       .then(res => {
         setSeconds(59);
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
       })
       .catch(e => {
         console.log('e ', e);
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: e.response?.data.message,
+        });
       });
   }, [user, email]);
   const onSendVerify = () => {
-    setIsLoading(true);
+    dispatch(getChangeLoadingRequest());
     veryfiCodedApi({
       user: user,
       verifyCode: value,
     })
       .then(res => {
-        setIsLoading(false);
+        dispatch(getChangeLoadingSuccess());
         navigation.replace('ConfirmPassword', {
           user: user,
           verify: value,
         });
       })
       .catch(e => {
-        setIsLoading(false);
         console.log('e ', e);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: e.response?.data.message,
+        });
       });
   };
 
@@ -176,18 +194,6 @@ const ForgotPassword = () => {
           textStyles={styles.textRegister}
         />
       </View>
-      {isLoading && (
-        <View style={styles.containerLoading}>
-          <View style={styles.loadingIndicator}>
-            <Lottie
-              source={IMAGES.ANIMATION}
-              autoPlay
-              loop
-              style={styles.loadingStyle}
-            />
-          </View>
-        </View>
-      )}
     </View>
   );
 };

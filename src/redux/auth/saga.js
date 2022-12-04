@@ -1,4 +1,5 @@
 import jwtDecode from 'jwt-decode';
+import {ToastAndroid} from 'react-native';
 import {call, put, all, takeLatest} from 'redux-saga/effects';
 import {showModal} from '../../components/customNotiModal';
 import {removeToken, setToken} from '../../helpers/tokenHelper';
@@ -13,6 +14,7 @@ import {
   loginFailed,
   loginSuccess,
   logoutSuccess,
+  signUpFailed,
   signUpSuccess,
 } from './action';
 import {
@@ -47,6 +49,7 @@ function* loginHandle(action) {
       title: 'Đăng nhập thất bại',
       message: error.response.data.message,
     });
+    console.log(error);
     console.log('====================================');
     console.log(error.response.data.message);
     console.log('====================================');
@@ -67,7 +70,16 @@ function* signUpHanlde(action) {
     onSuccess?.(action);
     yield put(signUpSuccess(res));
   } catch (error) {
+    yield put(signUpFailed());
     console.log('signUpHanlde -> ', error);
+    // showModal({
+    //   title: 'Đăng kí thất bại!!',
+    //   message : error?.response.data?.message
+    // })
+    ToastAndroid.show(
+      'Đăng kí thất bại ' + error?.response.data?.message,
+      ToastAndroid.LONG,
+    );
   }
 }
 ///////////////////////////////// logout  //////////////////////////////////////////

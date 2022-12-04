@@ -33,17 +33,13 @@ const Notification = () => {
     <View style={styles.container}>
       <Header title="Thông báo" iconBack />
       <View style={styles.body}>
-        {!loading ? (
-          <FlatList
-            renderItem={renderItem}
-            data={listNotification}
-            keyExtractor={item => item._id}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-          />
-        ) : (
-          <MyLoading />
-        )}
+        <FlatList
+          renderItem={renderItem}
+          data={listNotification}
+          keyExtractor={item => item._id}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </View>
   );

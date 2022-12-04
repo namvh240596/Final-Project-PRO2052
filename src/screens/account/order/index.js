@@ -4,31 +4,42 @@ import Header from '../../../components/header';
 import ItemOrder from '../components/ItemOrder';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {getMyOrderApi} from '../../../services/api/order';
 import Lottie from 'lottie-react-native';
 import IMAGES from '../../../assets/images';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../../redux/loading/action';
+import {showModal} from '../../../components/customNotiModal';
 
 const MyOrder = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [listOrder, setListOrder] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
   useEffect(() => {
-    setIsLoading(true);
-    getMyOrderApi()
-      .then(res => {
-        res && setListOrder(res.data);
-        res && setIsLoading(false);
-      })
-      .catch(e => {
-        console.log('errors ', e);
-        setIsLoading(false);
-      });
-  }, [dispatch]);
-  const onGoDetail = () => {
-    // navigation.navigate('OrderDetail');
+    isFocused && dispatch(getChangeLoadingRequest());
+    isFocused &&
+      getMyOrderApi()
+        .then(res => {
+          setListOrder(res.data);
+          dispatch(getChangeLoadingSuccess());
+        })
+        .catch(e => {
+          console.log('errors ', e);
+          dispatch(getChangeLoadingSuccess());
+          showModal({
+            title: 'Oops!!',
+            message: 'Có lỗi xảy ra!!!',
+          });
+        });
+  }, [isFocused]);
+  const onGoDetail = _id => {
+    console.log('id >> ', _id);
+    navigation.navigate('OrderDetail', {orderId: _id});
   };
   return (
     <View style={styles.container}>
@@ -36,20 +47,16 @@ const MyOrder = () => {
       <ScrollView
         style={styles.body}
         contentContainerStyle={{paddingBottom: verticalScale(20)}}>
-        {listOrder.map(item => {
-          return <ItemOrder key={item._id} order={item} onPress={onGoDetail} />;
+        {listOrder.reverse().map(item => {
+          return (
+            <ItemOrder
+              key={item._id}
+              order={item}
+              onPress={() => onGoDetail(item._id)}
+            />
+          );
         })}
       </ScrollView>
-      {isLoading && (
-        <View style={styles.viewLoading}>
-          <Lottie
-            source={IMAGES.ANIMATION}
-            autoPlay
-            loop
-            style={styles.loading}
-          />
-        </View>
-      )}
     </View>
   );
 };

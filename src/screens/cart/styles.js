@@ -3,6 +3,79 @@ import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
+  textNoSupport:{
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Red,
+    textAlign:'center',
+    marginBottom: verticalScale(15)
+  },
+  touchPayment: {
+    flexDirection: 'row',
+    marginTop: verticalScale(10),
+    paddingVertical: verticalScale(10),
+    borderWidth: 0.5,
+    borderColor: AppTheme.Colors.Dark,
+    paddingHorizontal: scale(16),
+    borderRadius: scale(6),
+  },
+  textPaymentMethod: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '700',
+  },
+  textMethod: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+  },
+  textChooseMethod: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    marginLeft: scale(16)
+  },
+  touchPaymentMethod: {
+    flexDirection: 'row',
+    borderWidth: 0.5,
+    borderColor: AppTheme.Colors.Dark,
+    borderRadius: 6,
+    marginVertical: verticalScale(14),
+    paddingHorizontal: scale(12),
+    paddingVertical: verticalScale(6),
+    justifyContent: 'space-between',
+    backgroundColor: AppTheme.Colors.White,
+  },
+  textHeader: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Dark,
+    fontWeight: '700',
+  },
+  modalHeader: {
+    paddingTop: verticalScale(20),
+    alignSelf: 'center',
+  },
+  touchModal: {
+    flex: 4,
+  },
+  centerView: {
+    minHeight: verticalScale(190),
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    paddingHorizontal: scale(16),
+    paddingBottom: verticalScale(20)
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgb(225,225,225,0.6)',
+  },
   body: {
     paddingVertical: verticalScale(20),
     flex: 1,
@@ -129,14 +202,14 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: verticalScale(10),
     paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(10)
+    paddingVertical: verticalScale(10),
   },
-  textChooseAddress:{
+  textChooseAddress: {
     fontSize: scale(16),
-    fontFamily: AppTheme.Fonts.Medium,
+    fontFamily: AppTheme.Fonts.SemiBold,
     letterSpacing: 0.5,
     color: AppTheme.Colors.Dark,
     textAlignVertical: 'center',
-    marginTop: verticalScale(8)
-  }
+    marginTop: verticalScale(8),
+  },
 });

@@ -51,6 +51,11 @@ const Location = () => {
     setDisabledButton(true);
   };
 
+useEffect(() => {
+  Geolocation.getCurrentPosition(()=>{});
+}, [])
+
+
   useEffect(() => {
     axios
       .get(
