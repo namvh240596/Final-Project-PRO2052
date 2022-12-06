@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Keyboard} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles';
@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loginRequest} from '../../../redux/auth/action';
 import {Formik} from 'formik';
 import {validateLoginSchema} from '../../../utils/schema';
-import CustomNotiModal from '../../../components/customNotiModal';
+import CustomNotiModal, { showModal } from '../../../components/customNotiModal';
 import MyLoading from '../../../components/loading';
 import {getChangeLoadingRequest} from '../../../redux/loading/action';
 import { getChangeLoading } from '../../../redux/loading/selector';
@@ -23,11 +23,18 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(loading);
   const onLogin = useCallback(
     values => {
+      Keyboard.dismiss();
       dispatch(loginRequest({email: values.email, password: values.password}));
       dispatch(getChangeLoadingRequest({loading: true}));
     },
     [dispatch],
   );
+  const onShowModal =()=>{
+    showModal({
+      title: 'Phương thức đăng nhập chưa được hổ trợ',
+      message: 'Vui lòng chọn phương thức khác',
+    })
+  }
   const [hide, setHide] = useState(true);
   return (
     <View style={styles.container}>
@@ -86,12 +93,14 @@ const Login = () => {
           title={'Đăng nhập với Google'}
           containerStyles={styles.containerBtnGG}
           leftIcon={AppIcon.IconGG}
+          onPress={onShowModal}
           textStyles={styles.textBtn}
         />
         <CustomButton
           title={'Đăng nhập với Facebook'}
           containerStyles={styles.containerBtnFB}
           leftIcon={AppIcon.IconFB}
+          onPress={onShowModal}
           textStyles={styles.textBtn}
         />
         <Text style={styles.text}>

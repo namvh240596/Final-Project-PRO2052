@@ -22,8 +22,12 @@ import Location from '../screens/location';
 import {PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {postDeviceTokenRequest} from '../redux/notification/action';
-import { getDeviceTokenSelector } from '../redux/notification/selector';
+import {getDeviceTokenSelector} from '../redux/notification/selector';
 import SearchScreen from '../screens/search';
+import SettingAddress from '../screens/account/address/SettingAddress';
+import {getChangeLoading} from '../redux/loading/selector';
+import MyLoading from '../components/loading';
+import {getUserInfoRequest} from '../redux/auth/action';
 const {Navigator, Screen, Group} = createNativeStackNavigator();
 
 export default function AppRouter() {
@@ -42,11 +46,13 @@ export default function AppRouter() {
     }
   }
   useEffect(() => {
+    isLogin && dispatch(getUserInfoRequest());
     requestUserPermission();
     messaging().onMessage(remoteMessage => {
       try {
-        let title = remoteMessage.notification?.title;
-        let body = remoteMessage.notification?.title;
+        console.log('firebase -> ',remoteMessage);
+        let title = remoteMessage.data?.title;
+        let body = remoteMessage.data?.title;
         onDisplayNotification(title, body);
       } catch (error) {
         console.log(error);
@@ -80,6 +86,8 @@ export default function AppRouter() {
     }
     requestLocationPermission();
   }, []);
+
+  const loading = useSelector(getChangeLoading);
   return (
     <NavigationContainer>
       <Navigator
@@ -103,7 +111,9 @@ export default function AppRouter() {
         <Screen name="OrderDetail" component={OrderDetail} />
         <Screen name="Location" component={Location} />
         <Screen name="SearchScreen" component={SearchScreen} />
+        <Screen name="SettingAddress" component={SettingAddress} />
       </Navigator>
+      {loading && <MyLoading />}
     </NavigationContainer>
   );
 }

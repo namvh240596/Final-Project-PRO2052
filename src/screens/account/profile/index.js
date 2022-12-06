@@ -25,33 +25,77 @@ import {updateProfileApi} from '../../../services/api/auth';
 import MyLoading from '../../../components/loading';
 import {Formik} from 'formik';
 import {validateUpdateSchema} from '../../../utils/schema';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../../redux/loading/action';
+import {showModal} from '../../../components/customNotiModal';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const user = useSelector(getUserSelector);
-  const [loading, setLoading] = useState(false);
+  const userInfo = useSelector(getUserSelector);
+  const [avatar, setAvatar] = useState(userInfo?.avatar);
   const onUpdate = _value => {
-    setLoading(true);
+    dispatch(getChangeLoadingRequest());
     updateProfileApi({
       fullname: _value.fullname,
       email: _value.email,
       phone: _value.phone,
+      avatar: avatar
     })
       .then(res => {
-        setLoading(false);
-        console.log('aa ', res);
+        dispatch(getChangeLoadingSuccess());
         dispatch(getUserInfoRequest());
+        showModal({
+          title: 'Cập nhật thông tin thành công',
+        });
       })
       .catch(error => {
-        setLoading(false);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: error.response?.data.message,
+        });
         console.log('error ', error);
       });
   };
   const initialValue = {
-    fullname: user.fullname,
-    email: user.email,
-    phone: user.phone,
+    fullname: userInfo.fullname,
+    email: userInfo.email,
+    phone: userInfo.phone,
+  };
+  const onChooseAvatar = async () => {
+    console.log('aaa');
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose Photo from Custom Option',
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    const avata = await launchImageLibrary(options, res => {
+      console.log('res  ' ,res);
+      setAvatar(res?.assets[0].uri)
+    });
+    const formData = new FormData();
+    avata?.assets &&
+      formData.append(
+        'file',
+        JSON.parse(
+          JSON.stringify({
+            uri: avata.assets[0]?.uri,
+            type: avata.assets[0]?.type,
+            name: avata.assets[0].fileName,
+          }),
+        ),
+      );
   };
   return (
     <View style={styles.container}>
@@ -63,9 +107,11 @@ const Profile = () => {
         />
         <View style={{top: verticalScale(-100)}}>
           <View style={styles.viewAvatar}>
-            <Image source={{uri: defaultImg}} style={styles.img} />
+            <Image source={{uri: avatar}} style={styles.img} />
             <TouchableOpacity style={styles.touchChange}>
-              <Text style={styles.textChange}>Đổi avatar</Text>
+              <Text onPress={onChooseAvatar} style={styles.textChange}>
+                Đổi avatar
+              </Text>
             </TouchableOpacity>
           </View>
           <Formik
@@ -120,7 +166,6 @@ const Profile = () => {
           </Formik>
         </View>
       </View>
-      {loading && <MyLoading />}
     </View>
   );
 };
@@ -140,7 +185,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(10),
   },
   containerTextInputStyle: {
-    borderRadius: scale(1),
+    borderRadius: scale(10),
     borderColor: '#caf',
   },
   viewInfo: {
@@ -153,8 +198,9 @@ const styles = StyleSheet.create({
   },
   textChange: {
     fontFamily: AppTheme.Fonts.SemiBold,
-    color: AppTheme.Colors.Black,
+    color: AppTheme.Colors.Blue,
     fontSize: AppTheme.FontSize.SmallX,
+    fontWeight: '700',
   },
 
   textName: {

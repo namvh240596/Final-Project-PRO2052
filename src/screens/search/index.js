@@ -58,7 +58,8 @@ const SearchScreen = () => {
   return (
     <View style={styles.container}>
       <Header title={'Tìm kiếm'} iconBack />
-      <CustomTextInput
+      <View style={{paddingHorizontal: scale(16)}}>
+        <CustomTextInput
         textPlaceHolder={'Tìm kiếm'}
         value={title}
         onChangeText={text => setTitle(text)}
@@ -70,6 +71,8 @@ const SearchScreen = () => {
         containerTextInputStyle={styles.containerTextInputStyle}
         rightIcon={AppIcon.IconSearch}
       />
+      </View>
+      
       <View style={styles.body}>
         {!first && (
           <FlatList

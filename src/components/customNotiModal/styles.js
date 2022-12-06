@@ -69,11 +69,11 @@ const styles = StyleSheet.create({
     fontFamily: AppTheme.Fonts.Medium,
     color: AppTheme.Colors.Black,
     width: scale(240),
-    fontSize: AppTheme.FontSize.Medium,
+    fontSize: AppTheme.FontSize.SmallX,
   },
   modalTitle: {
     // fontSize: AppTheme.FontSize.Large,
-    fontSize: 20,
+    fontSize: AppTheme.FontSize.Large,
     color: AppTheme.Colors.Dark,
     fontFamily: AppTheme.Fonts.SemiBold,
     width: scale(240),

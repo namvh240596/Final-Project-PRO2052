@@ -7,7 +7,7 @@ import {getToken} from '../helpers/tokenHelper';
 // });
 
 const axiosClient = axios.create({
-  baseURL: 'https://fpt-hightech-api.herokuapp.com/',
+  baseURL: 'http://quyt.ddns.net:3000',
 });
 
 axiosClient.interceptors.request.use(
@@ -25,7 +25,15 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
   res => res.data,
-  err => Promise.reject(err),
+  err => {
+    if(err.status === 503){
+      showModal({
+        title: 'Đăng nhập thất bại',
+        message: 'Sự cố hệ thống',
+      });
+    }
+    return Promise.reject(err);
+  },
 );
 
 export default axiosClient;

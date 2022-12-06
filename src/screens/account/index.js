@@ -17,7 +17,7 @@ import {getUserSelector} from '../../redux/auth/selector';
 import CustomButton from '../../components/customButton';
 import ItemProfile from './profile/components/ItemProfile';
 import AppIcon from '../../assets/icons';
-import {logoutRequest} from '../../redux/auth/action';
+import {getUserInfoRequest, logoutRequest} from '../../redux/auth/action';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -26,6 +26,10 @@ const Account = () => {
   const [email, setEmail] = useState(userInfo.email);
   const [fullname, setFullname] = useState(userInfo.fullname);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserInfoRequest())    
+  }, [])
+  console.log(userInfo);
   const onGo = value => {
     switch (value) {
       case 'Tài khoản':
@@ -35,7 +39,7 @@ const Account = () => {
         navigation.navigate('MyOrder');
         break;
       case 'Địa chỉ':
-        navigation.navigate('MyAddress');
+        navigation.navigate('MyAddress', {isDelete: true});
         break;
       case 'Liên kết':
         navigation.navigate('Payment');
@@ -57,7 +61,7 @@ const Account = () => {
     <View style={styles.container}>
       <View style={styles.avatar}>
         <Image
-          source={{uri: defaultImg}}
+          source={{uri: userInfo?.avatar}}
           style={styles.img}
         />
         <Text style={styles.textName}>{userInfo.fullname}</Text>
@@ -97,6 +101,3 @@ const Account = () => {
 };
 
 export default Account;
-
-export const defaultImg =
-  'https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/04/Anh-avatar-dep-anh-dai-dien-FB-Tiktok-Zalo.jpg?ssl=1';

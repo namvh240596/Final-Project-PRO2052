@@ -39,11 +39,11 @@ const validateRegisterSchema = Yup.object().shape({
     .required(requiredErrorMessage)
     .matches(regexPhone, validPhoneMessage),
   password: Yup.string()
-    .min(8, validPassMessage)
+    .min(6, validPassMessage)
     .required(requiredErrorMessage)
     .matches(regexPass, validPassMessage),
   confirmPassword: Yup.string()
-    .min(8, validPassMessage)
+    .min(6, validPassMessage)
     .required(requiredErrorMessage)
     .matches(regexPass, validPassMessage)
     .oneOf([Yup.ref('password'), null], confirmPassMessage),
@@ -75,8 +75,17 @@ const validateUpdateSchema = Yup.object().shape({
   phone: Yup.string()
     .required(requiredErrorMessage)
     .matches(regexPhone, validPhoneMessage),
-})
+});
+const validateAddressSchema = Yup.object().shape({
+  fullname: Yup.string()
+    .matches(regexFullname, validFullnameMessage)
+    .required(requiredErrorMessage),
+  phone: Yup.string()
+    .required(requiredErrorMessage)
+    .matches(regexPhone, validPhoneMessage),
+});
 export {
+  validateAddressSchema,
   validateLoginSchema,
   validateRegisterSchema,
   validateConfirmPasswordSchema,

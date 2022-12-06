@@ -21,3 +21,15 @@ export const changeFavoriteApi = data => {
 export const getProductByTitleApi = title => {
   return axiosClient.get(`/product?title=/${title}/i`);
 };
+
+export const getProductByFilter = (
+  _brand,
+  _minSalePrice,
+  _maxSalePrice,
+  _sort,
+) => {
+  return axiosClient.get(
+    `/product/?brands=${_brand}&salePrice>=${_minSalePrice}&salePrice<=${_maxSalePrice}&sort=${_sort}`,
+  );
+};
+

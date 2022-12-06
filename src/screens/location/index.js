@@ -44,7 +44,6 @@ const Location = () => {
   const [selectionTextInput, setSelectionTextInput] = useState({});
   const dispatch = useDispatch();
   const modalRef = useRef(null);
-  const opacityStyle = disabledButton ? scale(0.3) : scale(1);
   const [isFocus, setIsFocus] = useState(false);
   const getPlacess = text => {
     setPlace(text);
@@ -52,7 +51,12 @@ const Location = () => {
     setDisabledButton(true);
   };
 
-  const searchPlace = useCallback(() => {
+useEffect(() => {
+  Geolocation.getCurrentPosition(()=>{});
+}, [])
+
+
+  useEffect(() => {
     axios
       .get(
         `https://rsapi.goong.io/Place/AutoComplete?api_key=${API_KEY}&input=${debouncedValue}`,
@@ -72,7 +76,6 @@ const Location = () => {
           `https://rsapi.goong.io/Place/Detail?place_id=${id}&api_key=${API_KEY}`,
         )
         .then(res => {
-          console.log(res.data);
           setRegion({
             latitude: res.data.result.geometry.location.lat,
             longitude: res.data.result.geometry.location.lng,
@@ -92,17 +95,7 @@ const Location = () => {
     [places],
   );
 
-  const onAddAddressToProfile = () => {
-    updateProfileApi({
-      information: [],
-    })
-      .then(res => {
-        console.log('res ', res);
-      })
-      .catch(error => {
-        console.log('error ', error);
-      });
-  };
+  const onAddAddressToProfile = () => {};
 
   const onBackCurrentPosition = () => {
     Geolocation.getCurrentPosition(pos => {
@@ -129,7 +122,11 @@ const Location = () => {
     });
     setDisabledButton(false);
   };
-  const onChooseAddress = useCallback(item => {}, []);
+
+  const onChooseAddress = useCallback(() => {
+    console.log(value);
+    navigation.navigate('SettingAddress', {address: value});
+  }, [value, place]);
   return (
     <View style={styles.container}>
       <Header title="Chọn vị trí" iconBack={true} />
@@ -139,8 +136,13 @@ const Location = () => {
             textInputStyle={styles.inputStyle}
             containerTextInputStyle={styles.textInputContainer}
             textPlaceHolder={'Nhập địa chỉ'}
+            value={value}
             rightIcon={AppIcon.IconSearch}
-            onChangeText={text => {}}
+            onChangeText={text => {
+              setPlace(text);
+              setValue(text);
+              setDisabledButton(true);
+            }}
           />
         </View>
         {places && (
@@ -200,8 +202,13 @@ const Location = () => {
         </TouchableOpacity>
         <CustomButton
           title="Chọn"
-          containerStyles={styles.buttonContainerStyle}
+          disabled={disabledButton}
+          containerStyles={[
+            styles.buttonContainerStyle,
+            {opacity: disabledButton ? 0.5 : 1},
+          ]}
           textStyles={styles.textBtnStyle}
+          onPress={onChooseAddress}
         />
       </View>
     </View>

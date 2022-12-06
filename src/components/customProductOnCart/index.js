@@ -14,7 +14,7 @@ import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {formatMoney} from '../../helpers/formatMoney';
 
-const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
+const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate}) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
@@ -29,12 +29,6 @@ const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
               {item?.product.title}
             </Text>
             <View style={styles.viewIcon}>
-              <SvgXml
-                xml={item.product.favorite ? AppIcon.IconHeartRed : AppIcon.IconHeart}
-                width={scale(18)}
-                height={scale(18)}
-                onPress={() => {}}
-              />
               {noDeleted ? null : (
                 <TouchableOpacity
                   onPress={() => onUpdateQuantity(item.product._id, 0)}>
@@ -48,6 +42,7 @@ const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
               )}
             </View>
           </View>
+
           <View style={styles.viewPrice}>
             <View>
               {item.product.salePercent && (
@@ -56,7 +51,7 @@ const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
                     {formatMoney(item.product.costPrice)}
                   </Text>
                   <Text style={styles.textSale}>
-                    {item.product.salePercent}%
+                    {''} {item.product.salePercent}%
                   </Text>
                 </View>
               )}
@@ -65,33 +60,40 @@ const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
               </Text>
             </View>
 
-            <View style={[styles.viewPlus]}>
-              <Pressable
-                onPress={() =>
-                  onUpdateQuantity(item.product._id, item?.quantity - 1)
-                }
-                style={styles.buttonSubtraction}>
-                <SvgXml
-                  xml={AppIcon.IconMinus}
-                  width={scale(13)}
-                  height={scale(13)}
-                />
-              </Pressable>
-              <Text style={styles.textQuantity}>{item.quantity}</Text>
-              <Pressable
-                onPress={() =>
-                  onUpdateQuantity(item.product._id, item?.quantity + 1)
-                }
-                style={styles.buttonAddition}>
-                <SvgXml
-                  xml={AppIcon.IconPlus}
-                  width={scale(13)}
-                  height={scale(13)}
-                />
-              </Pressable>
-            </View>
+            {noUpdate ? null : (
+              <View style={[styles.viewPlus]}>
+                <Pressable
+                  onPress={() =>
+                    onUpdateQuantity(item.product._id, item?.quantity - 1)
+                  }
+                  style={styles.buttonSubtraction}>
+                  <SvgXml
+                    xml={AppIcon.IconMinus}
+                    width={scale(13)}
+                    height={scale(13)}
+                  />
+                </Pressable>
+                <Text style={styles.textQuantity}>{item.quantity}</Text>
+                <Pressable
+                  onPress={() =>
+                    onUpdateQuantity(item.product._id, item?.quantity + 1)
+                  }
+                  style={styles.buttonAddition}>
+                  <SvgXml
+                    xml={AppIcon.IconPlus}
+                    width={scale(13)}
+                    height={scale(13)}
+                  />
+                </Pressable>
+              </View>
+            )}
           </View>
         </View>
+        {noUpdate ? (
+          <View style={styles.viewQuantity}>
+            <Text style={styles.text}>X {item.quantity}</Text>
+          </View>
+        ) : null}
       </View>
     </View>
   );
@@ -100,6 +102,11 @@ const ProducOnCart = ({ noDeleted, item, onUpdateQuantity}) => {
 export default ProducOnCart;
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    color: AppTheme.Colors.Dark,
+  },
   textCostPrice: {
     fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.Bold,

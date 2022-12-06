@@ -1,4 +1,4 @@
-import {View, Text, Image, ScrollView, Pressable} from 'react-native';
+import {View, Text, Image, ScrollView, Pressable, RefreshControl} from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
 import {styles} from './styles';
 import CustomTextInput from '../../components/customTextInput';
@@ -27,6 +27,7 @@ import PlaceholderProductOnHome from '../../components/placeholderProductOnHome'
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
   const onMore = useCallback(
     title => {
       if (title === 'category') {
@@ -55,12 +56,27 @@ const Home = () => {
     },
     [dispatch],
   );
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getAllProductsRequest());
+    dispatch(getListCategoriesRequest());
+    dispatch(getListBannerRequest());
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
   return (
     <ScrollView
       style={styles.container}
       showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}>
-      {/* <Header title="Home" /> */}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }>
       <View style={styles.body}>
         <View style={styles.viewTextInput}>
           <CustomTextInput

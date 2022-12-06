@@ -1,55 +1,166 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Header from '../../../components/header';
 import ProducOnCart from '../../../components/customProductOnCart';
+import {getCancleOrder, getOrderById} from '../../../services/api/order';
+import {useState} from 'react';
+import {showModal} from '../../../components/customNotiModal';
+import {formatMoney} from '../../../helpers/formatMoney';
+import {format} from 'date-fns';
+import {useDispatch} from 'react-redux';
+import {
+  getChangeLoadingRequest,
+  getChangeLoadingSuccess,
+} from '../../../redux/loading/action';
 
-const OrderDetail = () => {
+const OrderDetail = props => {
+  const {orderId} = props.route?.params;
+  console.log(orderId);
+  const isFocused = useIsFocused();
+  const [order, setOrder] = useState();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getChangeLoadingRequest());
+    getOrderById(orderId)
+      .then(res => {
+        console.log('res ', res);
+        dispatch(getChangeLoadingSuccess());
+        setOrder(res.data);
+      })
+      .catch(error => {
+        console.log('error =>> ', error);
+        dispatch(getChangeLoadingSuccess());
+
+        showModal({
+          title: 'Có lỗi xảy ra!!!',
+          message: 'Xin vui lòng thử lại sau',
+        });
+      });
+  }, [orderId, isFocused]);
+  const dayCreate = order?.createdAt;
+  const onCancle = () => {
+    console.log('cancle');
+    dispatch(getChangeLoadingRequest());
+
+    if (order?.message === 'Đơn hàng đã bị hủy') {
+      dispatch(getChangeLoadingSuccess());
+
+      return showModal({
+        title: 'Đon hàng này đã bị hủy',
+        onConfirmPress: () => navigation.goBack(),
+      });
+    }
+    getCancleOrder(orderId, {
+      status: 'Cancelled',
+    })
+      .then(res => {
+        console.log('res', res);
+        dispatch(getChangeLoadingSuccess());
+
+        showModal({
+          title: 'Hủy đơn hàng thành công',
+          onConfirmPress: () => navigation.goBack(),
+        });
+      })
+      .catch(error => {
+        console.log('error ', error);
+        dispatch(getChangeLoadingSuccess());
+
+        showModal({
+          title: 'Có lỗi gì đó xảy ra!!!',
+          onConfirmPress: () => navigation.goBack(),
+        });
+      });
+  };
   return (
     <View style={styles.container}>
-      <Header title="Order" iconBack />
+      <Header title="Chi tiết đơn hàng" iconBack />
+      <ScrollView
+        style={styles.body}
+        contentContainerStyle={{
+          paddingBottom: verticalScale(40),
+        }}
+        showsHorizontalScrollIndicator={false}>
 
-      <ScrollView style={styles.body} showsHorizontalScrollIndicator={false}>
-        <Text style={styles.textTitle}>Sản phẩm</Text>
-        <ProducOnCart noCount noDeleted />
-        <ProducOnCart noCount noDeleted />
-        <Text style={styles.textTitle}>Thông tin hoá đơn và liên hệ</Text>
+        {order?.items.map((item, index) => {
+          return (
+            <ProducOnCart key={index} item={item} noDeleted={true} noUpdate />
+          );
+        })}
         <View style={styles.viewInfomation}>
           <View style={styles.fdl}>
-            <Text style={styles.text2}>Mã khuyến mãi</Text>
-            <Text style={styles.text}>HAPPY NEW YEAR</Text>
-          </View>
-          <View style={styles.fdl}>
-            <Text style={styles.text2}></Text>
-            <Text style={styles.text}>-20.000đ</Text>
-          </View>
-          <View style={styles.fdl}>
-            <Text style={styles.text2}>Tạm tính</Text>
-            <Text style={styles.textTitle}>200.000đ</Text>
-          </View>
-          <View style={styles.fdl}>
-            <Text style={styles.text2}>Tổng cộng</Text>
-            <Text style={styles.textTitle}>180.000đ</Text>
-          </View>
-          <View style={styles.fdl}>
-            <Text style={styles.text2}>Nhận vào</Text>
-            <Text style={styles.text}>14-10-2022</Text>
-          </View>
-          <View style={styles.fdl}>
-            <Text style={styles.text2}>Địa chỉ</Text>
-            <Text style={styles.text} numberOfLines={4}>
-              115A Tô Ký Phường Đông Hưng Thuận Quận 12 HCM
+            <Text style={styles.text}>Tổng tiền</Text>
+            <Text style={styles.textTitle}>
+              {formatMoney(order?.totalPrice)}
             </Text>
           </View>
           <View style={styles.fdl}>
-            <Text style={styles.text2}>SĐT</Text>
-            <Text style={styles.text} numberOfLines={4}>
-              32874810
+            <Text style={styles.text}>Phương thức thanh toán</Text>
+            <Text style={styles.textTitle}>
+              {order?.paymentMethod === 'COD' ? 'Tiền mặt' : 'ZaloPay'}
+            </Text>
+          </View>
+          <View style={styles.fdl}>
+            <Text style={styles.text}>Đặt ngày</Text>
+            <Text style={styles.textTitle}>
+              {dayCreate && format(new Date(dayCreate), 'HH:mm dd-MM-yyyy')}
+            </Text>
+          </View>
+          <View style={styles.fdl}>
+            <Text style={styles.text}>Địa chỉ nhận hàng:</Text>
+            <Text
+              style={[
+                styles.textTitle,
+                {width: scale(220), textAlign: 'right'},
+              ]}
+              numberOfLines={4}>
+              {order?.shippingAddress?.address}
+            </Text>
+          </View>
+          <View style={styles.fdl}>
+            <Text style={styles.text}>Đã thanh toán</Text>
+            <Text style={styles.textTitle} numberOfLines={4}>
+              {order?.isDelivered ? 'Đã thanh toán' : 'Chưa Thanh toán'}
+            </Text>
+          </View>
+          <View style={styles.fdl}>
+            <Text style={styles.text}>Trạng thái đơn hàng</Text>
+            <Text
+              style={[
+                styles.textTitle,
+                {
+                  width: scale(200),
+                  textAlign: 'right',
+                  color:
+                    order?.message === 'Đơn hàng đã bị hủy'
+                      ? AppTheme.Colors.Red
+                      : AppTheme.Colors.Dark,
+                },
+              ]}
+              numberOfLines={4}>
+              {order?.message}
+            </Text>
+          </View>
+          <View style={styles.fdl}>
+            <Text style={styles.text}>SĐT</Text>
+            <Text style={styles.textTitle} numberOfLines={4}>
+              {order?.phone}
             </Text>
           </View>
         </View>
+        <TouchableOpacity style={styles.touchCancle} onPress={onCancle}>
+          <Text style={styles.textCancle}>Hủy đơn hàng</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -58,6 +169,19 @@ const OrderDetail = () => {
 export default OrderDetail;
 
 const styles = StyleSheet.create({
+  touchCancle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: scale(200),
+    alignSelf: 'center',
+  },
+  textCancle: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Red,
+    marginVertical: verticalScale(16),
+  },
   fdl: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -80,13 +204,11 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   text: {
-    fontSize: scale(16),
+    fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.Bold,
     letterSpacing: 0.5,
-    color: AppTheme.Colors.Grey,
+    color: AppTheme.Colors.Black,
     marginBottom: verticalScale(16),
-    width: '40%',
-    textAlign: 'right',
   },
   textTitle: {
     fontSize: scale(16),
@@ -97,7 +219,7 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(16),
   },
   body: {
-    backgroundColor: AppTheme.Colors.SecondBackround,
+    backgroundColor: AppTheme.Colors.White,
     flex: 1,
     paddingHorizontal: scale(5),
     paddingTop: verticalScale(20),
