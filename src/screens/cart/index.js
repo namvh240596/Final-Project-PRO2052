@@ -45,7 +45,6 @@ const Cart = props => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const itemChooseAddress = props.route.params?.itemChooseAddress;
-  console.log('=>>', itemChooseAddress);
   const listCart = useSelector(getListCartSelector);
   const userInfor = useSelector(getUserSelector);
   const [totalItem, setTotalItem] = useState(0);
@@ -67,7 +66,7 @@ const Cart = props => {
       setMyAddress(itemChooseAddress);
       return;
     }
-    if (userInfor.information.length === 0) {
+    if (userInfor?.information.length === 0) {
       console.log('vcccccccccccccccc');
       setMyAddress({
         address: '',
@@ -76,7 +75,7 @@ const Cart = props => {
       });
       return;
     }
-    userInfor.information.map((item, index) => {
+    userInfor?.information.map((item, index) => {
       if (item.isDefault === true) {
         setMyAddress(item);
       }
