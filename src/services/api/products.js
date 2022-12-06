@@ -33,6 +33,3 @@ export const getProductByFilter = (
   );
 };
 
-export const getProductBySort = _sort => {
-  return axiosClient.get(`/product/sort=${_sort}`);
-};

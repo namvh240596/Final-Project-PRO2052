@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, ToastAndroid, View} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {styles} from './styles';
 import Lottie from 'lottie-react-native';
@@ -45,6 +45,7 @@ const ForgotPassword = () => {
   const onSendEmail = useCallback(values => {
     setEmail(values.email);
     dispatch(getChangeLoadingRequest());
+    console.log('aabbbb');
     forgotPasswordApi({email: values.email})
       .then(res => {
         setIsShow(false);
@@ -54,11 +55,8 @@ const ForgotPassword = () => {
       })
       .catch(e => {
         console.log('message error -> ', e);
+        ToastAndroid.show(e.response?.data.message, ToastAndroid.SHORT);
         dispatch(getChangeLoadingSuccess());
-
-        showModal({
-          title: e.response?.data.message,
-        });
       });
   }, []);
   useEffect(() => {
@@ -73,7 +71,6 @@ const ForgotPassword = () => {
   }, [seconds]);
   const onReSendCode = useCallback(() => {
     dispatch(getChangeLoadingRequest());
-
     forgotPasswordApi({email: email})
       .then(res => {
         setSeconds(59);
@@ -103,9 +100,8 @@ const ForgotPassword = () => {
       .catch(e => {
         console.log('e ', e);
         dispatch(getChangeLoadingSuccess());
-        showModal({
-          title: e.response?.data.message,
-        });
+
+        ToastAndroid.show(e.response?.data.message, ToastAndroid.SHORT);
       });
   };
 
@@ -174,7 +170,7 @@ const ForgotPassword = () => {
                       seconds > 0 ? AppTheme.Colors.Grey : AppTheme.Colors.Blue,
                   },
                 ]}>
-                Gửi lại sau : {seconds}
+                {seconds === 0 ? 'Gửi lại mã' : `Gửi lại sau : ${seconds}`}
               </Text>
             </View>
           </View>

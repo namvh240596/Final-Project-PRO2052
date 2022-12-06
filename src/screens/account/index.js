@@ -29,7 +29,7 @@ const Account = () => {
   useEffect(() => {
     dispatch(getUserInfoRequest())    
   }, [])
-  
+  console.log(userInfo);
   const onGo = value => {
     switch (value) {
       case 'Tài khoản':
@@ -61,7 +61,7 @@ const Account = () => {
     <View style={styles.container}>
       <View style={styles.avatar}>
         <Image
-          source={{uri: userInfo.avatar}}
+          source={{uri: userInfo?.avatar}}
           style={styles.img}
         />
         <Text style={styles.textName}>{userInfo.fullname}</Text>

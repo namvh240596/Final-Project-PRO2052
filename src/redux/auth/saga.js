@@ -45,14 +45,18 @@ function* loginHandle(action) {
     );
   } catch (error) {
     yield put(loginFailed());
-    showModal({
-      title: 'Đăng nhập thất bại',
-      message: error.response.data.message,
-    });
-    console.log(error);
-    console.log('====================================');
-    console.log(error.response.data.message);
-    console.log('====================================');
+    // showModal({
+    //   title: 'Đăng nhập thất bại',
+    //   message: error.response.data.message,
+    // });
+    ToastAndroid.show(
+      'Đăng nhập thất bại ' + error?.response.data?.message,
+      ToastAndroid.LONG,
+    );
+    // console.log(error);
+    // console.log('====================================');
+    // console.log(error.response.data.message);
+    // console.log('====================================');
   }
 }
 ///////////////////////////////// register  //////////////////////////////////////////
@@ -77,7 +81,7 @@ function* signUpHanlde(action) {
     //   message : error?.response.data?.message
     // })
     ToastAndroid.show(
-      'Đăng kí thất bại ' + error?.response.data?.message,
+      `Đăng kí thất bại ${ error?.response.data?.message}` ,
       ToastAndroid.LONG,
     );
   }

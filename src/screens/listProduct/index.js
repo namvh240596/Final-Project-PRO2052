@@ -61,7 +61,7 @@ const ListProduct = props => {
   const [listChooseBrand, setListChooseBrand] = useState([]);
   const [data, setData] = useState(listProductByType);
   const navigation = useNavigation();
-
+  const [type_sort, setType_sort] = useState('+salePrice');
   useEffect(() => {
     console.log(typeCategory);
     dispatch(getListBrandRequest());
@@ -147,24 +147,29 @@ const ListProduct = props => {
     setMultiSliderValue([0, 50]);
   };
   const onReverse = () => {
-    // const minSalePrice = multiSliderValue[0] * 1000000;
-    // const maxSalePrice = multiSliderValue[1] * 1000000;
-    // const brands = listChooseBrand.toString();
-    // const type_sort = '+salePrice';
-    // getProductByFilter(brands, minSalePrice, maxSalePrice, type_sort)
-    //   .then(res => {
-    //     setData(res?.data);
-    //     setIsModalVisible(false);
-    //     dispatch(getChangeLoadingSuccess());
-    //     setTypeCategory('');
-    //   })
-    //   .catch(error => {
-    //     dispatch(getChangeLoadingSuccess());
-    //     showModal({
-    //       title: 'Oops!!',
-    //       message: 'Có lỗi xảy ra! thử lại sau nhé',
-    //     });
-    //   });
+    const minSalePrice = multiSliderValue[0] * 1000000;
+    const maxSalePrice = multiSliderValue[1] * 1000000;
+    const brands = listChooseBrand.toString();
+    dispatch(getChangeLoadingRequest());
+    getProductByFilter(brands, minSalePrice, maxSalePrice, type_sort)
+      .then(res => {
+        setData(res?.data);
+        setIsModalVisible(false);
+        dispatch(getChangeLoadingSuccess());
+        setTypeCategory('');
+        if (type_sort === '+salePrice') {
+          setType_sort('-salePrice');
+        } else {
+          setType_sort('+salePrice');
+        }
+      })
+      .catch(error => {
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: 'Oops!!',
+          message: 'Có lỗi xảy ra! thử lại sau nhé',
+        });
+      });
   };
   return (
     <View style={styles.container}>
@@ -175,7 +180,7 @@ const ListProduct = props => {
           leftIcon={AppIcon.IconSearch}
           textPlaceHolder={'Tìm kiếm'}
           containerTextInputStyle={styles.containerTextInputStyle}
-          onFocus={()=>navigation.navigate('SearchScreen')}
+          onFocus={() => navigation.navigate('SearchScreen')}
         />
         <TouchableOpacity onPress={onOpenModal} style={styles.touchFilter}>
           <SvgXml
@@ -185,14 +190,18 @@ const ListProduct = props => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={onReverse}>
+        <TouchableOpacity onPress={onReverse}>
           <SvgXml
-            xml={AppIcon.IconSortTopToBottom}
+            xml={
+              type_sort === '+salePrice'
+                ? AppIcon.IconSortTopToBottom
+                : AppIcon.IconSortBottomToTop
+            }
             width={scale(24)}
             height={scale(24)}
             style={styles.icon}
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       <View style={styles.body}>
         <ScrollView

@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     height: scale(72),
   },
   container: {
-    backgroundColor: AppTheme.Colors.Green,
+    backgroundColor: AppTheme.Colors.Blue,
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
