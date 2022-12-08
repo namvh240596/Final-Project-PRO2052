@@ -3,6 +3,21 @@ import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
 
 export const styles = StyleSheet.create({
+  viewLogo: {
+    alignItems: 'center',
+    paddingTop: verticalScale(40),
+    paddingBottom: verticalScale(30),
+  },
+  textLogo: {
+    fontWeight: '700',
+    fontSize: scale(22),
+    color: AppTheme.Colors.Dark,
+    marginTop: verticalScale(10),
+  },
+  img: {
+    width: scale(64),
+    height: scale(64),
+  },
   textBtn: {
     fontFamily: AppTheme.Fonts.Regular,
     color: AppTheme.Colors.Grey,
