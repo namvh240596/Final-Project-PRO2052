@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, { useState } from 'react';
+import {StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import React, {useState} from 'react';
 import {styles} from './styles';
 import Header from '../../../components/header';
 import CustomTextInput from '../../../components/customTextInput';
@@ -7,7 +7,7 @@ import CustomButton from '../../../components/customButton';
 import {Formik} from 'formik';
 import {validateConfirmPasswordSchema} from '../../../utils/schema';
 import {resetPassworddApi} from '../../../services/api/auth';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
 import IMAGES from '../../../assets/images';
 
@@ -25,12 +25,16 @@ const ConfirmPassword = props => {
       .then(res => {
         setIsLoading(false);
         console.log(res);
-        navigation.replace('Login')
+        ToastAndroid.show('Đổi mật khẩu thành công', ToastAndroid.SHORT);
+        navigation.replace('Login');
       })
       .catch(e => {
         console.log('e ', e);
         setIsLoading(false);
-
+        ToastAndroid.show(
+          'Đã có lỗi gì đó xảy ra! Vui lòng thử lại sau',
+          ToastAndroid.SHORT,
+        );
       });
   };
   const initialValue = {password: '', confirmPassword: ''};

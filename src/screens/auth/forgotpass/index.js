@@ -75,6 +75,10 @@ const ForgotPassword = () => {
       .then(res => {
         setSeconds(59);
         dispatch(getChangeLoadingSuccess());
+        ToastAndroid.show(
+          'Gửi code thành công vui lòng kiểm tra email',
+          ToastAndroid.SHORT,
+        );
       })
       .catch(e => {
         console.log('e ', e);

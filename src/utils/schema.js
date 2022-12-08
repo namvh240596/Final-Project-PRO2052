@@ -56,11 +56,11 @@ const validateInformationSchema = Yup.object().shape({
 
 const validateConfirmPasswordSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, validPassMessage)
+    .min(6, validPassMessage)
     .required(requiredErrorMessage)
     .matches(regexPass, validPassMessage),
   confirmPassword: Yup.string()
-    .min(8, validPassMessage)
+    .min(6, validPassMessage)
     .required(requiredErrorMessage)
     .matches(regexPass, validPassMessage)
     .oneOf([Yup.ref('password'), null], confirmPassMessage),
@@ -91,5 +91,5 @@ export {
   validateConfirmPasswordSchema,
   validateInformationSchema,
   validateEmailSchema,
-  validateUpdateSchema
+  validateUpdateSchema,
 };
