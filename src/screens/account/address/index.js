@@ -19,11 +19,24 @@ import {
 const MyAddress = props => {
   const navigation = useNavigation();
   const isDelete = props.route.params?.isDelete;
+  const fromTo = props.route.params?.fromTo;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserInfoRequest());
   }, []);
+  console.log('from To ', fromTo);
   const userInfo = useSelector(getUserSelector);
+  const onClickAddress = (_item, _index) => {
+    if (fromTo === 'Cart') {
+      navigation.navigate('Cart', {itemChooseAddress: _item});
+    } else {
+      // navigation.navigate('SettingAddress', {
+      //   itemAddress: _item,
+      //   edit: true,
+      //   index: _index,
+      // });
+    }
+  };
   const renderItem = ({item, index}) => {
     return (
       <ItemAddress
@@ -34,17 +47,13 @@ const MyAddress = props => {
         onDelete={onDeleteAddress}
         index={index}
         isDelete={isDelete ? true : false}
-        onPress={() => {
-          navigation.navigate('Cart', {itemChooseAddress: item});
-        }}
-       
+        onPress={() => onClickAddress(item, index)}
       />
     );
   };
 
   const onDeleteAddress = index => {
     dispatch(getChangeLoadingRequest());
-    console.log(userInfo.information);
     let arr = userInfo.information;
     arr.splice(index, 1);
     updateProfileApi({
@@ -65,6 +74,7 @@ const MyAddress = props => {
       <View style={styles.body}>
         <FlatList
           keyExtractor={(item, index) => index}
+          showsVerticalScrollIndicator={false}
           data={userInfo.information}
           renderItem={renderItem}
           ListEmptyComponent={

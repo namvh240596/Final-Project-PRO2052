@@ -91,7 +91,6 @@ const OrderDetail = props => {
           paddingBottom: verticalScale(40),
         }}
         showsHorizontalScrollIndicator={false}>
-
         {order?.items.map((item, index) => {
           return (
             <ProducOnCart key={index} item={item} noDeleted={true} noUpdate />
@@ -158,9 +157,11 @@ const OrderDetail = props => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.touchCancle} onPress={onCancle}>
-          <Text style={styles.textCancle}>Hủy đơn hàng</Text>
-        </TouchableOpacity>
+        {order?.status === 'Not Processed' && (
+          <TouchableOpacity style={styles.touchCancle} onPress={onCancle}>
+            <Text style={styles.textCancle}>Hủy đơn hàng</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </View>
   );

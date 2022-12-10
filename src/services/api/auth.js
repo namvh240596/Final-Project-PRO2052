@@ -19,8 +19,8 @@ export const veryfiCodedApi = data => {
 export const resetPassworddApi = data => {
   return axiosClient.post('/access/reset-password', data);
 };
-export const updateProfileApi = data => {
-  return axiosClient.put('/access/me', data);
+export const updateProfileApi = (data, header) => {
+  return axiosClient.put('/access/me', data,header);
 };
 export const getUserInfoApi = () => {
   return axiosClient.get('/access/me');

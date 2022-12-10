@@ -109,7 +109,7 @@ const ProductDetail = props => {
               renderItem={({item}) => {
                 return (
                   <View style={styles.viewCarousel}>
-                    <Image source={{uri: item}} style={styles.itemImage} />
+                    <Image source={{uri: item}} resizeMode='contain' style={styles.itemImage} />
                   </View>
                 );
               }}

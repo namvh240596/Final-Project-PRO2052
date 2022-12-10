@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {scale} from '../../utils/scale';
+import {scale, verticalScale} from '../../utils/scale';
 import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {AppTheme, TextStyles} from '../../config/AppTheme';
@@ -14,12 +14,11 @@ const Header = ({title, iconBack}) => {
   return (
     <View style={styles.container}>
       {iconBack && (
-        <TouchableOpacity onPress={onGoBack}>
+        <TouchableOpacity style={styles.iconHeader} onPress={onGoBack}>
           <SvgXml
             xml={AppIcon.IconBack}
             width={scale(20)}
             height={scale(20)}
-            style={styles.icon}
           />
         </TouchableOpacity>
       )}
@@ -37,6 +36,10 @@ const Header = ({title, iconBack}) => {
 export default Header;
 
 const styles = StyleSheet.create({
+  iconHeader:{
+    paddingHorizontal: scale(24),
+    paddingVertical:verticalScale(15)
+  },
   viewTitle: {
     minHeight: scale(60),
     justifyContent: 'center',

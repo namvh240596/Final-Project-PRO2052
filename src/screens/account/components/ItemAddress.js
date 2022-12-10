@@ -50,7 +50,7 @@ const ItemAddress = ({
   );
 };
 
-export default ItemAddress;
+export default React.memo(ItemAddress);
 
 const styles = StyleSheet.create({
 

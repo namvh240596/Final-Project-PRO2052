@@ -40,7 +40,6 @@ import PlaceholderCart from '../../components/placholderCart';
 import {AppTheme} from '../../config/AppTheme';
 
 const Cart = props => {
-  console.log(props);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -66,8 +65,7 @@ const Cart = props => {
       setMyAddress(itemChooseAddress);
       return;
     }
-    if (userInfor?.information.length === 0) {
-      console.log('vcccccccccccccccc');
+    if (userInfor?.information?.length === 0) {
       setMyAddress({
         address: '',
         name: '',
@@ -75,7 +73,7 @@ const Cart = props => {
       });
       return;
     }
-    userInfor?.information.map((item, index) => {
+    userInfor?.information?.map((item, index) => {
       if (item.isDefault === true) {
         setMyAddress(item);
       }
@@ -97,14 +95,14 @@ const Cart = props => {
       _initialPrice += listCart[index].product.costPrice;
       _discount +=
         listCart[index].product.costPrice - listCart[index].product.salePrice;
-      _finalPrice += listCart[index].product.salePrice;
+      _finalPrice +=
+        listCart[index].product.salePrice * listCart[index]?.quantity;
     }
     setDiscount(_discount);
     setFinalPrice(_finalPrice + feeShip);
     setTotalItem(_totalItem);
     setInitialPrice(_initialPrice);
   }, [navigation, listCart, dispatch]);
-  console.log(myAddress);
   const onUpdateQuantity = useCallback((_id, quantity) => {
     dispatch(getChangeLoadingRequest());
     updateQuantityProductApi({productId: _id, quantity: quantity})
@@ -117,7 +115,6 @@ const Cart = props => {
         showModal({
           title: e.response.data.message,
         });
-        console.log('cart update quantity -> ', e);
       });
   }, []);
   const createOrder = () => {
@@ -152,7 +149,6 @@ const Cart = props => {
     } else {
       createOrderApi(data)
         .then(res => {
-          console.log('->>> ', res);
           showModal({
             title: 'Yeah!!!',
             message: 'Đặt hàng thành công!',
@@ -161,7 +157,6 @@ const Cart = props => {
           dispatch(getAllCartRequest());
         })
         .catch(e => {
-          console.log('errors ', e);
           dispatch(getChangeLoadingSuccess());
           showModal({
             title: e.response.data.message,
@@ -174,7 +169,10 @@ const Cart = props => {
     setModalPaymentMethod(false);
   };
   const onChooseAddress = () => {
-    navigation.navigate('MyAddress');
+    navigation.navigate('MyAddress', {isDelete: false, fromTo: 'Cart'});
+  };
+  const onGotoProductDetail = _id => {
+    navigation.navigate('ProductDetail', {productId: _id});
   };
   return (
     <View style={styles.container}>
@@ -193,6 +191,7 @@ const Cart = props => {
                   listCart.map((item, index) => {
                     return (
                       <ProducOnCart
+                        onPress={() => onGotoProductDetail(item?.product?._id)}
                         key={index}
                         item={item}
                         onUpdateQuantity={onUpdateQuantity}
@@ -213,9 +212,7 @@ const Cart = props => {
                     address={myAddress.address}
                     name={myAddress.name}
                     phone={myAddress.phone}
-                    onPress={() =>
-                      navigation.navigate('MyAddress', {isDelete: false})
-                    }
+                    onPress={onChooseAddress}
                   />
                 )}
                 <TouchableOpacity
