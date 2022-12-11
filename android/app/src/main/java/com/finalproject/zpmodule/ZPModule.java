@@ -15,7 +15,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import vn.zalopay.sdk.listeners.PayOrderListener;
 import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
-
+import android.widget.Toast;
 public class ZPModule extends ReactContextBaseJavaModule {
     private ReactApplicationContext mReactContext;
     final String PAYMENTSUCCESS = "1";
@@ -32,6 +32,7 @@ public class ZPModule extends ReactContextBaseJavaModule {
             params.putString("appTransID", appTransID);
             params.putString("returnCode", PAYMENTSUCCESS);
             sendEvent(mReactContext, "EventPayZalo", params);
+            Toast.makeText(getCurrentActivity(), "on payment success!", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -42,6 +43,8 @@ public class ZPModule extends ReactContextBaseJavaModule {
             params.putString("zpTranstoken", transToken);
             params.putString("appTransID", appTransID);
             sendEvent(mReactContext, "EventPayZalo", params);
+           
+            Toast.makeText(getCurrentActivity(), "on payment cancle!", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -52,6 +55,7 @@ public class ZPModule extends ReactContextBaseJavaModule {
             params.putString("zpTranstoken", transToken);
             params.putString("appTransID", appTransID);
             sendEvent(mReactContext, "EventPayZalo", params);
+            Toast.makeText(getCurrentActivity(), "on payment error!", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -76,7 +80,7 @@ public class ZPModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void payOrder(String zpTransToken) {
         Activity currentActivity = getCurrentActivity();
-        ZaloPaySDK.getInstance().payOrder(currentActivity, zpTransToken, "demozpdk://app", listener);
+        ZaloPaySDK.getInstance().payOrder(currentActivity, zpTransToken, "demozpdkk://app", listener);
     }
 
     @ReactMethod
