@@ -32,7 +32,6 @@ public class ZPModule extends ReactContextBaseJavaModule {
             params.putString("appTransID", appTransID);
             params.putString("returnCode", PAYMENTSUCCESS);
             sendEvent(mReactContext, "EventPayZalo", params);
-            Toast.makeText(getCurrentActivity(), "on payment success!", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -44,7 +43,6 @@ public class ZPModule extends ReactContextBaseJavaModule {
             params.putString("appTransID", appTransID);
             sendEvent(mReactContext, "EventPayZalo", params);
            
-            Toast.makeText(getCurrentActivity(), "on payment cancle!", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -55,7 +53,6 @@ public class ZPModule extends ReactContextBaseJavaModule {
             params.putString("zpTranstoken", transToken);
             params.putString("appTransID", appTransID);
             sendEvent(mReactContext, "EventPayZalo", params);
-            Toast.makeText(getCurrentActivity(), "on payment error!", Toast.LENGTH_SHORT).show();
         }
     };
 
