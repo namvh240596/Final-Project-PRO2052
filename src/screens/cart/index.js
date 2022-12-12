@@ -45,18 +45,10 @@ import ReactNativeModal from 'react-native-modal';
 import PlaceholderCart from '../../components/placholderCart';
 import {AppTheme} from '../../config/AppTheme';
 import CryptoJS from 'crypto-js';
-import axios from 'axios';
-import axiosClient from '../../utils/axiosClient';
+
 const {PayZaloBridge} = NativeModules;
 const payZaloBridgeEmitter = new NativeEventEmitter(PayZaloBridge);
 
-const subscription = payZaloBridgeEmitter.addListener('EventPayZalo', data => {
-  if (data.returnCode == 1) {
-    console.log('success');
-  } else {
-    console.log('data error ', data);
-  }
-});
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -104,6 +96,25 @@ const Cart = props => {
       }
     });
   }, [isFocused]);
+  useEffect(() => {
+    const subscription = payZaloBridgeEmitter.addListener(
+      'EventPayZalo',
+      data => {
+        if (data.returnCode == 1) {
+          console.log('success 1111 1111');
+          createOrder();
+        } else {
+          console.log('data error ', data);
+          showModal({
+            title: 'Có lỗi xảy ra vui lòng thử lại sau',
+          });
+        }
+      },
+    );
+    return () => {
+      payZaloBridgeEmitter.removeAllListeners(subscription);
+    };
+  }, []);
 
   useEffect(() => {
     isFocused && dispatch(getChangeLoadingRequest());
@@ -115,12 +126,15 @@ const Cart = props => {
     let _initialPrice = 0;
     let _discount = 0;
     let _finalPrice = 0;
+    console.log('list cart ', listCart);
     for (let index = 0; index < listCart.length; index++) {
       _totalItem += listCart[index].quantity;
-      _initialPrice += listCart[index].product.costPrice;
+      _initialPrice +=
+        listCart[index].product.costPrice * listCart[index].quantity;
       _discount +=
-        listCart[index].product.costPrice - listCart[index].product.salePrice;
-      _finalPrice += listCart[index].product.salePrice;
+        listCart[index].product.costPrice * listCart[index].quantity -
+        listCart[index].product.salePrice * listCart[index].quantity;
+      _finalPrice += listCart[index].product.salePrice * listCart[index].quantity;
     }
     setDiscount(_discount);
     setFinalPrice(_finalPrice + feeShip);
@@ -164,30 +178,33 @@ const Cart = props => {
       },
       phone: myAddress.phone,
       totalPrice: finalPrice,
-      isPaid: false,
+      isPaid: paymentMethod === 'ZALOPAY' ? true : false,
     };
-    if (paymentMethod === 'ZALOPAY') {
-      data = {...data, isPaid: true};
-      dispatch(getChangeLoadingSuccess());
-      console.log('zalopay data ', data);
-    } else {
-      createOrderApi(data)
-        .then(res => {
-          console.log('->>> ', res);
-          showModal({
-            title: 'Yeah!!!',
-            message: 'Đặt hàng thành công!',
-          });
-          dispatch(getChangeLoadingSuccess());
-          dispatch(getAllCartRequest());
-        })
-        .catch(e => {
-          console.log('errors ', e);
-          dispatch(getChangeLoadingSuccess());
-          showModal({
-            title: e.response.data.message,
-          });
+    createOrderApi(data)
+      .then(res => {
+        console.log('->>> ', res);
+        showModal({
+          title: 'Yeah!!!',
+          message: 'Đặt hàng thành công!',
         });
+        dispatch(getChangeLoadingSuccess());
+        dispatch(getAllCartRequest());
+      })
+      .catch(e => {
+        console.log('errors ', e);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: e.response.data.message,
+        });
+      });
+  };
+  const onCreateOrder = () => {
+    dispatch(getChangeLoadingRequest());
+    if (paymentMethod === 'ZALOPAY') {
+      callPaymentZaloPay();
+      dispatch(getChangeLoadingSuccess());
+    } else {
+      createOrder();
     }
   };
   const onChoosePaymentMethod = title => {
@@ -197,10 +214,6 @@ const Cart = props => {
   const onChooseAddress = () => {
     navigation.navigate('MyAddress');
   };
-
-  const [token, setToken] = React.useState('');
-  const [returncode, setReturnCode] = React.useState('');
-
   function getCurrentDateYYMMDD() {
     var todayDate = new Date().toISOString().slice(2, 10);
     return todayDate.split('-').join('');
@@ -216,7 +229,7 @@ const Cart = props => {
     }
     return JSON.stringify(arrItem);
   };
-  async function onCreateOrder() {
+  async function callPaymentZaloPay() {
     dispatch(getChangeLoadingRequest());
     let apptransid = getCurrentDateYYMMDD() + '_' + new Date().getTime();
     let appid = 2553;
@@ -279,11 +292,7 @@ const Cart = props => {
     })
       .then(response => response.json())
       .then(resJson => {
-        console.log('res json ', resJson);
-        // setToken(resJson.zp_trans_token);
-        // setReturnCode(resJson.return_code);
         payOrder(resJson.zp_trans_token);
-        dispatch(getChangeLoadingSuccess());
         if (resJson.return_message != 'Giao dịch thành công') {
           showModal({
             title: resJson.sub_return_message,
@@ -303,6 +312,7 @@ const Cart = props => {
   function payOrder(_token) {
     var payZP = NativeModules.PayZaloBridge;
     payZP.payOrder(_token);
+    dispatch(getChangeLoadingSuccess());
   }
 
   return (
@@ -329,7 +339,6 @@ const Cart = props => {
                     );
                   })}
               </View>
-
               <View style={styles.footer}>
                 {myAddress.address === '' ? (
                   <View style={styles.viewAddress}>
@@ -459,37 +468,6 @@ const Cart = props => {
           </TouchableOpacity>
         </View>
       </ReactNativeModal>
-      {/* <ScrollView>
-        <KeyboardAvoidingView style={styles.container}>
-          <Text style={styles.welcomeHead}>ZaloPay App To App Demo</Text>
-          <Text style={styles.welcome}>Amount:</Text>
-          <TextInput
-            onChangeText={value => setMoney(value)}
-            value={money}
-            keyboardType="numeric"
-            placeholder="Input amount"
-            style={styles.inputText}
-          />
-          <Button
-            title="Create order"
-            type="outline"
-            onPress={() => {
-              onCreateOrder(money);
-            }}
-          />
-          <Text style={styles.welcome}>ZpTranstoken: {token}</Text>
-          <Text style={styles.welcome}>returncode: {returncode}</Text>
-          {returncode == 1 ? (
-            <Button
-              title="Pay order"
-              type="outline"
-              onPress={() => {
-                payOrder();
-              }}
-            />
-          ) : null}
-        </KeyboardAvoidingView>
-      </ScrollView> */}
     </View>
   );
 };
