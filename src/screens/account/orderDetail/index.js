@@ -129,7 +129,7 @@ const OrderDetail = props => {
           <View style={styles.fdl}>
             <Text style={styles.text}>Đã thanh toán</Text>
             <Text style={styles.textTitle} numberOfLines={4}>
-              {order?.isDelivered ? 'Đã thanh toán' : 'Chưa Thanh toán'}
+              {order?.isPaid ? 'Đã thanh toán' : 'Chưa Thanh toán'}
             </Text>
           </View>
           <View style={styles.fdl}>

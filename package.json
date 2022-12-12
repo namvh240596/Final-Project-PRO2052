@@ -57,6 +57,7 @@
     "react-native-svg": "^13.2.0",
     "react-native-swiper-flatlist": "^3.0.17",
     "react-native-toast-message": "^2.1.5",
+    "react-native-unimodules": "^0.14.10",
     "react-redux": "^8.0.4",
     "redux": "^4.2.0",
     "redux-logger": "^3.0.6",

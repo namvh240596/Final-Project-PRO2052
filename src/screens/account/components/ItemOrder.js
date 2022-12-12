@@ -14,7 +14,11 @@ const ItemOrder = ({onPress, order}) => {
     status = 'Đã được xử lý';
   } else if (order?.status === 'Cancelled') {
     status = 'Đơn hàng đã bị hủy';
-  } 
+  } else if (order?.status === 'Shipping'){
+    status = 'Đang vận chuyển';
+  } else {
+    status = order?.status;
+  }
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.textTitle}>Thông tin đơn hàng</Text>
@@ -38,7 +42,7 @@ const ItemOrder = ({onPress, order}) => {
   );
 };
 
-export default ItemOrder;
+export default React.memo(ItemOrder);
 
 const styles = StyleSheet.create({
   viewDate: {

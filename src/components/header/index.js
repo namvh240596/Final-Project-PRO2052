@@ -38,14 +38,15 @@ export default Header;
 const styles = StyleSheet.create({
   iconHeader:{
     paddingHorizontal: scale(24),
-    paddingVertical:verticalScale(15)
+    paddingVertical:verticalScale(15),
+    position: 'absolute',
   },
   viewTitle: {
     minHeight: scale(60),
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    marginRight: scale(40)
+    marginRight: scale(40),
+    width: '100%'
   },
   icon: {
     marginLeft: scale(20),
