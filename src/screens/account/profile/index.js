@@ -61,6 +61,9 @@ const Profile = () => {
         console.log('res test ', res);
         dispatch(getUserInfoRequest());
         dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: 'Cập nhật thành công'
+        })
       })
       .catch(error => {
         console.log('error => ', error);
