@@ -15,7 +15,7 @@ export const getCheckFavoriteApi = id => {
   return axiosClient.get(`/favorite/check/${id}`);
 };
 export const changeFavoriteApi = data => {
-  return axiosClient.post(`/favorite`, data);
+  return axiosClient.post('/favorite', data);
 };
 
 export const getProductByTitleApi = title => {
@@ -32,4 +32,3 @@ export const getProductByFilter = (
     `/product/?brands=${_brand}&salePrice>=${_minSalePrice}&salePrice<=${_maxSalePrice}&sort=${_sort}`,
   );
 };
-

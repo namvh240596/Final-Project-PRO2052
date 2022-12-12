@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, ToastAndroid} from 'react-native';
+import {View, Text, ScrollView, ToastAndroid, Image} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {styles} from './styles';
 import AppIcon from '../../../assets/icons';
@@ -16,6 +16,7 @@ import {
   getChangeLoadingRequest,
   getChangeLoadingSuccess,
 } from '../../../redux/loading/action';
+import IMAGES from '../../../assets/images';
 
 const Register = () => {
   const navigation = useNavigation();
@@ -40,7 +41,7 @@ const Register = () => {
             phone: values.phone,
           },
           () => {
-            ToastAndroid.show('Đăng kí thành công', ToastAndroid.SHORT)
+            ToastAndroid.show('Đăng kí thành công', ToastAndroid.SHORT);
             return navigation.navigate('Login');
           },
         ),
@@ -51,12 +52,10 @@ const Register = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.body}>
-        <SvgXml
-          xml={AppIcon.IconLogo}
-          width={scale(104)}
-          height={verticalScale(104)}
-          style={styles.logo}
-        />
+        <View style={styles.viewLogo}>
+          <Image source={IMAGES.Logo} resizeMode="contain" style={styles.img} />
+          <Text style={styles.textLogo}>HighTech</Text>
+        </View>
         <Text style={styles.textWelcome}>Let's Get Started</Text>
         <Text style={styles.text}>Tạo tài khoản mới</Text>
         <Formik

@@ -5,6 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
+  NativeModules,
+  NativeEventEmitter,
+  KeyboardAvoidingView,
+  Button,
+  LogBox,
+  AppState,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {styles} from './styles';
@@ -38,14 +44,19 @@ import {getUserSelector} from '../../redux/auth/selector';
 import ReactNativeModal from 'react-native-modal';
 import PlaceholderCart from '../../components/placholderCart';
 import {AppTheme} from '../../config/AppTheme';
+import CryptoJS from 'crypto-js';
+
+const {PayZaloBridge} = NativeModules;
+const payZaloBridgeEmitter = new NativeEventEmitter(PayZaloBridge);
+
+LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const Cart = props => {
-  console.log(props);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const itemChooseAddress = props.route.params?.itemChooseAddress;
-  console.log('=>>', itemChooseAddress);
   const listCart = useSelector(getListCartSelector);
   const userInfor = useSelector(getUserSelector);
   const [totalItem, setTotalItem] = useState(0);
@@ -62,12 +73,15 @@ const Cart = props => {
     name: '',
     phone: '',
   });
+  const appState = React.useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
   useEffect(() => {
     if (itemChooseAddress) {
       setMyAddress(itemChooseAddress);
       return;
     }
-    if (userInfor.information.length === 0) {
+    if (userInfor?.information.length === 0) {
       console.log('vcccccccccccccccc');
       setMyAddress({
         address: '',
@@ -76,12 +90,31 @@ const Cart = props => {
       });
       return;
     }
-    userInfor.information.map((item, index) => {
+    userInfor?.information.map((item, index) => {
       if (item.isDefault === true) {
         setMyAddress(item);
       }
     });
   }, [isFocused]);
+  useEffect(() => {
+    const subscription = payZaloBridgeEmitter.addListener(
+      'EventPayZalo',
+      data => {
+        if (data.returnCode == 1) {
+          console.log('success 1111 1111');
+          createOrder();
+        } else {
+          console.log('data error ', data);
+          showModal({
+            title: 'Có lỗi xảy ra vui lòng thử lại sau',
+          });
+        }
+      },
+    );
+    return () => {
+      payZaloBridgeEmitter.removeAllListeners(subscription);
+    };
+  }, []);
 
   useEffect(() => {
     isFocused && dispatch(getChangeLoadingRequest());
@@ -93,19 +126,21 @@ const Cart = props => {
     let _initialPrice = 0;
     let _discount = 0;
     let _finalPrice = 0;
+    console.log('list cart ', listCart);
     for (let index = 0; index < listCart.length; index++) {
       _totalItem += listCart[index].quantity;
-      _initialPrice += listCart[index].product.costPrice;
+      _initialPrice +=
+        listCart[index].product.costPrice * listCart[index].quantity;
       _discount +=
-        listCart[index].product.costPrice - listCart[index].product.salePrice;
-      _finalPrice += listCart[index].product.salePrice;
+        listCart[index].product.costPrice * listCart[index].quantity -
+        listCart[index].product.salePrice * listCart[index].quantity;
+      _finalPrice += listCart[index].product.salePrice * listCart[index].quantity;
     }
     setDiscount(_discount);
     setFinalPrice(_finalPrice + feeShip);
     setTotalItem(_totalItem);
     setInitialPrice(_initialPrice);
   }, [navigation, listCart, dispatch]);
-  console.log(myAddress);
   const onUpdateQuantity = useCallback((_id, quantity) => {
     dispatch(getChangeLoadingRequest());
     updateQuantityProductApi({productId: _id, quantity: quantity})
@@ -143,31 +178,33 @@ const Cart = props => {
       },
       phone: myAddress.phone,
       totalPrice: finalPrice,
+      isPaid: paymentMethod === 'ZALOPAY' ? true : false,
     };
-    if (paymentMethod === 'ZALOPAY') {
-      showModal({
-        title: 'Thông báo!!!',
-        message: 'Phương thức bạn chọn chưa được hỗ trợ!!',
+    createOrderApi(data)
+      .then(res => {
+        console.log('->>> ', res);
+        showModal({
+          title: 'Yeah!!!',
+          message: 'Đặt hàng thành công!',
+        });
+        dispatch(getChangeLoadingSuccess());
+        dispatch(getAllCartRequest());
+      })
+      .catch(e => {
+        console.log('errors ', e);
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: e.response.data.message,
+        });
       });
+  };
+  const onCreateOrder = () => {
+    dispatch(getChangeLoadingRequest());
+    if (paymentMethod === 'ZALOPAY') {
+      callPaymentZaloPay();
       dispatch(getChangeLoadingSuccess());
     } else {
-      createOrderApi(data)
-        .then(res => {
-          console.log('->>> ', res);
-          showModal({
-            title: 'Yeah!!!',
-            message: 'Đặt hàng thành công!',
-          });
-          dispatch(getChangeLoadingSuccess());
-          dispatch(getAllCartRequest());
-        })
-        .catch(e => {
-          console.log('errors ', e);
-          dispatch(getChangeLoadingSuccess());
-          showModal({
-            title: e.response.data.message,
-          });
-        });
+      createOrder();
     }
   };
   const onChoosePaymentMethod = title => {
@@ -177,6 +214,107 @@ const Cart = props => {
   const onChooseAddress = () => {
     navigation.navigate('MyAddress');
   };
+  function getCurrentDateYYMMDD() {
+    var todayDate = new Date().toISOString().slice(2, 10);
+    return todayDate.split('-').join('');
+  }
+  const renderStringItem = () => {
+    let arrItem = [];
+    for (let index = 0; index < listCart.length; index++) {
+      let item = {
+        product: listCart[index].product._id,
+        quantity: listCart[index].quantity,
+      };
+      arrItem.push(item);
+    }
+    return JSON.stringify(arrItem);
+  };
+  async function callPaymentZaloPay() {
+    dispatch(getChangeLoadingRequest());
+    let apptransid = getCurrentDateYYMMDD() + '_' + new Date().getTime();
+    let appid = 2553;
+    let amount = parseInt(10000);
+    let appuser = userInfor.email;
+    let apptime = new Date().getTime();
+    let embeddata = '{}';
+    let item = renderStringItem();
+    let description = 'Thanh toán High Tech ' + apptransid;
+    let title = 'Thanh toán High Tech';
+    let hmacInput =
+      appid +
+      '|' +
+      apptransid +
+      '|' +
+      appuser +
+      '|' +
+      amount +
+      '|' +
+      apptime +
+      '|' +
+      embeddata +
+      '|' +
+      item;
+    let mac = CryptoJS.HmacSHA256(
+      hmacInput,
+      'PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL',
+    );
+    console.log('====================================');
+    console.log('hmacInput: ' + hmacInput);
+    console.log('mac: ' + mac);
+    console.log('====================================');
+    var order = {
+      app_id: appid,
+      app_user: appuser,
+      app_time: apptime,
+      amount: 10000,
+      app_trans_id: apptransid,
+      embed_data: embeddata,
+      item: item,
+      description: description,
+      mac: mac,
+    };
+
+    console.log('order ', order);
+
+    let formBody = [];
+    for (let i in order) {
+      var encodedKey = encodeURIComponent(i);
+      var encodedValue = encodeURIComponent(order[i]);
+      formBody.push(encodedKey + '=' + encodedValue);
+    }
+    formBody = formBody.join('&');
+    await fetch('https://sb-openapi.zalopay.vn/v2/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: formBody,
+    })
+      .then(response => response.json())
+      .then(resJson => {
+        payOrder(resJson.zp_trans_token);
+        if (resJson.return_message != 'Giao dịch thành công') {
+          showModal({
+            title: resJson.sub_return_message,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch(getChangeLoadingSuccess());
+        showModal({
+          title: 'Lỗi chưa xác định',
+          message: 'Vui lòng thử lại sau!!!',
+        });
+        console.log('error ', error);
+      });
+  }
+
+  function payOrder(_token) {
+    var payZP = NativeModules.PayZaloBridge;
+    payZP.payOrder(_token);
+    dispatch(getChangeLoadingSuccess());
+  }
+
   return (
     <View style={styles.container}>
       <Header title={'Giỏ hàng'} />
@@ -201,7 +339,6 @@ const Cart = props => {
                     );
                   })}
               </View>
-
               <View style={styles.footer}>
                 {myAddress.address === '' ? (
                   <View style={styles.viewAddress}>
@@ -227,11 +364,7 @@ const Cart = props => {
                     {paymentMethod === 'COD' ? 'Tiền mặt' : 'ZaloPay'}
                   </Text>
                 </TouchableOpacity>
-                {paymentMethod === 'ZALOPAY' && (
-                  <Text style={styles.textNoSupport}>
-                    Phương thức thanh toán chưa được hỗ trợ
-                  </Text>
-                )}
+
                 <View style={styles.viewCode}>
                   <TextInput
                     placeholder="Nhập mã code"
@@ -261,7 +394,7 @@ const Cart = props => {
                     </Text>
                   </View>
                 </View>
-                <CustomButton title={'Mua'} onPress={createOrder} />
+                <CustomButton title={'Mua'} onPress={onCreateOrder} />
               </View>
             </ScrollView>
           ) : (

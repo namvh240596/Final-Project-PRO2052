@@ -8,12 +8,16 @@ const ItemOrder = ({onPress, order}) => {
   let day = format(new Date(order.createdAt), 'MM/dd/yyyy');
   let status;
   console.log(order);
-  if(order.status === 'Not Processed'){
+  if (order?.status === 'Not Processed') {
     status = 'Đang được xử lý';
-  } else if (order.status === 'Processed'){
+  } else if (order?.status === 'Processing') {
     status = 'Đã được xử lý';
+  } else if (order?.status === 'Cancelled') {
+    status = 'Đơn hàng đã bị hủy';
+  } else if (order?.status === 'Shipping'){
+    status = 'Đang vận chuyển';
   } else {
-    status = order.status;
+    status = order?.status;
   }
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -38,7 +42,7 @@ const ItemOrder = ({onPress, order}) => {
   );
 };
 
-export default ItemOrder;
+export default React.memo(ItemOrder);
 
 const styles = StyleSheet.create({
   viewDate: {
