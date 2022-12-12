@@ -19,7 +19,7 @@ import {getIsLoginSelector} from '../redux/auth/selector';
 import messaging from '@react-native-firebase/messaging';
 import onDisplayNotification from '../helpers/notifee';
 import Location from '../screens/location';
-import {PermissionsAndroid} from 'react-native';
+import {Alert, BackHandler, PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {postDeviceTokenRequest} from '../redux/notification/action';
 import {getDeviceTokenSelector} from '../redux/notification/selector';
@@ -86,7 +86,26 @@ export default function AppRouter() {
     }
     requestLocationPermission();
   }, []);
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Ohhh no!!!", "Bạn có chắc muốn thoát app?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const loading = useSelector(getChangeLoading);
   return (
     <NavigationContainer>

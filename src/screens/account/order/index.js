@@ -29,7 +29,6 @@ const MyOrder = () => {
           dispatch(getChangeLoadingSuccess());
         })
         .catch(e => {
-          console.log('errors ', e);
           dispatch(getChangeLoadingSuccess());
           showModal({
             title: 'Oops!!',
@@ -38,7 +37,6 @@ const MyOrder = () => {
         });
   }, [isFocused]);
   const onGoDetail = _id => {
-    console.log('id >> ', _id);
     navigation.navigate('OrderDetail', {orderId: _id});
   };
   return (

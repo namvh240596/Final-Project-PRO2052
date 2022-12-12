@@ -168,12 +168,15 @@ const Explore = () => {
         });
     } else {
       showModal({
-        title: 'Opps!'
-        , message: 'Bạn chưa chọn sản phẩm nào!',
-      })
+        title: 'Opps!',
+        message: 'Bạn chưa chọn sản phẩm nào!',
+      });
     }
   };
-
+  const onCloseModal = () => {
+    setModalVisible(false);
+    dispatch(getChangeLoadingSuccess());
+  };
   return (
     <View style={styles.container}>
       {/* <Header title={'Build PC'} /> */}
@@ -210,13 +213,7 @@ const Explore = () => {
 
       <Modal visible={modalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible(false);
-              dispatch(getChangeLoadingSuccess());
-            }}
-            style={{flex: 1}}
-          />
+          <TouchableOpacity onPress={onCloseModal} style={{flex: 1}} />
           <View style={styles.modalBody}>
             <Text style={styles.textTitle}>Chọn Gear yêu thích</Text>
             <SvgXml
@@ -224,7 +221,7 @@ const Explore = () => {
               height={scale(28)}
               width={scale(28)}
               style={styles.iconClose}
-              onPress={() => setModalVisible(false)}
+              onPress={onCloseModal}
             />
             <ScrollView
               style={styles.scvProducts}

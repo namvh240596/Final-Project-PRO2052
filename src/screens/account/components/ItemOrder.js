@@ -5,15 +5,19 @@ import {scale, verticalScale} from '../../../utils/scale';
 import {formatMoney} from '../../../helpers/formatMoney';
 import {format} from 'date-fns';
 const ItemOrder = ({onPress, order}) => {
-  let day = format(new Date(order.createdAt), 'MM/dd/yyyy');
-  let status;
+  let day = format(new Date(order?.createdAt), 'MM/dd/yyyy');
   console.log(order);
-  if(order.status === 'Not Processed'){
+  let status;
+  if (order?.status === 'Not Processed') {
     status = 'Đang được xử lý';
-  } else if (order.status === 'Processed'){
+  } else if (order?.status === 'Processing') {
     status = 'Đã được xử lý';
+  } else if (order?.status === 'Cancelled') {
+    status = 'Đơn hàng đã bị hủy';
+  } else if (order?.status === 'Shipping'){
+    status = 'Đang vận chuyển';
   } else {
-    status = order.status;
+    status = order?.status;
   }
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -28,17 +32,17 @@ const ItemOrder = ({onPress, order}) => {
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Sản phẩm</Text>
-        <Text style={styles.textDate}>{order.items.length} sản phẩm</Text>
+        <Text style={styles.textDate}>{order?.items?.length} sản phẩm</Text>
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Tổng cộng</Text>
-        <Text style={styles.textPrice}>{formatMoney(order.totalPrice)}</Text>
+        <Text style={styles.textPrice}>{formatMoney(order?.totalPrice)}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default ItemOrder;
+export default React.memo(ItemOrder);
 
 const styles = StyleSheet.create({
   viewDate: {

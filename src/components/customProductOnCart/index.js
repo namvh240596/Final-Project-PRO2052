@@ -14,9 +14,9 @@ import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {formatMoney} from '../../helpers/formatMoney';
 
-const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate}) => {
+const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate, onPress}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.body}>
         <Image
           source={{uri: item?.product.images[0]}}
@@ -95,7 +95,7 @@ const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate}) => {
           </View>
         ) : null}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

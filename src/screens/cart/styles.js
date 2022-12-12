@@ -3,6 +3,30 @@ import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
+
+  welcomeHead: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 50,
+
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 20,
+
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+  inputText: {
+    marginBottom: 20,
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  ////////////////////////////////////////////////
   textNoSupport:{
     fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.SemiBold,

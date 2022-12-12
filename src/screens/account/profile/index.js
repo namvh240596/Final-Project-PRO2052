@@ -31,34 +31,65 @@ import {
 } from '../../../redux/loading/action';
 import {showModal} from '../../../components/customNotiModal';
 import {launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const userInfo = useSelector(getUserSelector);
   const [avatar, setAvatar] = useState(userInfo?.avatar);
-  const onUpdate = _value => {
+  const [formAvatar, setformAvatar] = useState();
+
+  const onUpdate = async _value => {
     dispatch(getChangeLoadingRequest());
-    updateProfileApi({
-      fullname: _value.fullname,
-      email: _value.email,
-      phone: _value.phone,
-      avatar: avatar
+    const formData = formAvatar;
+    formData.append('fullname', _value.fullname);
+    formData.append('email', _value.email);
+    formData.append('phone', _value.phone);
+    const token = await AsyncStorage.getItem('token');
+    axios({
+      method: 'put',
+      url: 'http://quyt.ddns.net:3000/access/me',
+      data: formData,
+      headers: {
+        'x-access-token': `${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
     })
       .then(res => {
-        dispatch(getChangeLoadingSuccess());
+        console.log('res test ', res);
         dispatch(getUserInfoRequest());
+        dispatch(getChangeLoadingSuccess());
         showModal({
-          title: 'Cập nhật thông tin thành công',
-        });
+          title: 'Cập nhật thành công'
+        })
       })
       .catch(error => {
+        console.log('error => ', error);
         dispatch(getChangeLoadingSuccess());
-        showModal({
-          title: error.response?.data.message,
-        });
-        console.log('error ', error);
       });
+    // updateProfileApi({
+    //   fullname: _value.fullname,
+    //   email: _value.email,
+    //   phone: _value.phone,
+    //   avatar: formAvatar,
+    // })
+    //   .then(res => {
+    //     console.log('res .', res);
+    //     dispatch(getChangeLoadingSuccess());
+    //     dispatch(getUserInfoRequest());
+    //     showModal({
+    //       title: 'Cập nhật thông tin thành công',
+    //     });
+    //   })
+    //   .catch(error => {
+    //     dispatch(getChangeLoadingSuccess());
+    //     showModal({
+    //       title: error.response?.data.message,
+    //     });
+    //     console.log('error ', error);
+    //   });
   };
   const initialValue = {
     fullname: userInfo.fullname,
@@ -66,7 +97,6 @@ const Profile = () => {
     phone: userInfo.phone,
   };
   const onChooseAvatar = async () => {
-    console.log('aaa');
     let options = {
       title: 'Select Image',
       customButtons: [
@@ -81,13 +111,13 @@ const Profile = () => {
       },
     };
     const avata = await launchImageLibrary(options, res => {
-      console.log('res  ' ,res);
-      setAvatar(res?.assets[0].uri)
+      console.log('res => ', res);
+      setAvatar(res?.assets[0]?.uri);
     });
     const formData = new FormData();
     avata?.assets &&
       formData.append(
-        'file',
+        'avatar',
         JSON.parse(
           JSON.stringify({
             uri: avata.assets[0]?.uri,
@@ -96,6 +126,7 @@ const Profile = () => {
           }),
         ),
       );
+    setformAvatar(formData);
   };
   return (
     <View style={styles.container}>
@@ -141,6 +172,7 @@ const Profile = () => {
                         containerTextInputStyle={styles.containerTextInputStyle}
                         onChangeText={text => setFieldValue('email', text)}
                         textErrors={errors.email}
+                        editable={false}
                       />
                     </View>
                   </View>

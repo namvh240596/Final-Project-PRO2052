@@ -15,7 +15,7 @@ import {showModal} from '../../../components/customNotiModal';
 import MyLoading from '../../../components/loading';
 
 const SettingAddress = props => {
-  const {address, index, name, phone} = props.route.params;
+  const {address, index, name, phone, edit,itemAddress} = props.route.params;
   const userInfor = useSelector(getUserSelector);
   const navigation = useNavigation();
   const [addressInput, setAddressInput] = useState(address);
