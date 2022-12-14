@@ -3,7 +3,9 @@ import {AppTheme} from '../../config/AppTheme';
 import {scale, verticalScale} from '../../utils/scale';
 
 export const styles = StyleSheet.create({
-
+  containerStyle:{
+    backgroundColor: AppTheme.Colors.Grey
+  },
   welcomeHead: {
     fontSize: 20,
     textAlign: 'center',
@@ -161,6 +163,8 @@ export const styles = StyleSheet.create({
   textInput: {
     paddingHorizontal: scale(16),
     paddingVertical: verticalScale(5),
+    width: '75%',
+    paddingLeft: scale(20),
   },
   textPriceTotal: {
     fontSize: scale(14),

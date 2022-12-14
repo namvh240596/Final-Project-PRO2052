@@ -46,7 +46,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     alignItems: 'center',
     backgroundColor: AppTheme.Colors.White,
-    paddingBottom: verticalScale(20),
   },
   textLastPrice: {
     fontSize: scale(16),
@@ -257,5 +256,14 @@ export const styles = StyleSheet.create({
   },
   itemProductStyle:{
     marginRight: scale(12)
+  },
+  textQuantity: {
+    fontSize: AppTheme.FontSize.Medium,
+    fontFamily: AppTheme.Fonts.Bold,
+    letterSpacing: 0.5,
+    color: AppTheme.Colors.Red,
+    fontWeight: '700',
+    paddingLeft: scale(16),
+    marginVertical: verticalScale(10)
   },
 });

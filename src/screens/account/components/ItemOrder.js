@@ -6,7 +6,6 @@ import {formatMoney} from '../../../helpers/formatMoney';
 import {format} from 'date-fns';
 const ItemOrder = ({onPress, order}) => {
   let day = format(new Date(order?.createdAt), 'MM/dd/yyyy');
-  console.log(order);
   let status;
   if (order?.status === 'Not Processed') {
     status = 'Đang được xử lý';

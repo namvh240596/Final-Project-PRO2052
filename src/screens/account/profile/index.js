@@ -58,7 +58,6 @@ const Profile = () => {
       },
     })
       .then(res => {
-        console.log('res test ', res);
         dispatch(getUserInfoRequest());
         dispatch(getChangeLoadingSuccess());
         showModal({
@@ -66,30 +65,8 @@ const Profile = () => {
         })
       })
       .catch(error => {
-        console.log('error => ', error);
         dispatch(getChangeLoadingSuccess());
       });
-    // updateProfileApi({
-    //   fullname: _value.fullname,
-    //   email: _value.email,
-    //   phone: _value.phone,
-    //   avatar: formAvatar,
-    // })
-    //   .then(res => {
-    //     console.log('res .', res);
-    //     dispatch(getChangeLoadingSuccess());
-    //     dispatch(getUserInfoRequest());
-    //     showModal({
-    //       title: 'Cập nhật thông tin thành công',
-    //     });
-    //   })
-    //   .catch(error => {
-    //     dispatch(getChangeLoadingSuccess());
-    //     showModal({
-    //       title: error.response?.data.message,
-    //     });
-    //     console.log('error ', error);
-    //   });
   };
   const initialValue = {
     fullname: userInfo.fullname,
@@ -111,7 +88,6 @@ const Profile = () => {
       },
     };
     const avata = await launchImageLibrary(options, res => {
-      console.log('res => ', res);
       setAvatar(res?.assets[0]?.uri);
     });
     const formData = new FormData();

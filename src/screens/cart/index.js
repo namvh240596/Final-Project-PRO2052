@@ -35,6 +35,7 @@ import AppIcon from '../../assets/icons';
 import {getChangeLoading} from '../../redux/loading/selector';
 import MyLoading from '../../components/loading';
 import {
+  getChangeLoadingFailed,
   getChangeLoadingRequest,
   getChangeLoadingSuccess,
 } from '../../redux/loading/action';
@@ -51,7 +52,7 @@ const payZaloBridgeEmitter = new NativeEventEmitter(PayZaloBridge);
 
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
-
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
 const Cart = props => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -73,8 +74,6 @@ const Cart = props => {
     name: '',
     phone: '',
   });
-  const appState = React.useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [coupon, setCoupon] = useState('');
   const [couponMoney, setCouponMoney] = useState(0);
   useEffect(() => {
@@ -95,8 +94,8 @@ const Cart = props => {
         setMyAddress(item);
       }
     });
-  }, [isFocused]);
-  const createOrder = () => {
+  }, []);
+  const createOrder = useCallback(() => {
     let data;
     let arrItem = [];
     dispatch(getChangeLoadingRequest());
@@ -107,6 +106,10 @@ const Cart = props => {
       };
       arrItem.push(item);
     }
+    let couponActive = '';
+    if(couponMoney > 0) {
+      couponActive = coupon
+    } 
     data = {
       items: arrItem,
       paymentMethod: paymentMethod,
@@ -119,8 +122,9 @@ const Cart = props => {
       phone: myAddress.phone,
       totalPrice: finalPrice,
       isPaid: paymentMethod === 'ZALOPAY' ? true : false,
-      coupon: coupon,
+      coupon: couponActive,
     };
+    console.log('dât ', data);
     createOrderApi(data)
       .then(res => {
         console.log('->>> ', res);
@@ -130,6 +134,8 @@ const Cart = props => {
         });
         dispatch(getChangeLoadingSuccess());
         dispatch(getAllCartRequest());
+        setCoupon('');
+        setCouponMoney(0);
       })
       .catch(e => {
         console.log('errors ', e);
@@ -138,25 +144,23 @@ const Cart = props => {
           title: e.response.data.message,
         });
       });
-  };
+  }, [listCart,coupon,couponMoney]);
   useEffect(() => {
     const subscription = payZaloBridgeEmitter.addListener(
       'EventPayZalo',
       data => {
+        console.log('dat a ', data);
         if (data.returnCode == 1) {
-          console.log('success 1111 1111');
+          console.log('success1111');
           createOrder();
         } else {
-          console.log('data error ', data);
           showModal({
             title: 'Có lỗi xảy ra vui lòng thử lại sau',
           });
         }
       },
     );
-    return () => {
-      payZaloBridgeEmitter.removeAllListeners(subscription);
-    };
+    return () => payZaloBridgeEmitter.removeAllListeners('EventPayZalo');
   }, []);
 
   useEffect(() => {
@@ -320,10 +324,22 @@ const Cart = props => {
     dispatch(getChangeLoadingSuccess());
   }
   const onCheckCoupon = () => {
-    // getCheckCoupon(coupon)
-    //   .then(res => console.log('coupon res '))
-    //   .catch(error => console.log('error check coupon'));
-    console.log('Check coupon .');
+    dispatch(getChangeLoadingRequest());
+    getCheckCoupon({code: coupon})
+      .then(res => {
+        console.log('coupon res ', res);
+        dispatch(getChangeLoadingSuccess());
+        res?.message === 'success' && setCouponMoney(res?.data?.value);
+      })
+      .catch(error => {
+        console.log('error check coupon', error);
+        dispatch(getChangeLoadingFailed());
+        showModal({
+          title: error?.response.data?.message,
+        });
+        setCoupon('');
+        setCouponMoney(0);
+      });
   };
   return (
     <View style={styles.container}>
@@ -378,6 +394,10 @@ const Cart = props => {
                   <TextInput
                     placeholder="Nhập mã code"
                     style={styles.textInput}
+                    autoCapitalize="characters"
+                    keyboardType="default"
+                    value={coupon}
+                    onChangeText={text => setCoupon(text.toLocaleUpperCase())}
                   />
                   <TouchableOpacity
                     onPress={onCheckCoupon}
@@ -398,12 +418,22 @@ const Cart = props => {
                     <Text style={styles.text}>Giảm giá</Text>
                     <Text style={styles.text}>- {formatMoney(discount)}</Text>
                   </View>
-                  {coupon !== '' && (
+                  {couponMoney !== 0 && (
                     <View style={styles.viewFdl}>
                       <Text style={styles.text}>Mã Giảm giá</Text>
                       <Text style={styles.text}> {coupon}</Text>
                     </View>
                   )}
+                  {couponMoney !== 0 && (
+                    <View style={styles.viewFdl}>
+                      <Text style={styles.text}>Tiền giảm từ coupon</Text>
+                      <Text style={styles.text}>
+                        {' '}
+                        - {formatMoney(couponMoney)}
+                      </Text>
+                    </View>
+                  )}
+
                   <View style={styles.viewFdl}>
                     <Text style={styles.textTotal}>Tổng cộng</Text>
                     <Text style={styles.textPriceTotal}>
@@ -411,7 +441,15 @@ const Cart = props => {
                     </Text>
                   </View>
                 </View>
-                <CustomButton title={'Mua'} onPress={onCreateOrder} />
+                {myAddress?.address !== '' ? (
+                  <CustomButton title={'Mua'} onPress={onCreateOrder} />
+                ) : (
+                  <CustomButton
+                    title="Mua"
+                    disabled
+                    containerStyles={styles.containerStyle}
+                  />
+                )}
               </View>
             </ScrollView>
           ) : (

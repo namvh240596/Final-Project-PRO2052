@@ -145,6 +145,7 @@ const ProductDetail = props => {
               containerStyles={styles.btnAddToCart}
               onPress={() => addToCart(product._id)}
             />
+         
             <View style={{left: -scale(20)}}>
               <Text style={styles.textPrice}>
                 {formatMoney(product?.salePrice)}
@@ -157,6 +158,7 @@ const ProductDetail = props => {
               </View>
             </View>
           </View>
+          <Text style={styles.textQuantity}>Số lượng : {product?.quantity}</Text>
           <View style={styles.viewSpecifications}>
             <Text style={styles.textTitle}>Thông số kĩ thuật</Text>
             <View style={styles.viewContent}>

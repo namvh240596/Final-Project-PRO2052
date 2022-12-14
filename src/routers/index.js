@@ -42,7 +42,7 @@ export default function AppRouter() {
 
     if (enabled && token === '') {
       const fcmToken = await messaging().getToken();
-      dispatch(postDeviceTokenRequest(fcmToken));
+      isLogin && dispatch(postDeviceTokenRequest(fcmToken));
     }
   }
   useEffect(() => {

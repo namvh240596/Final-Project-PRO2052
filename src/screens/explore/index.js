@@ -148,7 +148,6 @@ const Explore = () => {
       dispatch(getChangeLoadingRequest());
       addProductsToCartApi({productIds: data})
         .then(res => {
-          console.log(res);
           setListGear(listCategories);
           setMoney(0);
           dispatch(getChooseGearRequest([]));
@@ -187,6 +186,9 @@ const Explore = () => {
         style={styles.body}
         showsVerticalScrollIndicator={false}>
         {listGear.map((item, index) => {
+          if (index >= listGear?.length - 1) {
+            return;
+          }
           return (
             <ItemChooseGear
               key={Math.random() * 10000}
