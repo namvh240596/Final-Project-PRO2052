@@ -5,7 +5,7 @@ import {
 } from './actionType';
 
 const initialState = {
-  deviceToken: '',
+  
   listNotification: [],
 };
 
@@ -16,11 +16,7 @@ const notificationReducer = (state = initialState, action) => {
         ...state,
         listNotification: action.payload,
       };
-    case POST_DEVICE_TOKEN_SUCCESS:
-      return {
-        ...state,
-        deviceToken: action.payload,
-      };
+    
     default:
       return {
         ...state,

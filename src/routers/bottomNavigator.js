@@ -1,5 +1,5 @@
-import {View, Platform} from 'react-native';
-import React from 'react';
+import {View, Platform, Alert, BackHandler} from 'react-native';
+import React, { useEffect } from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/home';
 import Explore from '../screens/explore';
@@ -13,9 +13,28 @@ import Notification from '../screens/notification';
 import Favorites from '../screens/favorite';
 
 const {Navigator, Screen, Group} = createBottomTabNavigator();
-export default function BottomNavigator() {
+export default function BottomNavigator({navigation}) {
   const heightBottom =
     Platform.OS === 'ios' ? verticalScale(75) : verticalScale(65);
+    const backAction = () => {
+      if (navigation.isFocused()) {
+        Alert.alert('GUVI!', 'Bạn có muốn thoát khỏi ứng dụng?', [
+          {
+            text: 'Hủy',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {text: 'Đồng ý', onPress: () => BackHandler.exitApp()},
+        ]);
+        return true;
+      }
+    };
+    useEffect(() => {
+      BackHandler.addEventListener('hardwareBackPress', backAction);
+  
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', backAction);
+    }, []);
   return (
     <Navigator
       initialRouteName="Home"

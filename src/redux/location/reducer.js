@@ -12,6 +12,13 @@ const initialState = {
     lat: 10,
     long: 108,
   },
+  shippingAddress: {
+    name: '',
+    phone: '',
+    address: '',
+    isDefault: true,
+    latlng: [10.807079, 106.701778],
+  },
 };
 const locationReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -28,7 +35,7 @@ const locationReducer = (state = initialState, action) => {
     case GET_CHANGE_ADDRESS_SUCCESS:
       return {
         ...state,
-        listLocation: action.payload.listLocation,
+        shippingAddress: action?.payload.shippingAddress,
       };
     case GET_DELETE_ADDRESS_SUCCESS:
       return {

@@ -46,6 +46,7 @@ import ReactNativeModal from 'react-native-modal';
 import PlaceholderCart from '../../components/placholderCart';
 import {AppTheme} from '../../config/AppTheme';
 import CryptoJS from 'crypto-js';
+import { getShippingAddress } from '../../redux/location/selector';
 
 const {PayZaloBridge} = NativeModules;
 const payZaloBridgeEmitter = new NativeEventEmitter(PayZaloBridge);
@@ -58,6 +59,7 @@ const Cart = props => {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const itemChooseAddress = props.route.params?.itemChooseAddress;
+  const shippingAddress = useSelector(getShippingAddress);
   const listCart = useSelector(getListCartSelector);
   const userInfor = useSelector(getUserSelector);
   const [totalItem, setTotalItem] = useState(0);
@@ -73,28 +75,16 @@ const Cart = props => {
     address: '',
     name: '',
     phone: '',
+    latlng:[],
   });
   const [coupon, setCoupon] = useState('');
   const [couponMoney, setCouponMoney] = useState(0);
   useEffect(() => {
-    if (itemChooseAddress) {
-      setMyAddress(itemChooseAddress);
-      return;
-    }
-    if (userInfor?.information?.length === 0) {
-      setMyAddress({
-        address: '',
-        name: '',
-        phone: '',
-      });
-      return;
-    }
-    userInfor?.information?.map((item, index) => {
-      if (item.isDefault === true) {
-        setMyAddress(item);
-      }
-    });
-  }, []);
+   if(shippingAddress.address !== ''){
+    setMyAddress(shippingAddress);
+   }
+  }, [shippingAddress])
+  
   const createOrder = useCallback(() => {
     let data;
     let arrItem = [];
@@ -113,21 +103,14 @@ const Cart = props => {
     data = {
       items: arrItem,
       paymentMethod: paymentMethod,
-      shippingAddress: {
-        address: myAddress.address,
-        city: 'hcm',
-        postalCode: '12',
-        country: 'VN',
-      },
+      shippingAddress: myAddress,
       phone: myAddress.phone,
       totalPrice: finalPrice,
       isPaid: paymentMethod === 'ZALOPAY' ? true : false,
       coupon: couponActive,
     };
-    console.log('dât ', data);
     createOrderApi(data)
       .then(res => {
-        console.log('->>> ', res);
         showModal({
           title: 'Yeah!!!',
           message: 'Đặt hàng thành công!',
@@ -144,7 +127,7 @@ const Cart = props => {
           title: e.response.data.message,
         });
       });
-  }, [listCart,coupon,couponMoney]);
+  }, [listCart,coupon,couponMoney,finalPrice]);
   useEffect(() => {
     const subscription = payZaloBridgeEmitter.addListener(
       'EventPayZalo',
@@ -218,7 +201,7 @@ const Cart = props => {
     setModalPaymentMethod(false);
   };
   const onChooseAddress = () => {
-    navigation.navigate('MyAddress', {isDelete: false, fromTo: 'Cart'});
+    navigation.navigate('MyAddress', {isDelete: false});
   };
   const onGotoProductDetail = _id => {
     navigation.navigate('ProductDetail', {productId: _id});
@@ -242,7 +225,7 @@ const Cart = props => {
     dispatch(getChangeLoadingRequest());
     let apptransid = getCurrentDateYYMMDD() + '_' + new Date().getTime();
     let appid = 2553;
-    let amount = parseInt(10000);
+    let amount = parseInt(finalPrice);
     let appuser = userInfor.email;
     let apptime = new Date().getTime();
     let embeddata = '{}';
@@ -275,16 +258,13 @@ const Cart = props => {
       app_id: appid,
       app_user: appuser,
       app_time: apptime,
-      amount: 10000,
+      amount: finalPrice,
       app_trans_id: apptransid,
       embed_data: embeddata,
       item: item,
       description: description,
       mac: mac,
     };
-
-    console.log('order ', order);
-
     let formBody = [];
     for (let i in order) {
       var encodedKey = encodeURIComponent(i);
@@ -367,7 +347,7 @@ const Cart = props => {
                   })}
               </View>
               <View style={styles.footer}>
-                {myAddress.address === '' ? (
+                {myAddress?.address === '' ? (
                   <View style={styles.viewAddress}>
                     <TouchableOpacity onPress={onChooseAddress}>
                       <Text style={styles.textChooseAddress}>Chọn địa chỉ</Text>
@@ -375,9 +355,9 @@ const Cart = props => {
                   </View>
                 ) : (
                   <ItemAddress
-                    address={myAddress.address}
-                    name={myAddress.name}
-                    phone={myAddress.phone}
+                    address={myAddress?.address}
+                    name={myAddress?.name}
+                    phone={myAddress?.phone}
                     onPress={onChooseAddress}
                   />
                 )}

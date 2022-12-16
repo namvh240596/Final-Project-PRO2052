@@ -5,8 +5,9 @@ import {
   Image,
   ImageBackground,
   Modal,
+  ScrollView,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Header from '../../../components/header';
 import {AppTheme} from '../../../config/AppTheme';
 import {scale, verticalScale} from '../../../utils/scale';
@@ -40,39 +41,59 @@ const Profile = () => {
   const userInfo = useSelector(getUserSelector);
   const [avatar, setAvatar] = useState(userInfo?.avatar);
   const [formAvatar, setformAvatar] = useState();
-
-  const onUpdate = async _value => {
-    dispatch(getChangeLoadingRequest());
-    const formData = formAvatar;
-    formData.append('fullname', _value.fullname);
-    formData.append('email', _value.email);
-    formData.append('phone', _value.phone);
-    const token = await AsyncStorage.getItem('token');
-    axios({
-      method: 'put',
-      url: 'http://quyt.ddns.net:3000/access/me',
-      data: formData,
-      headers: {
-        'x-access-token': `${token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(res => {
-        dispatch(getUserInfoRequest());
-        dispatch(getChangeLoadingSuccess());
-        showModal({
-          title: 'Cập nhật thành công'
-        })
-      })
-      .catch(error => {
-        dispatch(getChangeLoadingSuccess());
-      });
-  };
+  const [isUpdate, setIsUpdate] = useState(false);
   const initialValue = {
     fullname: userInfo.fullname,
     email: userInfo.email,
     phone: userInfo.phone,
   };
+
+  const onUpdate = async _value => {
+    if (formAvatar) {
+      dispatch(getChangeLoadingRequest());
+      const formData = formAvatar;
+      formData.append('fullname', _value.fullname);
+      formData.append('email', _value.email);
+      formData.append('phone', _value.phone);
+      const token = await AsyncStorage.getItem('token');
+      axios({
+        method: 'put',
+        url: 'http://quyt.ddns.net:3000/access/me',
+        data: formData,
+        headers: {
+          'x-access-token': `${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(res => {
+          dispatch(getUserInfoRequest());
+          dispatch(getChangeLoadingSuccess());
+          showModal({
+            title: 'Cập nhật thành công',
+            onConfirmPress: ()=>navigation.goBack(),
+          });
+        })
+        .catch(error => {
+          dispatch(getChangeLoadingSuccess());
+        });
+    } else {
+      dispatch(getChangeLoadingRequest());
+      updateProfileApi({fullname: _value.fullname, phone: '0329584651'})
+        .then(res => {
+          console.log('res ', res);
+          showModal({
+            title: 'Cập nhật thành công',
+            onConfirmPress: ()=>navigation.goBack(),
+          });
+          dispatch(getChangeLoadingSuccess());
+        })
+        .catch(err => {
+          console.log('err ', err);
+          dispatch(getChangeLoadingSuccess());
+        });
+    }
+  };
+  console.log('isudat ', isUpdate);
   const onChooseAvatar = async () => {
     let options = {
       title: 'Select Image',
@@ -89,6 +110,7 @@ const Profile = () => {
     };
     const avata = await launchImageLibrary(options, res => {
       setAvatar(res?.assets[0]?.uri);
+      setIsUpdate(true);
     });
     const formData = new FormData();
     avata?.assets &&
@@ -104,8 +126,9 @@ const Profile = () => {
       );
     setformAvatar(formData);
   };
+  console.log('form avatar ', formAvatar);
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header title={'Tài khoản'} iconBack />
       <View style={styles.body}>
         <ImageBackground
@@ -127,6 +150,19 @@ const Profile = () => {
             validateOnChange={true}
             validationSchema={validateUpdateSchema}>
             {({errors, setFieldValue, handleSubmit, values}) => {
+              useEffect(() => {
+                if (
+                  values.phone !== initialValue.phone ||
+                  values.fullname !== initialValue.fullname
+                ) {
+                  setIsUpdate(true);
+                  console.log('aaaaaaaaaaa');
+                } else {
+                  false;
+                }
+                console.log('update ', isUpdate);
+              }, [values]);
+
               return (
                 <>
                   <View style={styles.viewInfo}>
@@ -137,6 +173,7 @@ const Profile = () => {
                         containerTextInputStyle={styles.containerTextInputStyle}
                         onChangeText={text => setFieldValue('fullname', text)}
                         textErrors={errors.fullname}
+                        textPlaceHolder={'Nhập họ và tên'}
                       />
                     </View>
                   </View>
@@ -160,21 +197,29 @@ const Profile = () => {
                         containerTextInputStyle={styles.containerTextInputStyle}
                         onChangeText={text => setFieldValue('phone', text)}
                         textErrors={errors.phone}
+                        textPlaceHolder={'Nhập số điện thoại'}
+
                       />
                     </View>
                   </View>
-                  <CustomButton
-                    title={'Cập nhật'}
-                    containerStyles={styles.containerButtonStyle}
-                    onPress={handleSubmit}
-                  />
+                  {
+                    <CustomButton
+                      title={'Cập nhật'}
+                      containerStyles={
+                        isUpdate
+                          ? styles.containerButtonStyle
+                          : styles.containerButtonDisableStyle
+                      }
+                      onPress={handleSubmit}
+                    />
+                  }
                 </>
               );
             }}
           </Formik>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -184,6 +229,14 @@ const styles = StyleSheet.create({
   containerButtonStyle: {
     width: scale(320),
     backgroundColor: AppTheme.Colors.Dark,
+    borderRadius: scale(20),
+    height: verticalScale(45),
+    alignSelf: 'center',
+    marginTop: verticalScale(30),
+  },
+  containerButtonDisableStyle: {
+    width: scale(320),
+    backgroundColor: AppTheme.Colors.SecondBackround,
     borderRadius: scale(20),
     height: verticalScale(45),
     alignSelf: 'center',

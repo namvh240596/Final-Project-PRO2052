@@ -5,6 +5,8 @@ import {
   Modal,
   TouchableOpacity,
   TextInput,
+  ScrollView,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
 import Header from '../../components/header';
@@ -27,8 +29,11 @@ const Account = () => {
   const [fullname, setFullname] = useState(userInfo.fullname);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getUserInfoRequest())    
-  }, [])
+    dispatch(getUserInfoRequest())   
+   
+  }, []);
+
+
   console.log(userInfo);
   const onGo = value => {
     switch (value) {
@@ -39,7 +44,7 @@ const Account = () => {
         navigation.navigate('MyOrder');
         break;
       case 'Địa chỉ':
-        navigation.navigate('MyAddress', {isDelete: true});
+        navigation.navigate('MyAddress', {isDelete: true, fromTo: 'account'});
         break;
       case 'Liên kết':
         navigation.navigate('Payment');
@@ -58,7 +63,7 @@ const Account = () => {
     dispatch(logoutRequest(() => navigation.navigate('SplashScreen')));
   }, []);
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.avatar}>
         <Image
           source={{uri: userInfo?.avatar}}
@@ -96,7 +101,7 @@ const Account = () => {
         />
       </View>
 
-    </View>
+    </ScrollView>
   );
 };
 
