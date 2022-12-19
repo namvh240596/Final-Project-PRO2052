@@ -12,7 +12,7 @@ import {
   LogBox,
   AppState,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {styles} from './styles';
 import Header from '../../components/header';
 import ProducOnCart from '../../components/customProductOnCart';
@@ -46,7 +46,7 @@ import ReactNativeModal from 'react-native-modal';
 import PlaceholderCart from '../../components/placholderCart';
 import {AppTheme} from '../../config/AppTheme';
 import CryptoJS from 'crypto-js';
-import { getShippingAddress } from '../../redux/location/selector';
+import {getShippingAddress} from '../../redux/location/selector';
 
 const {PayZaloBridge} = NativeModules;
 const payZaloBridgeEmitter = new NativeEventEmitter(PayZaloBridge);
@@ -75,31 +75,32 @@ const Cart = props => {
     address: '',
     name: '',
     phone: '',
-    latlng:[],
+    latlng: [],
   });
   const [coupon, setCoupon] = useState('');
   const [couponMoney, setCouponMoney] = useState(0);
+  const appState = useRef(AppState.currentState);
   useEffect(() => {
-   if(shippingAddress.address !== ''){
-    setMyAddress(shippingAddress);
-   }
-  }, [shippingAddress])
-  
-  const createOrder = useCallback(() => {
+    if (shippingAddress.address !== '') {
+      setMyAddress(shippingAddress);
+    }
+  }, [shippingAddress]);
+  const createOrder = () => {
     let data;
     let arrItem = [];
-    dispatch(getChangeLoadingRequest());
+    console.log('list casdrt ', listCart);
     for (let index = 0; index < listCart.length; index++) {
       let item = {
         product: listCart[index].product._id,
         quantity: listCart[index].quantity,
       };
+      console.log('item, ', item);
       arrItem.push(item);
     }
     let couponActive = '';
-    if(couponMoney > 0) {
-      couponActive = coupon
-    } 
+    if (couponMoney > 0) {
+      couponActive = coupon;
+    }
     data = {
       items: arrItem,
       paymentMethod: paymentMethod,
@@ -127,14 +128,13 @@ const Cart = props => {
           title: e.response.data.message,
         });
       });
-  }, [listCart,coupon,couponMoney,finalPrice]);
+  };
   useEffect(() => {
     const subscription = payZaloBridgeEmitter.addListener(
       'EventPayZalo',
       data => {
-        console.log('dat a ', data);
+        console.log('ádsdasdasda');
         if (data.returnCode == 1) {
-          console.log('success1111');
           createOrder();
         } else {
           showModal({
@@ -160,18 +160,18 @@ const Cart = props => {
     for (let index = 0; index < listCart.length; index++) {
       _totalItem += listCart[index].quantity;
       _initialPrice +=
-        listCart[index].product.costPrice * listCart[index].quantity;
-      _discount +=
-        listCart[index].product.costPrice * listCart[index].quantity -
         listCart[index].product.salePrice * listCart[index].quantity;
+      // _discount +=
+      //   listCart[index].product.costPrice * listCart[index].quantity -
+      //   listCart[index].product.salePrice * listCart[index].quantity;
       _finalPrice +=
         listCart[index].product.salePrice * listCart[index].quantity;
     }
-    setDiscount(_discount);
+    // setDiscount(_discount);
     setFinalPrice(_finalPrice + feeShip - couponMoney);
     setTotalItem(_totalItem);
     setInitialPrice(_initialPrice);
-  }, [navigation, listCart, dispatch]);
+  }, [navigation, listCart]);
   const onUpdateQuantity = useCallback((_id, quantity) => {
     dispatch(getChangeLoadingRequest());
     updateQuantityProductApi({productId: _id, quantity: quantity})
@@ -222,7 +222,7 @@ const Cart = props => {
     return JSON.stringify(arrItem);
   };
   async function callPaymentZaloPay() {
-    dispatch(getChangeLoadingRequest());
+    // dispatch(getChangeLoadingRequest());
     let apptransid = getCurrentDateYYMMDD() + '_' + new Date().getTime();
     let appid = 2553;
     let amount = parseInt(finalPrice);
@@ -301,18 +301,15 @@ const Cart = props => {
   function payOrder(_token) {
     var payZP = NativeModules.PayZaloBridge;
     payZP.payOrder(_token);
-    dispatch(getChangeLoadingSuccess());
   }
   const onCheckCoupon = () => {
     dispatch(getChangeLoadingRequest());
     getCheckCoupon({code: coupon})
       .then(res => {
-        console.log('coupon res ', res);
         dispatch(getChangeLoadingSuccess());
         res?.message === 'success' && setCouponMoney(res?.data?.value);
       })
       .catch(error => {
-        console.log('error check coupon', error);
         dispatch(getChangeLoadingFailed());
         showModal({
           title: error?.response.data?.message,
@@ -394,10 +391,10 @@ const Cart = props => {
                     <Text style={styles.text}>Phí vận chuyển</Text>
                     <Text style={styles.text}>{formatMoney(feeShip)}</Text>
                   </View>
-                  <View style={styles.viewFdl}>
+                  {/* <View style={styles.viewFdl}>
                     <Text style={styles.text}>Giảm giá</Text>
                     <Text style={styles.text}>- {formatMoney(discount)}</Text>
-                  </View>
+                  </View> */}
                   {couponMoney !== 0 && (
                     <View style={styles.viewFdl}>
                       <Text style={styles.text}>Mã Giảm giá</Text>

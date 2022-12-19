@@ -27,7 +27,7 @@ const ItemOrder = ({onPress, order}) => {
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Trạng thái</Text>
-        <Text style={styles.textDate}>{status}</Text>
+        <Text style={styles.textDate}>{order?.message}</Text>
       </View>
       <View style={styles.fdl}>
         <Text style={styles.textDate}>Sản phẩm</Text>

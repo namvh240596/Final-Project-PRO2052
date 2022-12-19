@@ -21,7 +21,6 @@ const ProducOnCart = ({
   noUpdate,
   onPress,
 }) => {
-  console.log('item ', item);
   const checkOutStock = item?.quantity > item?.product?.quantity;
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -120,7 +119,7 @@ const ProducOnCart = ({
   );
 };
 
-export default ProducOnCart;
+export default React.memo(ProducOnCart);
 
 const styles = StyleSheet.create({
   textError: {

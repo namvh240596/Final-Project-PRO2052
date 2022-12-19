@@ -70,7 +70,7 @@ const Profile = () => {
           dispatch(getChangeLoadingSuccess());
           showModal({
             title: 'Cập nhật thành công',
-            onConfirmPress: ()=>navigation.goBack(),
+            onConfirmPress: () => navigation.goBack(),
           });
         })
         .catch(error => {
@@ -80,20 +80,17 @@ const Profile = () => {
       dispatch(getChangeLoadingRequest());
       updateProfileApi({fullname: _value.fullname, phone: '0329584651'})
         .then(res => {
-          console.log('res ', res);
           showModal({
             title: 'Cập nhật thành công',
-            onConfirmPress: ()=>navigation.goBack(),
+            onConfirmPress: () => navigation.goBack(),
           });
           dispatch(getChangeLoadingSuccess());
         })
         .catch(err => {
-          console.log('err ', err);
           dispatch(getChangeLoadingSuccess());
         });
     }
   };
-  console.log('isudat ', isUpdate);
   const onChooseAvatar = async () => {
     let options = {
       title: 'Select Image',
@@ -109,24 +106,27 @@ const Profile = () => {
       },
     };
     const avata = await launchImageLibrary(options, res => {
-      setAvatar(res?.assets[0]?.uri);
-      setIsUpdate(true);
-    });
+      if (!res?.didCancel) {
+        setAvatar(res?.assets[0]?.uri);
+        setIsUpdate(true);
+      }
+    })
     const formData = new FormData();
-    avata?.assets &&
-      formData.append(
-        'avatar',
-        JSON.parse(
-          JSON.stringify({
-            uri: avata.assets[0]?.uri,
-            type: avata.assets[0]?.type,
-            name: avata.assets[0].fileName,
-          }),
-        ),
-      );
-    setformAvatar(formData);
+    if (avata) {
+      avata?.assets &&
+        formData.append(
+          'avatar',
+          JSON.parse(
+            JSON.stringify({
+              uri: avata.assets[0]?.uri,
+              type: avata.assets[0]?.type,
+              name: avata.assets[0].fileName,
+            }),
+          ),
+        );
+      setformAvatar(formData);
+    }
   };
-  console.log('form avatar ', formAvatar);
   return (
     <ScrollView style={styles.container}>
       <Header title={'Tài khoản'} iconBack />
@@ -198,7 +198,6 @@ const Profile = () => {
                         onChangeText={text => setFieldValue('phone', text)}
                         textErrors={errors.phone}
                         textPlaceHolder={'Nhập số điện thoại'}
-
                       />
                     </View>
                   </View>
