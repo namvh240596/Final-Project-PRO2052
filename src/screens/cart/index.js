@@ -90,7 +90,6 @@ const Cart = props => {
   const createOrder = () => {
     let data;
     let arrItem = [];
-    console.log('list casdrt ', listCart);
     for (let index = 0; index < listCart.length; index++) {
       let item = {
         product: listCart[index].product._id,
@@ -123,7 +122,6 @@ const Cart = props => {
         setCouponMoney(0);
       })
       .catch(e => {
-        console.log('errors ', e);
         dispatch(getChangeLoadingSuccess());
         showModal({
           title: e.response.data.message,
@@ -137,6 +135,7 @@ const Cart = props => {
         if (data.returnCode == 1) {
           createOrder();
         } else {
+        dispatch(getChangeLoadingSuccess());
           showModal({
             title: 'Có lỗi xảy ra vui lòng thử lại sau',
           });
@@ -144,7 +143,7 @@ const Cart = props => {
       },
     );
     return () => ref.current.remove()
-  }, [ref.current, isFocused, listCart, couponMoney,myAddress]);
+  }, [ref.current, isFocused, listCart, couponMoney,myAddress, paymentMethod]);
 
   useEffect(() => {
     isFocused && dispatch(getChangeLoadingRequest());
@@ -176,7 +175,7 @@ const Cart = props => {
     dispatch(getChangeLoadingRequest());
     updateQuantityProductApi({productId: _id, quantity: quantity})
       .then(res => {
-        isFocused && dispatch(getAllCartRequest());
+        dispatch(getAllCartRequest());
         dispatch(getChangeLoadingSuccess());
       })
       .catch(e => {
@@ -185,7 +184,7 @@ const Cart = props => {
           title: e.response.data.message,
         });
       });
-  }, []);
+  }, [listCart]);
 
   const onCreateOrder = () => {
     dispatch(getChangeLoadingRequest());
@@ -293,7 +292,6 @@ const Cart = props => {
           title: 'Lỗi chưa xác định',
           message: 'Vui lòng thử lại sau!!!',
         });
-        console.log('error ', error);
       });
   }
 

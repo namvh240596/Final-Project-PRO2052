@@ -159,7 +159,6 @@ const Explore = () => {
         })
         .catch(e => {
           dispatch(getChangeLoadingSuccess());
-          console.log('error ', e);
           showModal({
             title: 'Opps! có lỗi xãy ra!',
             message: e.response.data.message,
