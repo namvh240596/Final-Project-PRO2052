@@ -198,6 +198,7 @@ const Profile = () => {
                         onChangeText={text => setFieldValue('phone', text)}
                         textErrors={errors.phone}
                         textPlaceHolder={'Nhập số điện thoại'}
+                        keyboardType='phone-pad'
                       />
                     </View>
                   </View>

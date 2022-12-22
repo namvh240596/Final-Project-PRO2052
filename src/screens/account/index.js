@@ -2,22 +2,15 @@ import {
   View,
   Text,
   Image,
-  Modal,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
-  PermissionsAndroid,
 } from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
-import Header from '../../components/header';
 import {styles} from './styles';
-import {DATA_ACCOUNT} from '../../services/fakeApi/fakeAPI';
 import ItemAccount from './components/ItemAccount';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserSelector} from '../../redux/auth/selector';
 import CustomButton from '../../components/customButton';
-import ItemProfile from './profile/components/ItemProfile';
 import AppIcon from '../../assets/icons';
 import {getUserInfoRequest, logoutRequest} from '../../redux/auth/action';
 
@@ -32,9 +25,6 @@ const Account = () => {
     dispatch(getUserInfoRequest())   
    
   }, []);
-
-
-  console.log(userInfo);
   const onGo = value => {
     switch (value) {
       case 'Tài khoản':

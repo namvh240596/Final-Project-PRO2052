@@ -80,6 +80,8 @@ const Cart = props => {
   const [coupon, setCoupon] = useState('');
   const [couponMoney, setCouponMoney] = useState(0);
   const appState = useRef(AppState.currentState);
+  const ref = useRef();
+
   useEffect(() => {
     if (shippingAddress.address !== '') {
       setMyAddress(shippingAddress);
@@ -94,7 +96,6 @@ const Cart = props => {
         product: listCart[index].product._id,
         quantity: listCart[index].quantity,
       };
-      console.log('item, ', item);
       arrItem.push(item);
     }
     let couponActive = '';
@@ -130,10 +131,9 @@ const Cart = props => {
       });
   };
   useEffect(() => {
-    const subscription = payZaloBridgeEmitter.addListener(
+    ref.current = payZaloBridgeEmitter.addListener(
       'EventPayZalo',
       data => {
-        console.log('ádsdasdasda');
         if (data.returnCode == 1) {
           createOrder();
         } else {
@@ -143,8 +143,8 @@ const Cart = props => {
         }
       },
     );
-    return () => payZaloBridgeEmitter.removeAllListeners('EventPayZalo');
-  }, []);
+    return () => ref.current.remove()
+  }, [ref.current, isFocused, listCart, couponMoney,myAddress]);
 
   useEffect(() => {
     isFocused && dispatch(getChangeLoadingRequest());
@@ -171,7 +171,7 @@ const Cart = props => {
     setFinalPrice(_finalPrice + feeShip - couponMoney);
     setTotalItem(_totalItem);
     setInitialPrice(_initialPrice);
-  }, [navigation, listCart]);
+  }, [navigation, listCart,couponMoney]);
   const onUpdateQuantity = useCallback((_id, quantity) => {
     dispatch(getChangeLoadingRequest());
     updateQuantityProductApi({productId: _id, quantity: quantity})
@@ -191,7 +191,6 @@ const Cart = props => {
     dispatch(getChangeLoadingRequest());
     if (paymentMethod === 'ZALOPAY') {
       callPaymentZaloPay();
-      dispatch(getChangeLoadingSuccess());
     } else {
       createOrder();
     }
@@ -222,7 +221,7 @@ const Cart = props => {
     return JSON.stringify(arrItem);
   };
   async function callPaymentZaloPay() {
-    // dispatch(getChangeLoadingRequest());
+    dispatch(getChangeLoadingRequest());
     let apptransid = getCurrentDateYYMMDD() + '_' + new Date().getTime();
     let appid = 2553;
     let amount = parseInt(finalPrice);

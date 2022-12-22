@@ -36,7 +36,6 @@ const MyOrder = () => {
           });
         });
   }, [isFocused]);
-  console.log('lít orfder ', listOrder);
   const onGoDetail = _id => {
     navigation.navigate('OrderDetail', {orderId: _id});
   };
