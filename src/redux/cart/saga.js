@@ -1,4 +1,5 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
+import { showModal } from '../../components/customNotiModal';
 import {
   addOneProductToCartApi,
   addProductsToCartApi,
@@ -7,6 +8,7 @@ import {
 } from '../../services/api/cart';
 import {getChangeLoadingSuccess} from '../loading/action';
 import {
+  addOneProductToCartFailed,
   addOneProductToCartSuccess,
   getAllCartRequest,
   getAllCartSuccess,
@@ -27,6 +29,10 @@ function* addOneProductToCartHandle(action) {
     onSuccess?.(action);
     yield put(addOneProductToCartSuccess(res?.message));
   } catch (error) {
+    showModal({
+      title: error.response?.data.message,
+    })
+    yield put(addOneProductToCartFailed());
     console.log('addOneProductToCartHandle -> ', error);
   }
 }

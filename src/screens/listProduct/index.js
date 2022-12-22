@@ -63,7 +63,6 @@ const ListProduct = props => {
   const navigation = useNavigation();
   const [type_sort, setType_sort] = useState('+salePrice');
   useEffect(() => {
-    console.log(typeCategory);
     dispatch(getListBrandRequest());
     if (typeCategory === '') {
     } else if (typeCategory === -1) {

@@ -1,3 +1,4 @@
+import { POST_DEVICE_TOKEN_SUCCESS } from '../notification/actionType';
 import {
   GET_USER_INFO_SUCCESS,
   LOGIN_FAILED,
@@ -19,6 +20,7 @@ const initialState = {
     avatar: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
   },
   isLogin: false,
+  deviceToken: '',
 };
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -59,6 +61,11 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action?.payload,
+      };
+      case POST_DEVICE_TOKEN_SUCCESS:
+      return {
+        ...state,
+        deviceToken: action.payload,
       };
     default:
       return {...state};

@@ -1,6 +1,8 @@
 import {all, call, put, takeLatest} from 'redux-saga/effects';
 import {
   getChangeAddressSuccess,
+  getChangeShippingAddressFailed,
+  getChangeShippingAddressSuccess,
   getChooseLocationSuccess,
   getDeleteAddressSuccess,
 } from './action';
@@ -13,10 +15,12 @@ import {
 ///////////////////////////////// get change one address //////////////////////////////////
 function* getChangeOneAddressHandle(action) {
   try {
-    yield getChangeAddressSuccess({
-      listLocation: action.payload.listLocation,
-    });
+    console.log(action);
+    yield put(getChangeShippingAddressSuccess({
+      shippingAddress: action?.payload,
+    }));
   } catch (error) {
+    yield put(getChangeShippingAddressFailed());
     console.log('getChangeOneAddressHandle -> ', error);
   }
 }

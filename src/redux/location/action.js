@@ -63,17 +63,17 @@ export const getDeleteAddressFailed = payload => ({
 
 /////////////////////////////////////// edit one address /////////////////////////////////////////////////////
 
-export const getChangeAddressRequest = payload => ({
+export const getChangeShippingAddressRequest = payload => ({
   type: GET_CHANGE_ADDRESS_REQUEST,
   payload: payload,
 });
 
-export const getChangeAddressSuccess = payload => ({
+export const getChangeShippingAddressSuccess = payload => ({
   type: GET_CHANGE_ADDRESS_SUCCESS,
   payload: payload,
 });
 
-export const getChangeAddressFailed = payload => ({
+export const getChangeShippingAddressFailed = payload => ({
   type: GET_CHANGE_ADDRESS_FAILED,
   payload: payload,
 });

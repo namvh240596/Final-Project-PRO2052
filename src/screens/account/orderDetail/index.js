@@ -24,7 +24,6 @@ import {
 
 const OrderDetail = props => {
   const {orderId} = props.route?.params;
-  console.log(orderId);
   const isFocused = useIsFocused();
   const [order, setOrder] = useState();
   const navigation = useNavigation();
@@ -33,12 +32,10 @@ const OrderDetail = props => {
     dispatch(getChangeLoadingRequest());
     getOrderById(orderId)
       .then(res => {
-        console.log('res ', res);
         dispatch(getChangeLoadingSuccess());
         setOrder(res.data);
       })
       .catch(error => {
-        console.log('error =>> ', error);
         dispatch(getChangeLoadingSuccess());
 
         showModal({
@@ -47,9 +44,10 @@ const OrderDetail = props => {
         });
       });
   }, [orderId, isFocused]);
+  console.log('order ', order);
   const dayCreate = order?.createdAt;
+  console.log(orderId);
   const onCancle = () => {
-    console.log('cancle');
     dispatch(getChangeLoadingRequest());
 
     if (order?.message === 'Đơn hàng đã bị hủy') {
@@ -64,7 +62,6 @@ const OrderDetail = props => {
       status: 'Cancelled',
     })
       .then(res => {
-        console.log('res', res);
         dispatch(getChangeLoadingSuccess());
 
         showModal({
@@ -73,9 +70,7 @@ const OrderDetail = props => {
         });
       })
       .catch(error => {
-        console.log('error ', error);
         dispatch(getChangeLoadingSuccess());
-
         showModal({
           title: 'Có lỗi gì đó xảy ra!!!',
           onConfirmPress: () => navigation.goBack(),

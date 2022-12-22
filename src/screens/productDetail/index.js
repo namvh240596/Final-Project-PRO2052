@@ -81,9 +81,16 @@ const ProductDetail = props => {
       if (count < 5) {
         setCount(count + 1);
         dispatch(
-          addOneProductToCartRequest({productId: productId, quantity: 1}),
+          addOneProductToCartRequest(
+            {productId: productId, quantity: 1},
+            () => {
+              ToastAndroid.show(
+                'Thêm vào giỏ hàng thành công',
+                ToastAndroid.SHORT,
+              );
+            },
+          ),
         );
-        ToastAndroid.show('Thêm vào giỏ hàng thành công', ToastAndroid.SHORT);
       } else {
         ToastAndroid.show('Phát hiện bất thường', ToastAndroid.SHORT);
       }
@@ -109,7 +116,11 @@ const ProductDetail = props => {
               renderItem={({item}) => {
                 return (
                   <View style={styles.viewCarousel}>
-                    <Image source={{uri: item}} resizeMode='contain' style={styles.itemImage} />
+                    <Image
+                      source={{uri: item}}
+                      resizeMode="contain"
+                      style={styles.itemImage}
+                    />
                   </View>
                 );
               }}
@@ -145,6 +156,7 @@ const ProductDetail = props => {
               containerStyles={styles.btnAddToCart}
               onPress={() => addToCart(product._id)}
             />
+
             <View style={{left: -scale(20)}}>
               <Text style={styles.textPrice}>
                 {formatMoney(product?.salePrice)}
@@ -157,6 +169,9 @@ const ProductDetail = props => {
               </View>
             </View>
           </View>
+          <Text style={styles.textQuantity}>
+            Số lượng : {product?.quantity}
+          </Text>
           <View style={styles.viewSpecifications}>
             <Text style={styles.textTitle}>Thông số kĩ thuật</Text>
             <View style={styles.viewContent}>

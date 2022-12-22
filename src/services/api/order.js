@@ -13,5 +13,5 @@ export const getCancleOrder = (_id, data) => {
   return axiosClient.put(`/order/${_id}`, data);
 };
 export const getCheckCoupon = data => {
-  return axiosClient.post('/', data);
+  return axiosClient.post('/coupon/check', data);
 };

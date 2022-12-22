@@ -24,10 +24,7 @@ const locationPersistConfig = {
   key: 'location',
   storage: AsyncStorage,
 };
-const notificationPersistConfig = {
-  key: 'notification',
-  storage: AsyncStorage,
-};
+
 
 export const rootReducer = combineReducers({
   productsReducer,
@@ -36,8 +33,8 @@ export const rootReducer = combineReducers({
   bannerReducer,
   auth: persistReducer(authPersistConfig, authReducer),
   cartReducer,
-  location: persistReducer(locationPersistConfig, locationReducer),
+  locationReducer,
   loadingReducer,
-  notification: persistReducer(notificationPersistConfig, notificationReducer),
+  notificationReducer,
   brandReducer,
 });

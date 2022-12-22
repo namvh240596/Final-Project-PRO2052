@@ -14,7 +14,14 @@ import {SvgXml} from 'react-native-svg';
 import AppIcon from '../../assets/icons';
 import {formatMoney} from '../../helpers/formatMoney';
 
-const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate, onPress}) => {
+const ProducOnCart = ({
+  noDeleted,
+  item,
+  onUpdateQuantity,
+  noUpdate,
+  onPress,
+}) => {
+  const checkOutStock = item?.quantity > item?.product?.quantity;
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.body}>
@@ -64,7 +71,12 @@ const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate, onPress}) =>
               <View style={[styles.viewPlus]}>
                 <Pressable
                   onPress={() =>
-                    onUpdateQuantity(item.product._id, item?.quantity - 1)
+                    checkOutStock
+                      ? onUpdateQuantity(
+                          item.product._id,
+                          item?.product?.quantity,
+                        )
+                      : onUpdateQuantity(item.product._id, item?.quantity - 1)
                   }
                   style={styles.buttonSubtraction}>
                   <SvgXml
@@ -76,7 +88,12 @@ const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate, onPress}) =>
                 <Text style={styles.textQuantity}>{item.quantity}</Text>
                 <Pressable
                   onPress={() =>
-                    onUpdateQuantity(item.product._id, item?.quantity + 1)
+                    checkOutStock
+                      ? onUpdateQuantity(
+                          item.product._id,
+                          item?.product?.quantity,
+                        )
+                      : onUpdateQuantity(item.product._id, item?.quantity + 1)
                   }
                   style={styles.buttonAddition}>
                   <SvgXml
@@ -95,13 +112,23 @@ const ProducOnCart = ({noDeleted, item, onUpdateQuantity, noUpdate, onPress}) =>
           </View>
         ) : null}
       </View>
+      {checkOutStock && (
+        <Text style={styles.textError}>Sản phẩm không đủ số lượng</Text>
+      )}
     </TouchableOpacity>
   );
 };
 
-export default ProducOnCart;
+export default React.memo(ProducOnCart);
 
 const styles = StyleSheet.create({
+  textError: {
+    fontSize: AppTheme.FontSize.SmallX,
+    fontFamily: AppTheme.Fonts.SemiBold,
+    color: AppTheme.Colors.Red,
+    marginTop: verticalScale(5),
+    textAlign: 'right',
+  },
   text: {
     fontSize: AppTheme.FontSize.Medium,
     fontFamily: AppTheme.Fonts.Bold,
@@ -218,6 +245,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     marginBottom: verticalScale(14),
     shadowRadius: 15,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
 });
