@@ -129,21 +129,18 @@ const Cart = props => {
       });
   };
   useEffect(() => {
-    ref.current = payZaloBridgeEmitter.addListener(
-      'EventPayZalo',
-      data => {
-        if (data.returnCode == 1) {
-          createOrder();
-        } else {
+    ref.current = payZaloBridgeEmitter.addListener('EventPayZalo', data => {
+      if (data.returnCode == 1) {
+        createOrder();
+      } else {
         dispatch(getChangeLoadingSuccess());
-          showModal({
-            title: 'Có lỗi xảy ra vui lòng thử lại sau',
-          });
-        }
-      },
-    );
-    return () => ref.current.remove()
-  }, [ref.current, isFocused, listCart, couponMoney,myAddress, paymentMethod]);
+        showModal({
+          title: 'Có lỗi xảy ra vui lòng thử lại sau',
+        });
+      }
+    });
+    return () => ref.current.remove();
+  }, [ref.current, isFocused, listCart, couponMoney, myAddress, paymentMethod]);
 
   useEffect(() => {
     isFocused && dispatch(getChangeLoadingRequest());
@@ -167,24 +164,32 @@ const Cart = props => {
         listCart[index].product.salePrice * listCart[index].quantity;
     }
     // setDiscount(_discount);
-    setFinalPrice(_finalPrice + feeShip - couponMoney);
+    if (_finalPrice + feeShip - couponMoney <= 0) {
+      setFinalPrice(0);
+      setPaymentMethod('COD');
+    } else {
+      setFinalPrice(_finalPrice + feeShip - couponMoney);
+    }
     setTotalItem(_totalItem);
     setInitialPrice(_initialPrice);
-  }, [navigation, listCart,couponMoney]);
-  const onUpdateQuantity = useCallback((_id, quantity) => {
-    dispatch(getChangeLoadingRequest());
-    updateQuantityProductApi({productId: _id, quantity: quantity})
-      .then(res => {
-        dispatch(getAllCartRequest());
-        dispatch(getChangeLoadingSuccess());
-      })
-      .catch(e => {
-        dispatch(getChangeLoadingSuccess());
-        showModal({
-          title: e.response.data.message,
+  }, [navigation, listCart, couponMoney]);
+  const onUpdateQuantity = useCallback(
+    (_id, quantity) => {
+      dispatch(getChangeLoadingRequest());
+      updateQuantityProductApi({productId: _id, quantity: quantity})
+        .then(res => {
+          dispatch(getAllCartRequest());
+          dispatch(getChangeLoadingSuccess());
+        })
+        .catch(e => {
+          dispatch(getChangeLoadingSuccess());
+          showModal({
+            title: e.response.data.message,
+          });
         });
-      });
-  }, [listCart]);
+    },
+    [listCart],
+  );
 
   const onCreateOrder = () => {
     dispatch(getChangeLoadingRequest());
@@ -363,7 +368,6 @@ const Cart = props => {
                     {paymentMethod === 'COD' ? 'Tiền mặt' : 'ZaloPay'}
                   </Text>
                 </TouchableOpacity>
-
                 <View style={styles.viewCode}>
                   <TextInput
                     placeholder="Nhập mã code"
@@ -478,7 +482,17 @@ const Cart = props => {
             <Text style={styles.textChooseMethod}>Tiền mặt</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onChoosePaymentMethod('ZALOPAY')}
+            onPress={() =>{
+              console.log(finalPrice <= 0 && paymentMethod === 'ZaloPay');
+              if(finalPrice <= 0){
+                showModal({
+                  title: 'Phương thức thanh toán không được hỗ trợ',
+                  message: 'Tổng tiền bằng 0đ, phương thức thanh toán zalopay không được hổ trợ'
+                })
+              } else {
+                 onChoosePaymentMethod('ZALOPAY')}}
+              }
+             
             style={[
               styles.touchPayment,
               {

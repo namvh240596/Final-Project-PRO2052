@@ -7,5 +7,6 @@ const IMAGES = {
   ALL: require('../images/all.png'),
   BACKGROUND: require('../images/backround.jpg'),
   ANIMATION: require('./animation.json'),
+  ERRORIMAGE: require('./file.png'),
 };
 export default IMAGES;
