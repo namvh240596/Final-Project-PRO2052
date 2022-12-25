@@ -85,6 +85,7 @@ const Profile = () => {
             onConfirmPress: () => navigation.goBack(),
           });
           dispatch(getChangeLoadingSuccess());
+          dispatch(getUserInfoRequest());
         })
         .catch(err => {
           dispatch(getChangeLoadingSuccess());

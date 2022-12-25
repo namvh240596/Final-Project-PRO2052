@@ -20,7 +20,6 @@ const CustomProduct = ({
   containerStyle,
 }) => {
   const [valid, setValid] = useState(true);
-  console.log('sale price ', salePrice);
   return (
     <TouchableOpacity
       style={[styles.container, containerStyle]}
